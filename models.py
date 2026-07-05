@@ -23,7 +23,8 @@ def now():
 
 
 def make_snippet(content, length=SNIPPET_LENGTH):
-    text = " ".join((content or "").split())
+    first_line = (content or "").split("\n", 1)[0]
+    text = " ".join(first_line.split())
     if len(text) <= length:
         return text
     return text[:length].rstrip() + "…"
