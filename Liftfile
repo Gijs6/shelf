@@ -1,0 +1,4 @@
+name: shelf
+image: gijs6/shelf
+registry: ghcr.io
+host: dec
