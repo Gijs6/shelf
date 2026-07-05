@@ -1,0 +1,96 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/empty_state.jinja" import empty_state %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <h1 class="page-header__title">{{ icon("home") }} Dashboard</h1>
+    </header>
+
+    <div class="dashboard__grid">
+        <section class="dashboard-widget">
+            <h2 class="dashboard-widget__title">{{ icon("clock") }} Upcoming and overdue todos</h2>
+            {% if upcoming_todos %}
+                <ul class="card-list">
+                    {% for todo in upcoming_todos %}
+                        <li>
+                            <article class="entry-card">
+                                <h3 class="entry-card__title">
+                                    <a href="{{ url_for('todos.view_todo', todo_id=todo.id) }}"
+                                       class="entry-card__link">
+                                        <span class="entry-card__title-text">{{ todo.display_title }}</span>
+                                        <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
+                                        {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+                                    </a>
+                                </h3>
+                                <p class="entry-card__timestamp">
+                                    <time datetime="{{ todo.updated_at.isoformat() }}" data-live>{{ todo.updated_at | timeago }}</time>
+                                    ({{ todo.updated_at | strftime("%d %b %Y, %H:%M") }})
+                                </p>
+                                {% if todo.title %}<p class="entry-card__preview">{{ todo.snippet }}</p>{% endif %}
+                                <p class="entry-card__due{% if todo.deadline < current_time %} entry-card__due--overdue{% endif %}">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</p>
+                            </article>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ empty_state('clock', 'Nothing due.') }}
+            {% endif %}
+        </section>
+
+        <section class="dashboard-widget">
+            <h2 class="dashboard-widget__title">{{ icon("note") }} Recent notes</h2>
+            {% if recent_notes %}
+                <ul class="card-list">
+                    {% for note in recent_notes %}
+                        <li>
+                            <article class="entry-card">
+                                <h3 class="entry-card__title">
+                                    <a href="{{ url_for('notes.view_note', note_id=note.id) }}"
+                                       class="entry-card__link">
+                                        <span class="entry-card__title-text">{{ note.display_title }}</span>
+                                    </a>
+                                </h3>
+                                <p class="entry-card__timestamp">
+                                    <time datetime="{{ note.updated_at.isoformat() }}" data-live>{{ note.updated_at | timeago }}</time>
+                                    ({{ note.updated_at | strftime("%d %b %Y, %H:%M") }})
+                                </p>
+                                {% if note.title %}<p class="entry-card__preview">{{ note.snippet }}</p>{% endif %}
+                            </article>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ empty_state('note', 'No notes yet.') }}
+            {% endif %}
+        </section>
+
+        <section class="dashboard-widget">
+            <h2 class="dashboard-widget__title">{{ icon("sticky") }} Pinned and active sticky notes</h2>
+            {% if sticky_notes %}
+                <ul class="sticky-board">
+                    {% for sticky_note in sticky_notes %}
+                        <li>
+                            <article class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}">
+                                <header class="sticky-note__header">
+                                    {% if sticky_note.title %}
+                                        <h3 class="sticky-note__title">
+                                            <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}">{{ sticky_note.title }}</a>
+                                        </h3>
+                                    {% endif %}
+                                    {% if sticky_note.pinned %}{{ icon("pin") }}{% endif %}
+                                </header>
+                                <div class="sticky-note__body">{{ sticky_note.content | markdown }}</div>
+                            </article>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ empty_state('sticky', 'No sticky notes yet.') }}
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

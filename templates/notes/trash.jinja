@@ -1,0 +1,49 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/empty_state.jinja" import empty_state %}
+
+{% block title %}Notes trash{% endblock %}
+{% block page_class %}page--note{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">Notes trash</h1>
+        </div>
+    </header>
+
+    {% if notes %}
+        <ul class="card-list">
+            {% for note in notes %}
+                <li>
+                    <article class="entry-card">
+                        <h3 class="entry-card__title">
+                            <span class="entry-card__title-text">{{ note.display_title }}</span>
+                        </h3>
+                        <p class="entry-card__timestamp">
+                            Deleted
+                            <time datetime="{{ note.deleted_at.isoformat() }}" data-live>{{ note.deleted_at | timeago }}</time>
+                            ({{ note.deleted_at | strftime("%d %b %Y, %H:%M") }})
+                        </p>
+                        <footer class="entry-card__meta">
+                            <form hx-patch="{{ url_for('notes.restore_note', note_id=note.id) }}"
+                                  hx-target="body"
+                                  hx-push-url="true">
+                                <button type="submit" class="button button--ghost button--sm">{{ icon("restore") }} Restore</button>
+                            </form>
+                            <form hx-delete="{{ url_for('notes.purge_note', note_id=note.id) }}"
+                                  hx-target="body"
+                                  hx-push-url="true"
+                                  hx-confirm="Permanently delete this note? This can't be undone.">
+                                <button type="submit" class="button button--danger button--sm">{{ icon("trash") }} Delete forever</button>
+                            </form>
+                        </footer>
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {{ empty_state('trash', 'Trash is empty.') }}
+    {% endif %}
+{% endblock %}

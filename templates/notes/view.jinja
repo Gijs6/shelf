@@ -1,0 +1,52 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/eyebrow.jinja" import type_eyebrow %}
+
+{% block title %}{{ note.display_title }}{% endblock %}
+{% block page_class %}page--note{% endblock %}
+
+{% block content %}
+    <article>
+        <header class="page-header">
+            <hgroup class="page-header__heading">
+                {{ type_eyebrow("note") }}
+                <h1 class="page-header__title">{{ note.display_title }}</h1>
+            </hgroup>
+            <div class="page-header__actions">
+                <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
+                   class="button button--ghost">{{ icon("edit") }} Edit</a>
+                {% if note.archived %}
+                    <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
+                          hx-target="body"
+                          hx-push-url="true">
+                        <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
+                    </form>
+                {% else %}
+                    <form hx-patch="{{ url_for('notes.archive_note', note_id=note.id) }}"
+                          hx-target="body"
+                          hx-push-url="true">
+                        <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
+                    </form>
+                {% endif %}
+                <form hx-delete="{{ url_for('notes.delete_note', note_id=note.id) }}"
+                      hx-target="body"
+                      hx-push-url="true"
+                      hx-confirm="Move this note to trash?">
+                    <button type="submit" class="button button--danger">{{ icon("trash") }} Delete</button>
+                </form>
+            </div>
+        </header>
+
+        <div class="detail-meta">
+            {% if note.group_name %}<span class="detail-meta__group">{{ icon("folder") }} {{ note.group_name }}</span>{% endif %}
+            <span class="detail-meta__item">
+                Made {{ note.created_at | strftime }} - edited
+                <time datetime="{{ note.updated_at.isoformat() }}" data-live>{{ note.updated_at | timeago }}</time>
+                ({{ note.updated_at | strftime("%d %b %Y, %H:%M") }})
+            </span>
+        </div>
+
+        <div class="markdown">{{ note.content | markdown }}</div>
+    </article>
+{% endblock %}

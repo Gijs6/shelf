@@ -1,0 +1,77 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+
+{% block title %}
+    {% if todo and todo.id %}
+        Edit todo
+    {% else %}
+        New todo
+    {% endif %}
+{% endblock %}
+{% block page_class %}page--todo{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">
+                {% if todo and todo.id %}
+                    Edit todo
+                {% else %}
+                    New todo
+                {% endif %}
+            </h1>
+        </div>
+    </header>
+
+    <form {% if todo and todo.id %} hx-put="{{ url_for('todos.update_todo', todo_id=todo.id) }}" hx-target="body" hx-push-url="true" {% else %} method="post" action="{{ url_for('todos.create_todo') }}" {% endif %}
+          class="editor"
+          data-require-either="title,content">
+        <div class="editor__main">
+            <label for="title" class="visually-hidden">Title</label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   class="editor__title"
+                   placeholder="Todo title"
+                   value="{{ todo.title if todo else '' }}" />
+
+            <label for="content" class="visually-hidden">Content (markdown)</label>
+            <textarea id="content"
+                      name="content"
+                      class="editor__content"
+                      placeholder="Write in markdown...">{{ todo.content if todo else '' }}</textarea>
+        </div>
+
+        <fieldset class="editor__meta">
+            <legend class="visually-hidden">Details</legend>
+            <div class="field">
+                <label for="group" class="field__label">Group</label>
+                <input type="text"
+                       id="group"
+                       name="group"
+                       class="field__input"
+                       list="todo-groups"
+                       autocomplete="off"
+                       placeholder="Search or create a group"
+                       value="{{ todo.group_name if todo else '' }}" />
+                <datalist id="todo-groups">
+                    {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
+                </datalist>
+            </div>
+
+            <div class="field">
+                <label for="deadline" class="field__label">Deadline</label>
+                <input type="datetime-local"
+                       id="deadline"
+                       name="deadline"
+                       class="field__input"
+                       value="{{ todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
+            </div>
+        </fieldset>
+
+        <div class="editor__actions">
+            <button type="submit" class="button">{{ icon("edit") }} Save todo</button>
+        </div>
+    </form>
+{% endblock %}

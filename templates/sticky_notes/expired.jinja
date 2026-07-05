@@ -1,0 +1,23 @@
+{% extends "base.jinja" %}
+
+{% from "partials/empty_state.jinja" import empty_state %}
+{% from "partials/sticky_card.jinja" import sticky_card %}
+
+{% block title %}Expired sticky notes{% endblock %}
+{% block page_class %}page--sticky{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">Expired sticky notes</h1>
+        </div>
+    </header>
+
+    {% if notes %}
+        <ul class="sticky-board">
+            {% for sticky_note in notes %}{{ sticky_card(sticky_note) }}{% endfor %}
+        </ul>
+    {% else %}
+        {{ empty_state('archive', 'No expired sticky notes.') }}
+    {% endif %}
+{% endblock %}

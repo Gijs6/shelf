@@ -1,0 +1,23 @@
+{% macro flash_messages() %}
+    {% from "partials/icons.jinja" import icon %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash" aria-live="polite" aria-atomic="false">
+                <ul class="flash__list">
+                    {% for category, message in messages %}
+                        <li class="flash__item flash__item--{{ category }}">
+                            {% if category == "success" %}
+                                {{ icon("check-circle") }}
+                            {% elif category == "error" %}
+                                {{ icon("x-circle") }}
+                            {% elif category == "info" %}
+                                {{ icon("info") }}
+                            {% endif %}
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+{% endmacro %}

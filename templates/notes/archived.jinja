@@ -1,0 +1,46 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/empty_state.jinja" import empty_state %}
+
+{% block title %}Archived notes{% endblock %}
+{% block page_class %}page--note{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">Archived notes</h1>
+        </div>
+    </header>
+
+    {% if notes %}
+        <ul class="card-list">
+            {% for note in notes %}
+                <li>
+                    <article class="entry-card">
+                        <h3 class="entry-card__title">
+                            <a href="{{ url_for('notes.view_note', note_id=note.id) }}"
+                               class="entry-card__link">
+                                <span class="entry-card__title-text">{{ note.display_title }}</span>
+                            </a>
+                        </h3>
+                        <p class="entry-card__timestamp">
+                            Archived
+                            <time datetime="{{ note.archived_at.isoformat() }}" data-live>{{ note.archived_at | timeago }}</time>
+                            ({{ note.archived_at | strftime("%d %b %Y, %H:%M") }})
+                        </p>
+                        <footer class="entry-card__meta">
+                            <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
+                                  hx-target="body"
+                                  hx-push-url="true">
+                                <button type="submit" class="button button--ghost button--sm">{{ icon("archive") }} Unarchive</button>
+                            </form>
+                        </footer>
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {{ empty_state('archive', 'No archived notes.') }}
+    {% endif %}
+{% endblock %}

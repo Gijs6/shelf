@@ -1,0 +1,28 @@
+{% extends "skeleton.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/flash.jinja" import flash_messages %}
+
+{% macro nav_item(endpoint, name, icon_name) %}
+    <a href="{{ url_for(endpoint) }}"
+       class="navbar__link{% if request.endpoint==endpoint or (request.blueprint and request.blueprint==endpoint.split('.')[0]) %} navbar__link--active{% endif %}">{{ icon(icon_name) }} {{ name }}</a>
+{% endmacro %}
+
+{% block body_content %}
+    <header class="navbar">
+        <a href="{{ url_for('index') }}" class="navbar__brand">{{ icon("note") }} Shelf</a>
+
+        <nav class="navbar__nav" aria-label="Main">
+            {{ nav_item('index', 'Dashboard', 'home') }}
+            {{ nav_item('notes.list_notes', 'Notes', 'note') }}
+            {{ nav_item('sticky_notes.list_sticky_notes', 'Sticky notes', 'sticky') }}
+            {{ nav_item('todos.list_todos', 'Todos', 'todo') }}
+        </nav>
+    </header>
+
+    {{ flash_messages() }}
+
+    <main class="page {% block page_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+{% endblock %}

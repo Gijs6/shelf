@@ -1,0 +1,39 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/empty_state.jinja" import empty_state %}
+{% from "partials/sticky_card.jinja" import sticky_card %}
+
+{% block title %}Sticky notes{% endblock %}
+{% block page_class %}page--sticky{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">Sticky notes</h1>
+        </div>
+        <nav class="page-header__actions" aria-label="Sticky note actions">
+            <a href="{{ url_for('sticky_notes.expired') }}"
+               class="button button--ghost button--sm"
+               aria-label="Expired sticky notes">{{ icon("archive") }}</a>
+            <a href="{{ url_for('sticky_notes.new_sticky_note') }}" class="button">{{ icon("plus") }} New sticky note</a>
+        </nav>
+    </header>
+
+    {% if pinned_notes %}
+        <section class="sticky-board-section sticky-board-section--pinned">
+            <h2 class="sticky-board-section__title">{{ icon("pin") }} Pinned</h2>
+            <ul class="sticky-board sticky-board--pinned">
+                {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note) }}{% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    {% if active_notes %}
+        <ul class="sticky-board">
+            {% for sticky_note in active_notes %}{{ sticky_card(sticky_note) }}{% endfor %}
+        </ul>
+    {% elif not pinned_notes %}
+        {{ empty_state("sticky", "No sticky notes yet.", url_for('sticky_notes.new_sticky_note') , "New sticky note") }}
+    {% endif %}
+{% endblock %}

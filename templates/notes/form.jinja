@@ -1,0 +1,68 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+
+{% block title %}
+    {% if note and note.id %}
+        Edit note
+    {% else %}
+        New note
+    {% endif %}
+{% endblock %}
+{% block page_class %}page--note{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">
+                {% if note and note.id %}
+                    Edit note
+                {% else %}
+                    New note
+                {% endif %}
+            </h1>
+        </div>
+    </header>
+
+    <form {% if note and note.id %} hx-put="{{ url_for('notes.update_note', note_id=note.id) }}" hx-target="body" hx-push-url="true" {% else %} method="post" action="{{ url_for('notes.create_note') }}" {% endif %}
+          class="editor"
+          data-require-either="title,content">
+        <div class="editor__main">
+            <label for="title" class="visually-hidden">Title</label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   class="editor__title"
+                   placeholder="Note title"
+                   value="{{ note.title if note else '' }}" />
+
+            <label for="content" class="visually-hidden">Content (markdown)</label>
+            <textarea id="content"
+                      name="content"
+                      class="editor__content"
+                      placeholder="Write in markdown...">{{ note.content if note else '' }}</textarea>
+        </div>
+
+        <fieldset class="editor__meta">
+            <legend class="visually-hidden">Details</legend>
+            <div class="field">
+                <label for="group" class="field__label">Group</label>
+                <input type="text"
+                       id="group"
+                       name="group"
+                       class="field__input"
+                       list="note-groups"
+                       autocomplete="off"
+                       placeholder="Search or create a group"
+                       value="{{ note.group_name if note else '' }}" />
+                <datalist id="note-groups">
+                    {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
+                </datalist>
+            </div>
+        </fieldset>
+
+        <div class="editor__actions">
+            <button type="submit" class="button">{{ icon("edit") }} Save note</button>
+        </div>
+    </form>
+{% endblock %}

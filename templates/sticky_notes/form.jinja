@@ -1,0 +1,86 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+
+{% block title %}
+    {% if sticky_note %}
+        Edit sticky note
+    {% else %}
+        New sticky note
+    {% endif %}
+{% endblock %}
+{% block page_class %}page--sticky{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">
+                {% if sticky_note %}
+                    Edit sticky note
+                {% else %}
+                    New sticky note
+                {% endif %}
+            </h1>
+        </div>
+    </header>
+
+    <form {% if sticky_note %} hx-put="{{ url_for('sticky_notes.update_sticky_note', sticky_note_id=sticky_note.id) }}" hx-target="body" hx-push-url="true" {% else %} method="post" action="{{ url_for('sticky_notes.create_sticky_note') }}" {% endif %}
+          class="editor">
+        <div class="editor__main">
+            <label for="title" class="visually-hidden">Title</label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   class="editor__title"
+                   placeholder="Sticky note title"
+                   value="{{ sticky_note.title if sticky_note else '' }}" />
+
+            <label for="content" class="visually-hidden">Content (markdown)</label>
+            <textarea id="content"
+                      name="content"
+                      class="editor__content"
+                      placeholder="Write in markdown...">{{ sticky_note.content if sticky_note else '' }}</textarea>
+        </div>
+
+        <fieldset class="colour-picker">
+            <legend class="field__label">Colour</legend>
+            {% for colour in colours %}
+                <label class="colour-picker__option colour-picker__option--{{ colour }}">
+                    <input type="radio"
+                           name="colour"
+                           value="{{ colour }}"
+                           class="visually-hidden"
+                           {% if (sticky_note and sticky_note.colour==colour) or (not sticky_note and colour=="yellow") %}checked{% endif %} />
+                    {{ colour }}
+                </label>
+            {% endfor %}
+        </fieldset>
+
+        <fieldset class="editor__meta">
+            <legend class="visually-hidden">Details</legend>
+            <div class="field">
+                <label for="expires_at" class="field__label">Expires at</label>
+                <input type="datetime-local"
+                       id="expires_at"
+                       name="expires_at"
+                       class="field__input"
+                       value="{{ sticky_note.expires_at.strftime('%Y-%m-%dT%H:%M') if sticky_note and sticky_note.expires_at else (default_expires_at.strftime('%Y-%m-%dT%H:%M') if not sticky_note else '') }}" />
+            </div>
+
+            <div class="field field--checkbox">
+                <label for="pinned" class="field__label">
+                    <input type="checkbox"
+                           id="pinned"
+                           name="pinned"
+                           class="field__checkbox"
+                           {% if sticky_note and sticky_note.pinned %}checked{% endif %} />
+                    {{ icon("pin") }} Pinned
+                </label>
+            </div>
+        </fieldset>
+
+        <div class="editor__actions">
+            <button type="submit" class="button">{{ icon("edit") }} Save sticky note</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/empty_state.jinja" import empty_state %}
+
+{% block title %}Notes{% endblock %}
+{% block page_class %}page--note{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">Notes</h1>
+        </div>
+        <nav class="page-header__actions" aria-label="Note actions">
+            <a href="{{ url_for('notes.archived') }}"
+               class="button button--ghost button--sm"
+               aria-label="Archived notes">{{ icon("archive") }}</a>
+            <a href="{{ url_for('notes.trash') }}"
+               class="button button--ghost button--sm"
+               aria-label="Trash">{{ icon("trash") }}</a>
+            <a href="{{ url_for('notes.new_note') }}" class="button">{{ icon("plus") }} New</a>
+        </nav>
+    </header>
+
+    {% if sections %}
+        {% for label, items in sections %}
+            <h2 class="list-section__title">{{ label }}</h2>
+            <ul class="card-list">
+                {% for note in items %}
+                    <li>
+                        <article class="entry-card">
+                            <h3 class="entry-card__title">
+                                <a href="{{ url_for('notes.view_note', note_id=note.id) }}"
+                                   class="entry-card__link">
+                                    <span class="entry-card__title-text">{{ note.display_title }}</span>
+                                </a>
+                            </h3>
+                            <p class="entry-card__timestamp">
+                                <time datetime="{{ note.updated_at.isoformat() }}" data-live>{{ note.updated_at | timeago }}</time>
+                                ({{ note.updated_at | strftime("%d %b %Y, %H:%M") }})
+                            </p>
+                            {% if note.title %}<p class="entry-card__preview">{{ note.snippet }}</p>{% endif %}
+                        </article>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        {{ empty_state("note", "No notes yet.", url_for('notes.new_note') , "New note") }}
+    {% endif %}
+{% endblock %}
