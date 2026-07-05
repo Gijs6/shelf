@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from datetime import datetime
 
-from models import TODO_STATES, Todo, db, now
+from models import TODO_STATES, Note, Todo, db, now
 from utils.groups import all_group_names, group_sections
 
 
@@ -162,6 +162,37 @@ def set_state(todo_id):
     return redirect(
         request.referrer or url_for("todos.view_todo", todo_id=todo.id), code=303
     )
+
+
+@todos_bp.post("/<todo_id>/convert")
+def convert_todo(todo_id):
+    todo = Todo.query.filter(
+        Todo.id == todo_id, Todo.deleted_at.is_(None)
+    ).first_or_404()
+
+    dropped = []
+    if todo.state != "open":
+        dropped.append(f"state: {todo.state.replace('_', ' ')}")
+    if todo.deadline:
+        dropped.append(f"deadline: {todo.deadline.strftime('%d %b %Y, %H:%M')}")
+
+    content = todo.content
+    if dropped:
+        note_line = f"_Converted from todo ({', '.join(dropped)})_"
+        content = f"{note_line}\n\n{content}" if content else note_line
+
+    note = Note(
+        title=todo.title,
+        content=content,
+        group_name=todo.group_name,
+        created_at=todo.created_at,
+        archived_at=todo.archived_at,
+    )
+    db.session.add(note)
+    db.session.delete(todo)
+    db.session.commit()
+    flash("Todo converted to note.", "success")
+    return redirect(url_for("notes.view_note", note_id=note.id), code=303)
 
 
 @todos_bp.delete("/<todo_id>/delete")

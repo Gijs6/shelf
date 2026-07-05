@@ -65,4 +65,13 @@
             <button type="submit" class="button">{{ icon("edit") }} Save note</button>
         </div>
     </form>
+
+    {% if note and note.id %}
+        <form hx-post="{{ url_for('notes.convert_note', note_id=note.id) }}"
+              hx-target="body"
+              hx-push-url="true"
+              hx-confirm="Convert this note to a todo? It will get a new URL, and you'll lose any unsaved changes made here.">
+            <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to todo</button>
+        </form>
+    {% endif %}
 {% endblock %}

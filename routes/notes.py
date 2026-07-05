@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
-from models import Note, db, now
+from models import Note, Todo, db, now
 from utils.groups import all_group_names, group_sections
 
 
@@ -105,6 +105,26 @@ def update_note(note_id):
     db.session.commit()
     flash("Note saved.", "success")
     return redirect(url_for("notes.view_note", note_id=note.id), code=303)
+
+
+@notes_bp.post("/<note_id>/convert")
+def convert_note(note_id):
+    note = Note.query.filter(
+        Note.id == note_id, Note.deleted_at.is_(None)
+    ).first_or_404()
+
+    todo = Todo(
+        title=note.title,
+        content=note.content,
+        group_name=note.group_name,
+        created_at=note.created_at,
+        archived_at=note.archived_at,
+    )
+    db.session.add(todo)
+    db.session.delete(note)
+    db.session.commit()
+    flash("Note converted to todo.", "success")
+    return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
 
 
 @notes_bp.delete("/<note_id>/delete")
