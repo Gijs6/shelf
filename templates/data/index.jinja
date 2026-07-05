@@ -36,4 +36,15 @@
             <button type="submit" class="button">{{ icon("upload") }} Import</button>
         </form>
     </section>
+
+    <section class="data-panel">
+        <h2 class="data-panel__title">{{ icon("trash") }} Remove all</h2>
+        <p class="data-panel__desc">Permanently delete every note, sticky note, and todo. Export a backup first if you might need this data again.</p>
+        <form hx-delete="{{ url_for('data.remove_all') }}"
+              hx-target="body"
+              hx-push-url="true"
+              hx-confirm="Are you really sure to PERMANENTLY delete ALL notes, todos and sticky notes? THIS CANNOT BE UNDONE.">
+            <button type="submit" class="button button--danger">{{ icon("trash") }} Remove all data</button>
+        </form>
+    </section>
 {% endblock %}

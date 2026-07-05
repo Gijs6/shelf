@@ -186,3 +186,14 @@ def import_data():
         "success",
     )
     return redirect(url_for("data.index"), code=303)
+
+
+@data_bp.delete("/")
+def remove_all():
+    Note.query.delete()
+    StickyNote.query.delete()
+    Todo.query.delete()
+    db.session.commit()
+
+    flash("Removed all notes, sticky notes, and todos.", "success")
+    return redirect(url_for("data.index"), code=303)
