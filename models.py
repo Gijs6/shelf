@@ -8,6 +8,7 @@ db = SQLAlchemy()
 
 STICKY_COLOURS = ["yellow", "pink", "blue", "green", "purple", "orange"]
 TODO_STATES = ["open", "active", "done", "cancelled"]
+RECUR_UNITS = ["day", "week", "month"]
 SNIPPET_LENGTH = 80
 
 ID_LENGTH = 8
@@ -89,6 +90,8 @@ class Todo(db.Model):
     active_at = db.Column(db.DateTime, nullable=True)
     group_name = db.Column(db.String(100), nullable=True)
     deadline = db.Column(db.DateTime, nullable=True)
+    recur_interval = db.Column(db.Integer, nullable=True)
+    recur_unit = db.Column(db.String(10), nullable=True)
     deleted_at = db.Column(db.DateTime, nullable=True)
     archived_at = db.Column(db.DateTime, nullable=True)
 
@@ -99,6 +102,10 @@ class Todo(db.Model):
     @property
     def archived(self):
         return self.archived_at is not None
+
+    @property
+    def recurring(self):
+        return self.recur_interval is not None and self.recur_unit is not None
 
     @property
     def snippet(self):

@@ -48,6 +48,10 @@
                                     <span class="entry-card__title-text">{{ todo.display_title }}</span>
                                     <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
                                     {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+                                    {% if todo.recurring %}
+                                        <span class="badge"
+                                              title="Repeats every {{ todo.recur_interval }} {{ todo.recur_unit }}(s)">{{ icon("repeat") }}</span>
+                                    {% endif %}
                                 </a>
                             </h3>
                             <p class="entry-card__timestamp">

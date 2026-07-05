@@ -12,6 +12,7 @@ import json
 from datetime import datetime
 
 from models import (
+    RECUR_UNITS,
     STICKY_COLOURS,
     TODO_STATES,
     Note,
@@ -72,6 +73,8 @@ def todo_to_dict(todo):
         "active_at": iso(todo.active_at),
         "group_name": todo.group_name,
         "deadline": iso(todo.deadline),
+        "recur_interval": todo.recur_interval,
+        "recur_unit": todo.recur_unit,
         "deleted_at": iso(todo.deleted_at),
         "archived_at": iso(todo.archived_at),
     }
@@ -120,6 +123,9 @@ def apply_todo(data):
     todo.completed_at = parse_dt(data.get("completed_at"))
     todo.active_at = parse_dt(data.get("active_at"))
     todo.deadline = parse_dt(data.get("deadline"))
+    recur_unit = data.get("recur_unit")
+    todo.recur_unit = recur_unit if recur_unit in RECUR_UNITS else None
+    todo.recur_interval = data.get("recur_interval") if todo.recur_unit else None
     todo.deleted_at = parse_dt(data.get("deleted_at"))
     todo.archived_at = parse_dt(data.get("archived_at"))
     return todo

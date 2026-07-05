@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash
 from models import TODO_STATES, Note, StickyNote, Todo, db, now
 from routes import register_routes
 from utils.filters import register_filters
+from utils.recurring import process_due_recurrences
 
 
 load_dotenv(override=True)
@@ -39,6 +40,18 @@ def is_logged_in():
         session.clear()
         return False
     return True
+
+
+RECUR_CHECK_INTERVAL = timedelta(hours=1)
+last_recur_check = None
+
+
+def check_recurring_todos():
+    global last_recur_check
+    if last_recur_check and now() - last_recur_check < RECUR_CHECK_INTERVAL:
+        return
+    last_recur_check = now()
+    process_due_recurrences()
 
 
 @app.get("/")
@@ -109,6 +122,7 @@ def require_login():
     if request.endpoint and request.endpoint not in allowed:
         if not is_logged_in():
             return redirect(url_for("login"))
+        check_recurring_todos()
 
 
 @app.errorhandler(404)

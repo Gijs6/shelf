@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from datetime import datetime
 
-from models import TODO_STATES, Note, Todo, db, now
+from models import RECUR_UNITS, TODO_STATES, Note, Todo, db, now
 from utils.groups import all_group_names, group_sections
 
 
@@ -16,6 +16,20 @@ def parse_deadline(raw):
         return datetime.fromisoformat(raw)
     except ValueError:
         return None
+
+
+def parse_recurrence(raw_interval, raw_unit):
+    raw_interval = (raw_interval or "").strip()
+    raw_unit = (raw_unit or "").strip()
+    if not raw_interval or not raw_unit:
+        return None, None
+    try:
+        interval = int(raw_interval)
+    except ValueError:
+        return None, None
+    if interval < 1 or raw_unit not in RECUR_UNITS:
+        return None, None
+    return interval, raw_unit
 
 
 @todos_bp.get("/")
@@ -59,7 +73,11 @@ def archived():
 @todos_bp.get("/new")
 def new_todo():
     return render_template(
-        "todos/form.jinja", todo=None, groups=all_group_names(), states=TODO_STATES
+        "todos/form.jinja",
+        todo=None,
+        groups=all_group_names(),
+        states=TODO_STATES,
+        recur_units=RECUR_UNITS,
     )
 
 
@@ -69,20 +87,42 @@ def create_todo():
     content = request.form.get("content", "")
     group_name = request.form.get("group", "").strip() or None
     deadline = parse_deadline(request.form.get("deadline"))
+    recur_interval, recur_unit = parse_recurrence(
+        request.form.get("recur_interval"), request.form.get("recur_unit")
+    )
 
+    error = None
     if not title and not content.strip():
-        flash("Add a title or some content.", "error")
+        error = "Add a title or some content."
+    elif recur_interval and not deadline:
+        error = "Recurring todos need a deadline."
+
+    if error:
+        flash(error, "error")
         todo = Todo(
-            title=title, content=content, group_name=group_name, deadline=deadline
+            title=title,
+            content=content,
+            group_name=group_name,
+            deadline=deadline,
+            recur_interval=recur_interval,
+            recur_unit=recur_unit,
         )
         return render_template(
             "todos/form.jinja",
             todo=todo,
             groups=all_group_names(),
             states=TODO_STATES,
+            recur_units=RECUR_UNITS,
         ), 400
 
-    todo = Todo(title=title, content=content, group_name=group_name, deadline=deadline)
+    todo = Todo(
+        title=title,
+        content=content,
+        group_name=group_name,
+        deadline=deadline,
+        recur_interval=recur_interval,
+        recur_unit=recur_unit,
+    )
     db.session.add(todo)
     db.session.commit()
     flash("Todo created.", "success")
@@ -103,7 +143,11 @@ def edit_todo(todo_id):
         Todo.id == todo_id, Todo.deleted_at.is_(None)
     ).first_or_404()
     return render_template(
-        "todos/form.jinja", todo=todo, groups=all_group_names(), states=TODO_STATES
+        "todos/form.jinja",
+        todo=todo,
+        groups=all_group_names(),
+        states=TODO_STATES,
+        recur_units=RECUR_UNITS,
     )
 
 
@@ -117,24 +161,38 @@ def update_todo(todo_id):
     content = request.form.get("content", "")
     group_name = request.form.get("group", "").strip() or None
     deadline = parse_deadline(request.form.get("deadline"))
+    recur_interval, recur_unit = parse_recurrence(
+        request.form.get("recur_interval"), request.form.get("recur_unit")
+    )
 
+    error = None
     if not title and not content.strip():
-        flash("Add a title or some content.", "error")
+        error = "Add a title or some content."
+    elif recur_interval and not deadline:
+        error = "Recurring todos need a deadline."
+
+    if error:
+        flash(error, "error")
         todo.title = title
         todo.content = content
         todo.group_name = group_name
         todo.deadline = deadline
+        todo.recur_interval = recur_interval
+        todo.recur_unit = recur_unit
         return render_template(
             "todos/form.jinja",
             todo=todo,
             groups=all_group_names(),
             states=TODO_STATES,
+            recur_units=RECUR_UNITS,
         ), 400
 
     todo.title = title
     todo.content = content
     todo.group_name = group_name
     todo.deadline = deadline
+    todo.recur_interval = recur_interval
+    todo.recur_unit = recur_unit
     todo.updated_at = now()
     db.session.commit()
     flash("Todo saved.", "success")
@@ -175,6 +233,8 @@ def convert_todo(todo_id):
         dropped.append(f"state: {todo.state.replace('_', ' ')}")
     if todo.deadline:
         dropped.append(f"deadline: {todo.deadline.strftime('%d %b %Y, %H:%M')}")
+    if todo.recurring:
+        dropped.append(f"repeats every {todo.recur_interval} {todo.recur_unit}(s)")
 
     content = todo.content
     if dropped:
