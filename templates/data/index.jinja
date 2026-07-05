@@ -1,0 +1,39 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+
+{% block title %}Data{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">{{ icon("database") }} Data</h1>
+        </div>
+    </header>
+
+    <section class="data-panel">
+        <h2 class="data-panel__title">{{ icon("download") }} Export</h2>
+        <p class="data-panel__desc">Download all notes, sticky notes, and todos as a single JSON file.</p>
+        <a href="{{ url_for('data.export') }}" class="button">{{ icon("download") }} Export JSON</a>
+    </section>
+
+    <section class="data-panel">
+        <h2 class="data-panel__title">{{ icon("upload") }} Import</h2>
+        <p class="data-panel__desc">Restore or merge data from a previously exported JSON file. Records whose ID matches an existing one are updated in place, everything else is added.</p>
+        <form method="post"
+              action="{{ url_for('data.import_data') }}"
+              enctype="multipart/form-data"
+              class="form">
+            <div class="field">
+                <label for="file" class="field__label">JSON file</label>
+                <input type="file"
+                       id="file"
+                       name="file"
+                       class="field__input"
+                       accept="application/json,.json"
+                       required />
+            </div>
+            <button type="submit" class="button">{{ icon("upload") }} Import</button>
+        </form>
+    </section>
+{% endblock %}
