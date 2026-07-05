@@ -1,0 +1,26 @@
+.state-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-lg) 0;
+    padding: 0;
+    border: none;
+}
+
+.state-picker .button--active[data-state="active"] {
+    background-color: color-mix(in srgb, var(--color-info) 16%, var(--color-surface));
+    border-color: var(--color-info);
+    color: var(--color-info);
+}
+
+.state-picker .button--active[data-state="done"] {
+    background-color: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.state-picker .button--active[data-state="cancelled"] {
+    background-color: color-mix(in srgb, var(--color-danger) 16%, var(--color-surface));
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}

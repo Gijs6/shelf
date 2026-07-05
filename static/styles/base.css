@@ -1,0 +1,201 @@
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-sm) var(--space-xl);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    color: var(--color-fg);
+    text-decoration: none;
+}
+
+.navbar__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+}
+
+.navbar__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    color: var(--color-fg-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.navbar__link:hover {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+}
+
+.navbar__link--active {
+    background-color: var(--color-accent-subtle);
+    color: var(--color-accent-text);
+}
+
+.page {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--space-xl);
+}
+
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.page-header__heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+}
+
+.page-header__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin: 0;
+    color: var(--color-fg-faint);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+}
+
+.page-header__eyebrow--note {
+    color: var(--color-note);
+}
+
+.page-header__eyebrow--todo {
+    color: var(--color-todo);
+}
+
+.page-header__eyebrow--sticky {
+    color: var(--color-sticky);
+}
+
+.page-header__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+}
+
+.page-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: var(--space-xs);
+}
+
+.page--note .page-header,
+.page--todo .page-header,
+.page--sticky .page-header {
+    padding-left: var(--space-md);
+    border-left: 3px solid var(--color-section);
+}
+
+.dashboard__grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.dashboard-widget {
+    padding: var(--space-lg);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+}
+
+.dashboard-widget__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-md) 0;
+    font-size: var(--font-size-lg);
+}
+
+.editor {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 48rem;
+}
+
+.editor__main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.editor__title {
+    padding: var(--space-xs) 0;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--color-fg);
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+}
+
+.editor__title:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.editor__content {
+    width: 100%;
+    min-height: 16rem;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-base);
+}
+
+.editor__content:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -1px;
+    border-color: var(--color-accent);
+}
+
+.editor__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin: 0;
+    padding: var(--space-md) 0 0 0;
+    border: none;
+    border-top: 1px solid var(--color-border);
+}
+
+.editor__meta .field {
+    flex: 1;
+    min-width: 12rem;
+    margin-bottom: 0;
+}
+
+.editor__actions {
+    display: flex;
+    justify-content: flex-end;
+}
