@@ -15,7 +15,7 @@ def strftime_filter(value, fmt="%d %b %Y"):
     value = ensure_tz(value)
     if value is None:
         return "-"
-    return value.strftime(fmt)
+    return value.astimezone().strftime(fmt)
 
 
 def timeago_filter(value):

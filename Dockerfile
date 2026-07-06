@@ -1,4 +1,5 @@
 FROM python:3.10
+RUN apt-get update && apt-get install -y tzdata
 ENV TZ=Europe/Amsterdam
 WORKDIR /app
 COPY ./requirements.txt requirements.txt
