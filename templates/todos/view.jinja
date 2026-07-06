@@ -65,9 +65,7 @@
             {% endif %}
             {% if todo.recurring %}
                 <span class="detail-meta__item">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_unit }}(s)</span>
-                {% if todo.notify_before_days is not none %}
-                    <span class="detail-meta__item">{{ icon("clock") }} Notifies {{ todo.notify_before_days }} day(s) before deadline</span>
-                {% endif %}
+                {% if todo.notify_before_days is not none %}<span class="detail-meta__item">{{ icon("clock") }} Notifies {{ todo.notify_before_days }} day(s) before deadline</span>{% endif %}
             {% endif %}
             {% if todo.state == "active" and todo.active_at %}
                 <span class="detail-meta__item">

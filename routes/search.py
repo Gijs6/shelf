@@ -10,6 +10,4 @@ search_bp = Blueprint("search", __name__, url_prefix="/search")
 def search_view():
     query = request.args.get("q", "").strip()
     results, parsed = search(query) if query else ([], None)
-    return render_template(
-        "search.jinja", query=query, results=results, parsed=parsed
-    )
+    return render_template("search.jinja", query=query, results=results, parsed=parsed)
