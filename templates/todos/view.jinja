@@ -60,6 +60,11 @@
 
         <div class="detail-meta">
             {% if todo.group_name %}<span class="detail-meta__group">{{ icon("folder") }} {{ todo.group_name }}</span>{% endif %}
+            <span class="detail-meta__item">
+                Made {{ todo.created_at | strftime }} - edited
+                <time datetime="{{ todo.updated_at.isoformat() }}" data-live>{{ todo.updated_at | timeago }}</time>
+                ({{ todo.updated_at | strftime("%d %b %Y, %H:%M") }})
+            </span>
             {% if todo.deadline %}
                 <span class="detail-meta__item">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</span>
             {% endif %}
