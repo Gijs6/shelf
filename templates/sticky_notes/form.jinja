@@ -33,7 +33,7 @@
                    name="title"
                    class="editor__title"
                    placeholder="Sticky note title"
-                   value="{{ sticky_note.title if sticky_note else '' }}" />
+                   value="{{ sticky_note.title or '' }}" />
 
             <label for="content" class="visually-hidden">Content (markdown)</label>
             <textarea id="content"
