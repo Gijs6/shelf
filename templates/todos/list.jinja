@@ -18,7 +18,9 @@
             <a href="{{ url_for('todos.trash') }}"
                class="button button--ghost button--sm"
                aria-label="Trash">{{ icon("trash") }}</a>
-            <a href="{{ url_for('todos.new_todo') }}" class="button">{{ icon("plus") }} New</a>
+            <a href="{{ url_for('todos.new_todo') }}"
+               class="button"
+               data-shortcut="new">{{ icon("plus") }} New</a>
         </nav>
     </header>
 

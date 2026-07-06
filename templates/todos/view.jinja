@@ -19,7 +19,8 @@
             </hgroup>
             <div class="page-header__actions">
                 <a href="{{ url_for('todos.edit_todo', todo_id=todo.id) }}"
-                   class="button button--ghost">{{ icon("edit") }} Edit</a>
+                   class="button button--ghost"
+                   data-shortcut="edit">{{ icon("edit") }} Edit</a>
                 {% if todo.archived %}
                     <form hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
                           hx-target="body"

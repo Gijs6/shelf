@@ -101,6 +101,41 @@
                     });
                 });
             });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.defaultPrevented) return;
+
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    var form = e.target.closest('form') || document.querySelector('form.editor');
+                    if (form) {
+                        e.preventDefault();
+                        form.requestSubmit();
+                    }
+                    return;
+                }
+
+                if (e.key === 'Escape') {
+                    history.back();
+                    return;
+                }
+
+                var typing = e.target.matches('input, textarea, select') || e.target.isContentEditable;
+                if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
+
+                if (e.key === 'n' || e.key === 'N') {
+                    var newLink = document.querySelector('[data-shortcut="new"]');
+                    if (newLink) {
+                        e.preventDefault();
+                        newLink.click();
+                    }
+                } else if (e.key === 'e' || e.key === 'E') {
+                    var editLink = document.querySelector('[data-shortcut="edit"]');
+                    if (editLink) {
+                        e.preventDefault();
+                        editLink.click();
+                    }
+                }
+            });
         </script>
     </body>
 </html>

@@ -16,7 +16,9 @@
             <a href="{{ url_for('sticky_notes.expired') }}"
                class="button button--ghost button--sm"
                aria-label="Expired sticky notes">{{ icon("archive") }}</a>
-            <a href="{{ url_for('sticky_notes.new_sticky_note') }}" class="button">{{ icon("plus") }} New sticky note</a>
+            <a href="{{ url_for('sticky_notes.new_sticky_note') }}"
+               class="button"
+               data-shortcut="new">{{ icon("plus") }} New sticky note</a>
         </nav>
     </header>
 
