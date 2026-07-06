@@ -5,12 +5,12 @@
 
 {% macro nav_item(endpoint, name, icon_name) %}
     <a href="{{ url_for(endpoint) }}"
-       class="navbar__link{% if request.endpoint==endpoint or (request.blueprint and request.blueprint==endpoint.split('.')[0]) %} navbar__link--active{% endif %}">{{ icon(icon_name) }} {{ name }}</a>
+       class="navbar__link{% if request.endpoint==endpoint or (request.blueprint and request.blueprint==endpoint.split('.')[0]) %} navbar__link--active{% endif %}">{{ icon(icon_name) }} <span class="navbar__link-label">{{ name }}</span></a>
 {% endmacro %}
 
 {% block body_content %}
     <header class="navbar">
-        <a href="{{ url_for('index') }}" class="navbar__brand">{{ icon("note") }} Shelf</a>
+        <a href="{{ url_for('index') }}" class="navbar__brand">{{ icon("note") }} <span class="navbar__brand-label">Shelf</span></a>
 
         <nav class="navbar__nav" aria-label="Main">
             {{ nav_item('index', 'Dashboard', 'home') }}

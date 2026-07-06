@@ -255,6 +255,29 @@ body {
     color: var(--color-danger);
 }
 
+@media (max-width: 40rem) {
+    .entry-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        row-gap: var(--space-3xs);
+    }
+
+    .entry-card__title,
+    .entry-card__timestamp,
+    .entry-card__preview,
+    .entry-card__due,
+    .entry-card__meta {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .entry-card__timestamp,
+    .entry-card__due {
+        justify-self: start;
+        text-align: left;
+    }
+}
+
 .entry-card__meta {
     position: relative;
     z-index: 1;
@@ -365,6 +388,7 @@ body {
 
 .filters {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-sm);
     margin-bottom: var(--space-md);
 }
