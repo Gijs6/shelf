@@ -48,7 +48,7 @@ def process_due_recurrences():
                 recur_unit=todo.recur_unit,
             )
         )
-        
+
         todo.recur_interval = None
         todo.recur_unit = None
 
