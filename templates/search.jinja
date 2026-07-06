@@ -1,0 +1,77 @@
+{% extends "base.jinja" %}
+
+{% from "partials/icons.jinja" import icon %}
+{% from "partials/empty_state.jinja" import empty_state %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="page-header__heading">
+            <h1 class="page-header__title">{{ icon("search") }} Search</h1>
+        </div>
+    </header>
+
+    <form method="get"
+          class="filters"
+          role="search"
+          hx-get="{{ url_for('search.search_view') }}"
+          hx-trigger="input changed delay:300ms from:find input, submit"
+          hx-select="#search-results"
+          hx-target="#search-results"
+          hx-swap="outerHTML"
+          hx-replace-url="true">
+        <label for="q" class="visually-hidden">Search</label>
+        <input type="search"
+               id="q"
+               name="q"
+               class="field__input"
+               placeholder="is:todo state:open group:home archived:yes overdue:yes ..."
+               value="{{ query }}"
+               autofocus />
+        <button type="submit" class="button">{{ icon("search") }} Search</button>
+    </form>
+
+    <div id="search-results">
+        {% if not query %}
+            {{ empty_state("search", "Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes - or combine them with plain text.") }}
+        {% elif results %}
+            <ul class="card-list">
+                {% for result in results %}
+                    <li>
+                        <article class="entry-card">
+                            <h3 class="entry-card__title">
+                                <a href="{{ url_for(result.endpoint, **result.url_kwargs) }}"
+                                   class="entry-card__link">
+                                    <span class="entry-card__title-text">{{ result.title }}</span>
+                                    <span class="badge badge--{{ result.kind }}">{{ icon(result.kind) }}<span>{{ result.kind | capitalize }}</span></span>
+                                    {% if result.kind == "todo" %}
+                                        <span class="badge{% if result.state=='open' %} badge--open{% elif result.state=='active' %} badge--active{% elif result.state=='done' %} badge--done{% elif result.state=='cancelled' %} badge--cancelled{% endif %}">{{ result.state | replace('_', ' ') | title }}</span>
+                                        {% if result.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+                                    {% endif %}
+                                    {% if result.kind in ("note", "todo") and result.archived %}
+                                        <span class="badge">{{ icon("archive") }} Archived</span>
+                                    {% endif %}
+                                    {% if result.kind == "sticky" and result.pinned %}
+                                        <span class="badge">{{ icon("pin") }} Pinned</span>
+                                    {% endif %}
+                                </a>
+                            </h3>
+                            <p class="entry-card__timestamp">
+                                <time datetime="{{ result.updated_at.isoformat() }}" data-live>{{ result.updated_at | timeago }}</time>
+                                ({{ result.updated_at | strftime("%d %b %Y, %H:%M") }})
+                            </p>
+                            {% if result.snippet or result.get("group_name") %}
+                                <p class="entry-card__preview">
+                                    {% if result.get("group_name") %}{{ icon("folder") }} {{ result.group_name }}{% if result.snippet %} · {% endif %}{% endif %}{{ result.snippet }}
+                                </p>
+                            {% endif %}
+                        </article>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            {{ empty_state("search", 'No results for "' + query + '".') }}
+        {% endif %}
+    </div>
+{% endblock %}

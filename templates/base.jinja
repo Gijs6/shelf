@@ -18,6 +18,9 @@
             {{ nav_item('todos.list_todos', 'Todos', 'todo') }}
             {{ nav_item('sticky_notes.list_sticky_notes', 'Sticky notes', 'sticky') }}
             {{ nav_item('data.index', 'Data', 'database') }}
+            <a href="{{ url_for('search.search_view') }}"
+               class="navbar__link{% if request.endpoint=='search.search_view' %} navbar__link--active{% endif %}"
+               aria-label="Search">{{ icon("search") }}</a>
         </nav>
     </header>
 
