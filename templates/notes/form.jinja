@@ -34,7 +34,7 @@
                    name="title"
                    class="editor__title"
                    placeholder="Note title"
-                   value="{{ note.title if note else '' }}" />
+                   value="{{ note.title or '' }}" />
 
             <label for="content" class="visually-hidden">Content (markdown)</label>
             <textarea id="content"
@@ -54,7 +54,7 @@
                        list="note-groups"
                        autocomplete="off"
                        placeholder="Search or create a group"
-                       value="{{ note.group_name if note else '' }}" />
+                       value="{{ note.group_name or '' }}" />
                 <datalist id="note-groups">
                     {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
                 </datalist>

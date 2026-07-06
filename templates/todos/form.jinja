@@ -34,7 +34,7 @@
                    name="title"
                    class="editor__title"
                    placeholder="Todo title"
-                   value="{{ todo.title if todo else '' }}" />
+                   value="{{ todo.title or '' }}" />
 
             <label for="content" class="visually-hidden">Content (markdown)</label>
             <textarea id="content"
@@ -54,7 +54,7 @@
                        list="todo-groups"
                        autocomplete="off"
                        placeholder="Search or create a group"
-                       value="{{ todo.group_name if todo else '' }}" />
+                       value="{{ todo.group_name or '' }}" />
                 <datalist id="todo-groups">
                     {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
                 </datalist>
