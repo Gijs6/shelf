@@ -90,6 +90,17 @@
                     {% endfor %}
                 </select>
             </div>
+
+            <div class="field">
+                <label for="notify_before_days" class="field__label">Notify before deadline</label>
+                <input type="number"
+                       id="notify_before_days"
+                       name="notify_before_days"
+                       class="field__input"
+                       min="0"
+                       placeholder="Days (repeating todos only)"
+                       value="{{ '' if not todo or todo.notify_before_days is none else todo.notify_before_days }}" />
+            </div>
         </fieldset>
 
         <div class="editor__actions">

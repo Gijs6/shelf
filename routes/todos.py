@@ -32,6 +32,17 @@ def parse_recurrence(raw_interval, raw_unit):
     return interval, raw_unit
 
 
+def parse_notify_before_days(raw):
+    raw = (raw or "").strip()
+    if not raw:
+        return None
+    try:
+        days = int(raw)
+    except ValueError:
+        return None
+    return days if days >= 0 else None
+
+
 @todos_bp.get("/")
 def list_todos():
     query = Todo.query.filter(Todo.deleted_at.is_(None), Todo.archived_at.is_(None))
@@ -90,6 +101,11 @@ def create_todo():
     recur_interval, recur_unit = parse_recurrence(
         request.form.get("recur_interval"), request.form.get("recur_unit")
     )
+    notify_before_days = parse_notify_before_days(
+        request.form.get("notify_before_days")
+    )
+    if not (recur_interval and recur_unit):
+        notify_before_days = None
 
     error = None
     if not title and not content.strip():
@@ -106,6 +122,7 @@ def create_todo():
             deadline=deadline,
             recur_interval=recur_interval,
             recur_unit=recur_unit,
+            notify_before_days=notify_before_days,
         )
         return render_template(
             "todos/form.jinja",
@@ -122,6 +139,7 @@ def create_todo():
         deadline=deadline,
         recur_interval=recur_interval,
         recur_unit=recur_unit,
+        notify_before_days=notify_before_days,
     )
     db.session.add(todo)
     db.session.commit()
@@ -164,6 +182,11 @@ def update_todo(todo_id):
     recur_interval, recur_unit = parse_recurrence(
         request.form.get("recur_interval"), request.form.get("recur_unit")
     )
+    notify_before_days = parse_notify_before_days(
+        request.form.get("notify_before_days")
+    )
+    if not (recur_interval and recur_unit):
+        notify_before_days = None
 
     error = None
     if not title and not content.strip():
@@ -179,6 +202,7 @@ def update_todo(todo_id):
         todo.deadline = deadline
         todo.recur_interval = recur_interval
         todo.recur_unit = recur_unit
+        todo.notify_before_days = notify_before_days
         return render_template(
             "todos/form.jinja",
             todo=todo,
@@ -193,6 +217,7 @@ def update_todo(todo_id):
     todo.deadline = deadline
     todo.recur_interval = recur_interval
     todo.recur_unit = recur_unit
+    todo.notify_before_days = notify_before_days
     todo.updated_at = now()
     db.session.commit()
     flash("Todo saved.", "success")

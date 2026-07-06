@@ -63,7 +63,12 @@
             {% if todo.deadline %}
                 <span class="detail-meta__item">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</span>
             {% endif %}
-            {% if todo.recurring %}<span class="detail-meta__item">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_unit }}(s)</span>{% endif %}
+            {% if todo.recurring %}
+                <span class="detail-meta__item">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_unit }}(s)</span>
+                {% if todo.notify_before_days is not none %}
+                    <span class="detail-meta__item">{{ icon("clock") }} Notifies {{ todo.notify_before_days }} day(s) before deadline</span>
+                {% endif %}
+            {% endif %}
             {% if todo.state == "active" and todo.active_at %}
                 <span class="detail-meta__item">
                     Active since

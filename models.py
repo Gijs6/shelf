@@ -92,6 +92,7 @@ class Todo(db.Model):
     deadline = db.Column(db.DateTime, nullable=True)
     recur_interval = db.Column(db.Integer, nullable=True)
     recur_unit = db.Column(db.String(10), nullable=True)
+    notify_before_days = db.Column(db.Integer, nullable=True)
     deleted_at = db.Column(db.DateTime, nullable=True)
     archived_at = db.Column(db.DateTime, nullable=True)
 

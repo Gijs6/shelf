@@ -6,6 +6,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 
+from migrations import run_migrations
 from models import TODO_STATES, Note, StickyNote, Todo, db, now
 from routes import register_routes
 from utils.filters import register_filters
@@ -32,6 +33,7 @@ os.makedirs(app.instance_path, exist_ok=True)
 
 with app.app_context():
     db.create_all()
+    run_migrations()
 
 
 def is_logged_in():
@@ -68,7 +70,9 @@ def index():
     ).all()
     dashboard_sticky_notes = [s for s in sticky_notes if s.pinned or not s.expired][:6]
 
-    upcoming_todos = (
+    current_time = now().replace(tzinfo=None)
+
+    due_todos = (
         Todo.query.filter(
             Todo.deleted_at.is_(None),
             Todo.archived_at.is_(None),
@@ -76,16 +80,27 @@ def index():
             Todo.state.notin_(["done", "cancelled"]),
         )
         .order_by(Todo.deadline.asc())
-        .limit(5)
         .all()
     )
+
+    upcoming_todos = []
+    for todo in due_todos:
+        if (
+            todo.recurring
+            and todo.notify_before_days is not None
+            and todo.deadline - current_time > timedelta(days=todo.notify_before_days)
+        ):
+            continue
+        upcoming_todos.append(todo)
+        if len(upcoming_todos) == 5:
+            break
 
     return render_template(
         "dashboard.jinja",
         recent_notes=recent_notes,
         sticky_notes=dashboard_sticky_notes,
         upcoming_todos=upcoming_todos,
-        current_time=now().replace(tzinfo=None),
+        current_time=current_time,
     )
 
 

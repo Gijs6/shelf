@@ -46,6 +46,7 @@ def process_due_recurrences():
                 ),
                 recur_interval=todo.recur_interval,
                 recur_unit=todo.recur_unit,
+                notify_before_days=todo.notify_before_days,
             )
         )
 
