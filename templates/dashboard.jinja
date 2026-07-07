@@ -2,6 +2,7 @@
 
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/empty_state.jinja" import empty_state %}
+{% from "partials/sticky_card.jinja" import sticky_card %}
 
 {% block title %}Dashboard{% endblock %}
 
@@ -74,21 +75,7 @@
             <h2 class="dashboard-widget__title">{{ icon("sticky") }} Pinned and active sticky notes</h2>
             {% if sticky_notes %}
                 <ul class="sticky-board">
-                    {% for sticky_note in sticky_notes %}
-                        <li>
-                            <article class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}">
-                                <header class="sticky-note__header">
-                                    {% if sticky_note.title %}
-                                        <h3 class="sticky-note__title">
-                                            <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}">{{ sticky_note.title }}</a>
-                                        </h3>
-                                    {% endif %}
-                                    {% if sticky_note.pinned %}{{ icon("pin") }}{% endif %}
-                                </header>
-                                <div class="sticky-note__body">{{ sticky_note.content | markdown }}</div>
-                            </article>
-                        </li>
-                    {% endfor %}
+                    {% for sticky_note in sticky_notes %}{{ sticky_card(sticky_note, compact=True) }}{% endfor %}
                 </ul>
             {% else %}
                 {{ empty_state('sticky', 'No sticky notes yet.') }}

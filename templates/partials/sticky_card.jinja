@@ -1,14 +1,18 @@
 {% from "partials/icons.jinja" import icon %}
 
-{% macro sticky_card(sticky_note) %}
+{% macro sticky_card(sticky_note, compact=False) %}
     <li>
         <article class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}">
-            <header class="sticky-note__header">
+            <div class="sticky-note__content">
                 {% if sticky_note.title %}
                     <h3 class="sticky-note__title">
                         <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}">{{ sticky_note.title }}</a>
                     </h3>
                 {% endif %}
+                <div class="sticky-note__body">{{ sticky_note.content | markdown }}</div>
+            </div>
+
+            {% if not compact %}
                 <div class="sticky-note__actions">
                     <form hx-patch="{{ url_for('sticky_notes.toggle_pin', sticky_note_id=sticky_note.id) }}"
                           hx-target="body"
@@ -27,21 +31,23 @@
                         </button>
                     </form>
                 </div>
-            </header>
-            <div class="sticky-note__body">{{ sticky_note.content | markdown }}</div>
-            {% if sticky_note.expires_at %}
-                <p class="sticky-note__expires">
-                    {% if sticky_note.expired %}
-                        Expired
-                    {% else %}
-                        Expires
+
+                <footer class="sticky-note__footer">
+                    {% if sticky_note.expires_at %}
+                        <p class="sticky-note__expires">
+                            {% if sticky_note.expired %}
+                                Expired
+                            {% else %}
+                                Expires
+                            {% endif %}
+                            <time datetime="{{ sticky_note.expires_at.isoformat() }}">{{ sticky_note.expires_at | strftime }}</time>
+                        </p>
                     {% endif %}
-                    <time datetime="{{ sticky_note.expires_at.isoformat() }}">{{ sticky_note.expires_at | strftime }}</time>
-                </p>
+                    <p class="sticky-note__made">
+                        Made <time datetime="{{ sticky_note.created_at.isoformat() }}" data-live>{{ sticky_note.created_at | timeago }}</time>
+                    </p>
+                </footer>
             {% endif %}
-            <p class="sticky-note__made">
-                Made <time datetime="{{ sticky_note.created_at.isoformat() }}" data-live>{{ sticky_note.created_at | timeago }}</time>
-            </p>
         </article>
     </li>
 {% endmacro %}
