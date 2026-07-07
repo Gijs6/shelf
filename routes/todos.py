@@ -47,17 +47,28 @@ def parse_notify_before_days(raw):
 def list_todos():
     query = Todo.query.filter(Todo.deleted_at.is_(None), Todo.archived_at.is_(None))
 
-    state = request.args.get("state")
-    if state in TODO_STATES:
-        query = query.filter_by(state=state)
+    if "state" in request.args:
+        selected_states = [s for s in request.args.getlist("state") if s in TODO_STATES]
+    else:
+        selected_states = ["open", "active"]
 
+    query = query.filter(Todo.state.in_(selected_states))
     todos = query.order_by(Todo.created_at.desc()).all()
+
+    selected = set(selected_states)
+    chip_links = {}
+    for s in TODO_STATES:
+        toggled = selected ^ {s}
+        chip_links[s] = url_for(
+            "todos.list_todos", state=sorted(toggled) if toggled else "none"
+        )
 
     return render_template(
         "todos/list.jinja",
         sections=group_sections(todos),
         states=TODO_STATES,
-        active_state=state,
+        selected_states=selected,
+        chip_links=chip_links,
     )
 
 

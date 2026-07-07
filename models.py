@@ -67,12 +67,17 @@ class StickyNote(db.Model):
     expires_at = db.Column(db.DateTime, nullable=True)
     colour = db.Column(db.String(20), nullable=False, default="yellow")
     pinned = db.Column(db.Boolean, nullable=False, default=False)
+    deleted_at = db.Column(db.DateTime, nullable=True)
 
     @property
     def expired(self):
         return self.expires_at is not None and self.expires_at < now().replace(
             tzinfo=None
         )
+
+    @property
+    def deleted(self):
+        return self.deleted_at is not None
 
     @property
     def display_title(self):

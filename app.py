@@ -65,9 +65,11 @@ def index():
         .all()
     )
 
-    sticky_notes = StickyNote.query.order_by(
-        StickyNote.pinned.desc(), StickyNote.created_at.desc()
-    ).all()
+    sticky_notes = (
+        StickyNote.query.filter(StickyNote.deleted_at.is_(None))
+        .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
+        .all()
+    )
     dashboard_sticky_notes = [s for s in sticky_notes if s.pinned or not s.expired][:6]
 
     current_time = now().replace(tzinfo=None)

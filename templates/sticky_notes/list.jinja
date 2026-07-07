@@ -16,6 +16,9 @@
             <a href="{{ url_for('sticky_notes.expired') }}"
                class="button button--ghost button--sm"
                aria-label="Expired sticky notes">{{ icon("archive") }}</a>
+            <a href="{{ url_for('sticky_notes.trash') }}"
+               class="button button--ghost button--sm"
+               aria-label="Trash">{{ icon("trash") }}</a>
             <a href="{{ url_for('sticky_notes.new_sticky_note') }}"
                class="button"
                data-shortcut="new">{{ icon("plus") }} New sticky note</a>
@@ -23,12 +26,9 @@
     </header>
 
     {% if pinned_notes %}
-        <section class="sticky-board-section sticky-board-section--pinned">
-            <h2 class="sticky-board-section__title">{{ icon("pin") }} Pinned</h2>
-            <ul class="sticky-board sticky-board--pinned">
-                {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note) }}{% endfor %}
-            </ul>
-        </section>
+        <ul class="sticky-board sticky-board--pinned">
+            {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note) }}{% endfor %}
+        </ul>
     {% endif %}
 
     {% if active_notes %}

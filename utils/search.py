@@ -153,7 +153,7 @@ def search(raw_query, limit=50):
             )
 
     if "sticky" in types:
-        query = StickyNote.query
+        query = StickyNote.query.filter(StickyNote.deleted_at.is_(None))
         if parsed["pinned"] is not None:
             query = query.filter(StickyNote.pinned == parsed["pinned"])
         if parsed["text"]:

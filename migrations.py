@@ -1,10 +1,11 @@
 from sqlalchemy import inspect, text
 
-from models import Todo, db
+from models import StickyNote, Todo, db
 
 
 PENDING_COLUMNS = [
     (Todo, "notify_before_days", "INTEGER"),
+    (StickyNote, "deleted_at", "DATETIME"),
 ]
 
 

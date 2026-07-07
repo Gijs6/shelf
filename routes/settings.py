@@ -24,7 +24,7 @@ from models import (
 )
 
 
-data_bp = Blueprint("data", __name__, url_prefix="/data")
+settings_bp = Blueprint("settings", __name__, url_prefix="/settings")
 
 
 def iso(dt):
@@ -58,6 +58,7 @@ def sticky_note_to_dict(sticky_note):
         "expires_at": iso(sticky_note.expires_at),
         "colour": sticky_note.colour,
         "pinned": sticky_note.pinned,
+        "deleted_at": iso(sticky_note.deleted_at),
     }
 
 
@@ -108,6 +109,7 @@ def apply_sticky_note(data):
     sticky_note.created_at = parse_dt(data.get("created_at")) or now()
     sticky_note.updated_at = parse_dt(data.get("updated_at")) or now()
     sticky_note.expires_at = parse_dt(data.get("expires_at"))
+    sticky_note.deleted_at = parse_dt(data.get("deleted_at"))
     return sticky_note
 
 
@@ -131,12 +133,12 @@ def apply_todo(data):
     return todo
 
 
-@data_bp.get("/")
+@settings_bp.get("/")
 def index():
-    return render_template("data/index.jinja")
+    return render_template("settings/index.jinja")
 
 
-@data_bp.get("/export")
+@settings_bp.get("/export")
 def export():
     payload = {
         "exported_at": iso(now()),
@@ -154,12 +156,12 @@ def export():
     )
 
 
-@data_bp.post("/import")
+@settings_bp.post("/import")
 def import_data():
     file = request.files.get("file")
     if not file or not file.filename:
         flash("Choose a JSON file to import.", "error")
-        return redirect(url_for("data.index"), code=303)
+        return redirect(url_for("settings.index"), code=303)
 
     try:
         payload = json.load(file.stream)
@@ -184,17 +186,17 @@ def import_data():
     except (ValueError, TypeError, AttributeError, KeyError):
         db.session.rollback()
         flash("That file isn't a valid Shelf export.", "error")
-        return redirect(url_for("data.index"), code=303)
+        return redirect(url_for("settings.index"), code=303)
 
     flash(
         f"Imported {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
         f"{counts['todos']} todos.",
         "success",
     )
-    return redirect(url_for("data.index"), code=303)
+    return redirect(url_for("settings.index"), code=303)
 
 
-@data_bp.delete("/")
+@settings_bp.delete("/")
 def remove_all():
     Note.query.delete()
     StickyNote.query.delete()
@@ -202,4 +204,4 @@ def remove_all():
     db.session.commit()
 
     flash("Removed all notes, sticky notes, and todos.", "success")
-    return redirect(url_for("data.index"), code=303)
+    return redirect(url_for("settings.index"), code=303)

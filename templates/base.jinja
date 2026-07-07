@@ -3,24 +3,22 @@
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/flash.jinja" import flash_messages %}
 
-{% macro nav_item(endpoint, name, icon_name) %}
-    <a href="{{ url_for(endpoint) }}"
-       class="navbar__link{% if request.endpoint==endpoint or (request.blueprint and request.blueprint==endpoint.split('.')[0]) %} navbar__link--active{% endif %}">{{ icon(icon_name) }} <span class="navbar__link-label">{{ name }}</span></a>
-{% endmacro %}
-
 {% block body_content %}
     <header class="navbar">
         <a href="{{ url_for('index') }}" class="navbar__brand">{{ icon("note") }} <span class="navbar__brand-label">Shelf</span></a>
 
         <nav class="navbar__nav" aria-label="Main">
+            {% macro nav_item(endpoint, name, icon_name) %}
+                <a href="{{ url_for(endpoint) }}"
+                   class="navbar__link{% if request.endpoint==endpoint or (request.blueprint and request.blueprint==endpoint.split('.')[0]) %} navbar__link--active{% endif %}">{{ icon(icon_name) }} <span class="navbar__link-label">{{ name }}</span></a>
+            {% endmacro %}
+
             {{ nav_item('index', 'Dashboard', 'home') }}
             {{ nav_item('notes.list_notes', 'Notes', 'note') }}
             {{ nav_item('todos.list_todos', 'Todos', 'todo') }}
             {{ nav_item('sticky_notes.list_sticky_notes', 'Sticky notes', 'sticky') }}
-            {{ nav_item('data.index', 'Data', 'database') }}
-            <a href="{{ url_for('search.search_view') }}"
-               class="navbar__link{% if request.endpoint=='search.search_view' %} navbar__link--active{% endif %}"
-               aria-label="Search">{{ icon("search") }}</a>
+            {{ nav_item('search.search_view', 'Search', 'search') }}
+            {{ nav_item('settings.index', 'Settings', 'settings') }}
         </nav>
     </header>
 

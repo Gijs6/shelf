@@ -13,8 +13,10 @@
                 {{ type_eyebrow("todo") }}
                 <h1 class="page-header__title">
                     {{ todo.display_title }}
-                    <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
-                    {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+                    <span class="page-header__badges">
+                        <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
+                        {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+                    </span>
                 </h1>
             </hgroup>
             <div class="page-header__actions">

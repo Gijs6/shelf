@@ -28,13 +28,14 @@
                class="field__input"
                placeholder="is:todo state:open group:home archived:yes overdue:yes ..."
                value="{{ query }}"
+               autocomplete="off"
                autofocus />
         <button type="submit" class="button">{{ icon("search") }} Search</button>
     </form>
 
     <div id="search-results">
         {% if not query %}
-            {{ empty_state('search', 'Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes - or combine them with plain text.') }}
+            {{ empty_state('search', 'Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes') }}
         {% elif results %}
             <ul class="card-list">
                 {% for result in results %}
@@ -45,7 +46,7 @@
                                    class="entry-card__link">
                                     <span class="entry-card__title-text">{{ result.title }}</span>
                                     <span class="entry-card__badges">
-                                        <span class="badge badge--{{ result.kind }}">{{ icon(result.kind) }}<span>{{ result.kind | capitalize }}</span></span>
+                                        <span class="badge badge--{{ result.kind }}">{{ icon(result.kind) }} {{ result.kind | capitalize }}</span>
                                         {% if result.kind == "todo" %}
                                             <span class="badge{% if result.state=='open' %} badge--open{% elif result.state=='active' %} badge--active{% elif result.state=='done' %} badge--done{% elif result.state=='cancelled' %} badge--cancelled{% endif %}">{{ result.state | replace('_', ' ') | title }}</span>
                                             {% if result.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}

@@ -31,9 +31,9 @@ html {
 }
 
 svg {
-    width: 1.125em;
-    height: 1.125em;
-    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+    vertical-align: -11.5%;
 }
 
 img {

@@ -20,8 +20,7 @@
                     </form>
                     <form hx-delete="{{ url_for('sticky_notes.delete_sticky_note', sticky_note_id=sticky_note.id) }}"
                           hx-target="body"
-                          hx-push-url="true"
-                          hx-confirm="Delete this sticky note?">
+                          hx-push-url="true">
                         <button type="submit" class="sticky-note__icon-button">
                             <span class="visually-hidden">Delete</span>
                             {{ icon("trash") }}

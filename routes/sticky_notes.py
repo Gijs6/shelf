@@ -21,9 +21,11 @@ def parse_expires_at(raw):
 
 @sticky_notes_bp.get("/")
 def list_sticky_notes():
-    active = StickyNote.query.order_by(
-        StickyNote.pinned.desc(), StickyNote.created_at.desc()
-    ).all()
+    active = (
+        StickyNote.query.filter(StickyNote.deleted_at.is_(None))
+        .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
+        .all()
+    )
     active = [n for n in active if not n.expired]
     pinned = [n for n in active if n.pinned]
     unpinned = [n for n in active if not n.pinned]
@@ -37,9 +39,23 @@ def list_sticky_notes():
 
 @sticky_notes_bp.get("/expired")
 def expired():
-    notes = [n for n in StickyNote.query.all() if n.expired]
+    notes = [
+        n
+        for n in StickyNote.query.filter(StickyNote.deleted_at.is_(None)).all()
+        if n.expired
+    ]
     notes.sort(key=lambda n: n.expires_at, reverse=True)
     return render_template("sticky_notes/expired.jinja", notes=notes)
+
+
+@sticky_notes_bp.get("/trash")
+def trash():
+    notes = (
+        StickyNote.query.filter(StickyNote.deleted_at.isnot(None))
+        .order_by(StickyNote.deleted_at.desc())
+        .all()
+    )
+    return render_template("sticky_notes/trash.jinja", notes=notes)
 
 
 @sticky_notes_bp.get("/new")
@@ -78,7 +94,9 @@ def create_sticky_note():
 
 @sticky_notes_bp.get("/<sticky_note_id>/edit")
 def edit_sticky_note(sticky_note_id):
-    sticky_note = StickyNote.query.get_or_404(sticky_note_id)
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
+    ).first_or_404()
     return render_template(
         "sticky_notes/form.jinja", sticky_note=sticky_note, colours=STICKY_COLOURS
     )
@@ -86,7 +104,9 @@ def edit_sticky_note(sticky_note_id):
 
 @sticky_notes_bp.put("/<sticky_note_id>")
 def update_sticky_note(sticky_note_id):
-    sticky_note = StickyNote.query.get_or_404(sticky_note_id)
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
+    ).first_or_404()
 
     colour = request.form.get("colour", "yellow")
     if colour not in STICKY_COLOURS:
@@ -114,9 +134,29 @@ def toggle_pin(sticky_note_id):
 @sticky_notes_bp.delete("/<sticky_note_id>/delete")
 def delete_sticky_note(sticky_note_id):
     sticky_note = StickyNote.query.get_or_404(sticky_note_id)
-    db.session.delete(sticky_note)
+    sticky_note.deleted_at = now()
     db.session.commit()
-    flash("Sticky note deleted.", "success")
+    flash("Sticky note moved to trash.", "success")
     return redirect(
         request.referrer or url_for("sticky_notes.list_sticky_notes"), code=303
     )
+
+
+@sticky_notes_bp.patch("/<sticky_note_id>/restore")
+def restore_sticky_note(sticky_note_id):
+    sticky_note = StickyNote.query.get_or_404(sticky_note_id)
+    sticky_note.deleted_at = None
+    db.session.commit()
+    flash("Sticky note restored.", "success")
+    return redirect(url_for("sticky_notes.trash"), code=303)
+
+
+@sticky_notes_bp.delete("/<sticky_note_id>/purge")
+def purge_sticky_note(sticky_note_id):
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.isnot(None)
+    ).first_or_404()
+    db.session.delete(sticky_note)
+    db.session.commit()
+    flash("Sticky note permanently deleted.", "success")
+    return redirect(url_for("sticky_notes.trash"), code=303)
