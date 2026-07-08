@@ -190,6 +190,7 @@ body {
     min-width: 0;
     color: inherit;
     text-decoration: none;
+    width: fit-content;
 }
 
 .entry-card__link::after {
@@ -501,19 +502,67 @@ body {
     line-height: var(--line-height-base);
 }
 
-.markdown pre {
-    padding: var(--space-sm);
+.markdown table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: var(--space-sm) 0;
+    font-size: var(--font-size-sm);
+}
+
+.markdown th,
+.markdown td {
+    padding: var(--space-2xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    text-align: left;
+}
+
+.markdown th {
+    background-color: var(--color-surface);
+    font-weight: 700;
+}
+
+.markdown .admonition {
+    margin: var(--space-sm) 0;
+    padding: var(--space-sm) var(--space-md);
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-info);
 }
 
-.markdown code {
-    background-color: var(--color-surface);
-    padding: var(--space-3xs) var(--space-2xs);
-    font-size: 0.875em;
+.markdown .admonition-title {
+    margin: 0 0 var(--space-2xs) 0;
+    font-weight: 700;
+    color: var(--color-info);
 }
 
-.markdown pre code {
-    background-color: transparent;
-    padding: 0;
+.markdown .admonition.tip,
+.markdown .admonition.hint {
+    border-left-color: var(--color-success);
+}
+
+.markdown .admonition.tip .admonition-title,
+.markdown .admonition.hint .admonition-title {
+    color: var(--color-success);
+}
+
+.markdown .admonition.warning,
+.markdown .admonition.caution,
+.markdown .admonition.attention {
+    border-left-color: var(--color-warning);
+}
+
+.markdown .admonition.warning .admonition-title,
+.markdown .admonition.caution .admonition-title,
+.markdown .admonition.attention .admonition-title {
+    color: var(--color-warning);
+}
+
+.markdown .admonition.danger,
+.markdown .admonition.error {
+    border-left-color: var(--color-danger);
+}
+
+.markdown .admonition.danger .admonition-title,
+.markdown .admonition.error .admonition-title {
+    color: var(--color-danger);
 }

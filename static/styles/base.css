@@ -185,7 +185,7 @@
 
 .editor__content {
     width: 100%;
-    min-height: 16rem;
+    min-height: 60vh;
     padding: var(--space-xs) var(--space-sm);
     border: 1px solid var(--color-border);
     background-color: var(--color-surface);
@@ -219,4 +219,90 @@
 .editor__actions {
     display: flex;
     justify-content: flex-end;
+}
+
+.shortcuts-modal {
+    width: 100%;
+    max-width: 30rem;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+}
+
+.shortcuts-modal::backdrop {
+    background-color: var(--color-overlay);
+}
+
+.shortcuts-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.shortcuts-modal__title {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+}
+
+.shortcuts-modal__close {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2xs);
+    border: none;
+    background-color: transparent;
+    color: var(--color-fg-muted);
+    cursor: pointer;
+}
+
+.shortcuts-modal__close:hover {
+    color: var(--color-fg);
+}
+
+.shortcuts-modal__group + .shortcuts-modal__group {
+    margin-top: var(--space-md);
+}
+
+.shortcuts-modal__group-title {
+    margin: 0 0 var(--space-xs) 0;
+    color: var(--color-fg-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.shortcuts-modal__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin: 0;
+}
+
+.shortcuts-modal__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    font-size: var(--font-size-sm);
+}
+
+.shortcuts-modal__row dt {
+    color: var(--color-fg-muted);
+}
+
+.shortcuts-modal__row dd {
+    display: flex;
+    gap: var(--space-3xs);
+    margin: 0;
+}
+
+.shortcuts-modal kbd {
+    padding: var(--space-3xs) var(--space-2xs);
+    border: 1px solid var(--color-border-strong);
+    border-bottom-width: 2px;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-size: var(--font-size-sm);
 }

@@ -162,15 +162,15 @@
     --color-fg-faint: var(--color-gray-6);
     --color-fg-on-accent: var(--color-white);
 
-    --color-accent: var(--color-violet-5);
-    --color-accent-hover: color-mix(in srgb, var(--color-accent) 85%, white);
+    --color-accent: var(--color-violet-7);
+    --color-accent-hover: color-mix(in srgb, var(--color-accent) 85%, black);
     --color-accent-text: var(--color-violet-3);
     --color-accent-text-hover: var(--color-violet-2);
     --color-accent-subtle: color-mix(in srgb, var(--color-accent) 15%, var(--color-surface));
 
     --color-danger: var(--color-red-4);
-    --color-danger-fill: var(--color-red-6);
-    --color-danger-fill-hover: var(--color-red-7);
+    --color-danger-fill: var(--color-red-8);
+    --color-danger-fill-hover: var(--color-red-9);
     --color-success: var(--color-green-4);
     --color-success-fill: var(--color-green-7);
     --color-info: var(--color-blue-4);
@@ -179,14 +179,14 @@
     --color-warning-fill: var(--color-orange-6);
 
     --color-note: var(--color-teal-3);
-    --color-note-fill: var(--color-teal-6);
-    --color-note-fill-hover: color-mix(in srgb, var(--color-note-fill) 85%, white);
+    --color-note-fill: var(--color-teal-9);
+    --color-note-fill-hover: color-mix(in srgb, var(--color-note-fill) 85%, black);
     --color-note-subtle: color-mix(in srgb, var(--color-note) 15%, var(--color-surface));
     --color-fg-on-note: var(--color-white);
 
     --color-todo: var(--color-red-5);
-    --color-todo-fill: var(--color-red-7);
-    --color-todo-fill-hover: color-mix(in srgb, var(--color-todo-fill) 85%, white);
+    --color-todo-fill: var(--color-red-9);
+    --color-todo-fill-hover: color-mix(in srgb, var(--color-todo-fill) 85%, black);
     --color-todo-subtle: color-mix(in srgb, var(--color-todo) 15%, var(--color-surface));
     --color-fg-on-todo: var(--color-white);
 

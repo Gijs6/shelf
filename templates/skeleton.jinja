@@ -1,3 +1,4 @@
+{% from "partials/icons.jinja" import icon -%}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -41,101 +42,151 @@
     <body class="{% block body_class %}{% endblock %}" hx-boost="true">
         {% block body_content %}{% endblock %}
 
-        <script>
-            function timeago(dt) {
-                const now = Date.now();
-                const value = new Date(dt).getTime();
+        <dialog id="shortcuts-modal" class="shortcuts-modal">
+            <div class="shortcuts-modal__header">
+                <h2 class="shortcuts-modal__title">Keyboard shortcuts</h2>
+                <form method="dialog">
+                    <button type="submit" class="shortcuts-modal__close" aria-label="Close">{{ icon("x") }}</button>
+                </form>
+            </div>
 
-                if (value == null || isNaN(value)) return "never";
+            <div class="shortcuts-modal__group">
+                <h3 class="shortcuts-modal__group-title">Global</h3>
+                <dl class="shortcuts-modal__list">
+                    <div class="shortcuts-modal__row">
+                        <dt>Show this help</dt>
+                        <dd><kbd>?</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Go back / close</dt>
+                        <dd><kbd>Esc</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Submit the current form</dt>
+                        <dd><kbd>Ctrl</kbd><kbd>Enter</kbd></dd>
+                    </div>
+                </dl>
+            </div>
 
-                let secs = Math.floor((now - value) / 1000);
-                const future = secs < 0;
-                secs = Math.abs(secs);
+            <div class="shortcuts-modal__group">
+                <h3 class="shortcuts-modal__group-title">Go to</h3>
+                <dl class="shortcuts-modal__list">
+                    <div class="shortcuts-modal__row">
+                        <dt>Search</dt>
+                        <dd><kbd>/</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Dashboard</dt>
+                        <dd><kbd>g</kbd><kbd>d</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Notes</dt>
+                        <dd><kbd>g</kbd><kbd>n</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Todos</dt>
+                        <dd><kbd>g</kbd><kbd>t</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Sticky notes</dt>
+                        <dd><kbd>g</kbd><kbd>s</kbd></dd>
+                    </div>
+                </dl>
+            </div>
 
-                const fmt = (n, unit) => {
-                    return n + " " + (n === 1 ? unit : unit + "s");
-                };
+            <div class="shortcuts-modal__group">
+                <h3 class="shortcuts-modal__group-title">Create</h3>
+                <dl class="shortcuts-modal__list">
+                    <div class="shortcuts-modal__row">
+                        <dt>New note</dt>
+                        <dd><kbd>c</kbd><kbd>n</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>New todo</dt>
+                        <dd><kbd>c</kbd><kbd>t</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>New sticky note</dt>
+                        <dd><kbd>c</kbd><kbd>s</kbd></dd>
+                    </div>
+                </dl>
+            </div>
 
-                let unit;
+            <div class="shortcuts-modal__group">
+                <h3 class="shortcuts-modal__group-title">On a notes/todos/sticky notes list</h3>
+                <dl class="shortcuts-modal__list">
+                    <div class="shortcuts-modal__row">
+                        <dt>New</dt>
+                        <dd><kbd>n</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Archived (Expired for sticky notes)</dt>
+                        <dd><kbd>a</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Trash</dt>
+                        <dd><kbd>t</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Recurring (todos only)</dt>
+                        <dd><kbd>r</kbd></dd>
+                    </div>
+                </dl>
+            </div>
 
-                if (secs < 10) return "now";
-                else if (secs < 60) unit = fmt(secs, "second");
-                else if (secs < 3600) unit = fmt(Math.floor(secs / 60), "minute");
-                else if (secs < 86400) unit = fmt(Math.floor(secs / 3600), "hour");
-                else if (secs < 604800) unit = fmt(Math.floor(secs / 86400), "day");
-                else if (secs < 2629800) unit = fmt(Math.floor(secs / 604800), "week");
-                else if (secs < 31557600) unit = fmt(Math.floor(secs / 2629800), "month");
-                else unit = fmt(Math.floor(secs / 31557600), "year");
+            <div class="shortcuts-modal__group">
+                <h3 class="shortcuts-modal__group-title">On a note or todo</h3>
+                <dl class="shortcuts-modal__list">
+                    <div class="shortcuts-modal__row">
+                        <dt>Edit</dt>
+                        <dd><kbd>e</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Toggle archive</dt>
+                        <dd><kbd>a</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Trash</dt>
+                        <dd><kbd>d</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Set state to open / active / done / cancelled</dt>
+                        <dd><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd></dd>
+                    </div>
+                </dl>
+            </div>
 
-                return future ? "in " + unit : unit + " ago";
+            <div class="shortcuts-modal__group">
+                <h3 class="shortcuts-modal__group-title">On a focused sticky note</h3>
+                <dl class="shortcuts-modal__list">
+                    <div class="shortcuts-modal__row">
+                        <dt>Toggle pin</dt>
+                        <dd><kbd>p</kbd></dd>
+                    </div>
+                    <div class="shortcuts-modal__row">
+                        <dt>Trash</dt>
+                        <dd><kbd>d</kbd></dd>
+                    </div>
+                </dl>
+            </div>
+        </dialog>
+
+        <script type="application/json" id="nav-routes">
+            {
+                "dashboard": "{{ url_for('index') }}",
+                "notes": "{{ url_for('notes.list_notes') }}",
+                "todos": "{{ url_for('todos.list_todos') }}",
+                "stickyNotes": "{{ url_for('sticky_notes.list_sticky_notes') }}",
+                "newNote": "{{ url_for('notes.new_note') }}",
+                "newTodo": "{{ url_for('todos.new_todo') }}",
+                "newStickyNote": "{{ url_for('sticky_notes.new_sticky_note') }}",
+                "search": "{{ url_for('search.search_view') }}"
             }
-
-            function updateLiveTimes() {
-                document.querySelectorAll('time[data-live]').forEach(function(el) {
-                    const dt = new Date(el.getAttribute('datetime'));
-                    if (!isNaN(dt)) el.textContent = timeago(dt);
-                });
-            }
-            updateLiveTimes();
-            setInterval(updateLiveTimes, 1000);
-            document.addEventListener('htmx:afterSettle', updateLiveTimes);
-
-            document.querySelectorAll('form[data-require-either]').forEach(function(form) {
-                var names = form.dataset.requireEither.split(',');
-                var fields = names.map(function(name) {
-                    return form.elements.namedItem(name);
-                });
-                form.addEventListener('submit', function(e) {
-                    var allBlank = fields.every(function(f) {
-                        return !f.value.trim();
-                    });
-                    fields[0].setCustomValidity(allBlank ? 'Add a title or some content.' : '');
-                    if (allBlank) {
-                        e.preventDefault();
-                        fields[0].reportValidity();
-                    }
-                });
-                fields.forEach(function(f) {
-                    f.addEventListener('input', function() {
-                        fields[0].setCustomValidity('');
-                    });
-                });
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.defaultPrevented) return;
-
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                    var form = e.target.closest('form') || document.querySelector('form.editor');
-                    if (form) {
-                        e.preventDefault();
-                        form.requestSubmit();
-                    }
-                    return;
-                }
-
-                if (e.key === 'Escape') {
-                    history.back();
-                    return;
-                }
-
-                var typing = e.target.matches('input, textarea, select') || e.target.isContentEditable;
-                if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
-
-                if (e.key === 'n' || e.key === 'N') {
-                    var newLink = document.querySelector('[data-shortcut="new"]');
-                    if (newLink) {
-                        e.preventDefault();
-                        newLink.click();
-                    }
-                } else if (e.key === 'e' || e.key === 'E') {
-                    var editLink = document.querySelector('[data-shortcut="edit"]');
-                    if (editLink) {
-                        e.preventDefault();
-                        editLink.click();
-                    }
-                }
-            });
         </script>
+
+        <script src="{{ url_for('static', filename='scripts/live-timestamps.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/required-fields.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/shortcuts-modal.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/keyboard-shortcuts.js') }}"></script>
     </body>
 </html>

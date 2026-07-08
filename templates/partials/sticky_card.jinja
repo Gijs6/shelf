@@ -16,7 +16,8 @@
                 <div class="sticky-note__actions">
                     <form hx-patch="{{ url_for('sticky_notes.toggle_pin', sticky_note_id=sticky_note.id) }}"
                           hx-target="body"
-                          hx-push-url="true">
+                          hx-push-url="true"
+                          data-shortcut="sticky-pin">
                         <button type="submit" class="sticky-note__icon-button">
                             <span class="visually-hidden">Toggle pin</span>
                             {{ icon("pin") }}
@@ -24,7 +25,8 @@
                     </form>
                     <form hx-delete="{{ url_for('sticky_notes.delete_sticky_note', sticky_note_id=sticky_note.id) }}"
                           hx-target="body"
-                          hx-push-url="true">
+                          hx-push-url="true"
+                          data-shortcut="sticky-delete">
                         <button type="submit" class="sticky-note__icon-button">
                             <span class="visually-hidden">Delete</span>
                             {{ icon("trash") }}

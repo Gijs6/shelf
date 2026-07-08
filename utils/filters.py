@@ -64,10 +64,26 @@ def pluralize_filter(n, unit):
     return unit if n == 1 else unit + "s"
 
 
+MARKDOWN_EXTENSIONS = [
+    "fenced_code",
+    "nl2br",
+    "tables",
+    "sane_lists",
+    "codehilite",
+    "admonition",
+]
+
+
 def markdown_filter(text):
     if not text:
         return ""
-    return Markup(markdown.markdown(text, extensions=["fenced_code", "nl2br"]))
+    return Markup(
+        markdown.markdown(
+            text,
+            extensions=MARKDOWN_EXTENSIONS,
+            extension_configs={"codehilite": {"guess_lang": True}},
+        )
+    )
 
 
 FILTERS = {

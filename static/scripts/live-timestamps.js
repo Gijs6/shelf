@@ -1,0 +1,38 @@
+(function () {
+    function timeago(dt) {
+        const now = Date.now();
+        const value = new Date(dt).getTime();
+
+        if (value == null || isNaN(value)) return "never";
+
+        let secs = Math.floor((now - value) / 1000);
+        const future = secs < 0;
+        secs = Math.abs(secs);
+
+        const fmt = (n, unit) => n + " " + (n === 1 ? unit : unit + "s");
+
+        let unit;
+
+        if (secs < 10) return "now";
+        else if (secs < 60) unit = fmt(secs, "second");
+        else if (secs < 3600) unit = fmt(Math.floor(secs / 60), "minute");
+        else if (secs < 86400) unit = fmt(Math.floor(secs / 3600), "hour");
+        else if (secs < 604800) unit = fmt(Math.floor(secs / 86400), "day");
+        else if (secs < 2629800) unit = fmt(Math.floor(secs / 604800), "week");
+        else if (secs < 31557600) unit = fmt(Math.floor(secs / 2629800), "month");
+        else unit = fmt(Math.floor(secs / 31557600), "year");
+
+        return future ? "in " + unit : unit + " ago";
+    }
+
+    function updateLiveTimes() {
+        document.querySelectorAll('time[data-live]').forEach(function (el) {
+            const dt = new Date(el.getAttribute('datetime'));
+            if (!isNaN(dt)) el.textContent = timeago(dt);
+        });
+    }
+
+    updateLiveTimes();
+    setInterval(updateLiveTimes, 1000);
+    document.addEventListener('htmx:afterSettle', updateLiveTimes);
+})();

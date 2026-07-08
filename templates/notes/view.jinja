@@ -27,20 +27,22 @@
                 {% if note.archived %}
                     <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
                           hx-target="body"
-                          hx-push-url="true">
+                          hx-push-url="true"
+                          data-shortcut="archive-toggle">
                         <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
                     </form>
                 {% else %}
                     <form hx-patch="{{ url_for('notes.archive_note', note_id=note.id) }}"
                           hx-target="body"
-                          hx-push-url="true">
+                          hx-push-url="true"
+                          data-shortcut="archive-toggle">
                         <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
                     </form>
                 {% endif %}
                 <form hx-delete="{{ url_for('notes.delete_note', note_id=note.id) }}"
                       hx-target="body"
                       hx-push-url="true"
-                      hx-confirm="Move this note to trash?">
+                      data-shortcut="delete">
                     <button type="submit" class="button button--danger">{{ icon("trash") }} Delete</button>
                 </form>
             </div>
