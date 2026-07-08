@@ -17,6 +17,13 @@ def get_version():
             .decode()
             .strip()
         )
+        commit_count = (
+            subprocess.check_output(
+                ["git", "rev-list", "--count", "HEAD"], stderr=subprocess.DEVNULL
+            )
+            .decode()
+            .strip()
+        )
     except (OSError, subprocess.CalledProcessError):
         return None
-    return f"{datetime.now():%Y.%m}:{commit}"
+    return f"{datetime.now():%Y.%m}:{commit}:{commit_count}"
