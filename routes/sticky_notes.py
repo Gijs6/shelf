@@ -128,7 +128,13 @@ def toggle_pin(sticky_note_id):
     ).first_or_404()
     sticky_note.pinned = not sticky_note.pinned
     db.session.commit()
-    return redirect(url_for("sticky_notes.list_sticky_notes"), code=303)
+    flash(
+        "Sticky note pinned." if sticky_note.pinned else "Sticky note unpinned.",
+        "success",
+    )
+    return redirect(
+        request.referrer or url_for("sticky_notes.list_sticky_notes"), code=303
+    )
 
 
 @sticky_notes_bp.delete("/<sticky_note_id>/delete")
