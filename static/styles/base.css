@@ -22,11 +22,6 @@ footer p {
     margin: 0;
 }
 
-.app-footer__version {
-    border: none;
-    background: none;
-}
-
 @media (max-width: 800px) {
     .navbar {
         gap: var(--space-sm);
@@ -73,9 +68,11 @@ footer p {
 }
 
 .page {
+    width: 100%;
     max-width: 72rem;
     margin: 0 auto;
     padding: var(--space-xl);
+    flex: 1 0 auto;
 }
 
 .page-header {
