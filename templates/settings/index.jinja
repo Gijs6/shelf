@@ -14,14 +14,12 @@
     <div class="settings-grid">
 
         <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("download") }} Export</h2>
-            <p class="settings-panel__desc">Download all notes, sticky notes, and todos as a single JSON file.</p>
+            <h2 class="settings-panel__title">{{ icon("download") }} Export all data</h2>
             <a href="{{ url_for('settings.export') }}" class="button">{{ icon("download") }} Export JSON</a>
         </section>
 
         <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("upload") }} Import</h2>
-            <p class="settings-panel__desc">Restore or merge data from a previously exported JSON file. Records whose ID matches an existing one are updated in place, everything else is added.</p>
+            <h2 class="settings-panel__title">{{ icon("upload") }} Import data</h2>
             <form method="post"
                   action="{{ url_for('settings.import_data') }}"
                   enctype="multipart/form-data"
@@ -40,8 +38,7 @@
         </section>
 
         <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("trash") }} Remove all</h2>
-            <p class="settings-panel__desc">Permanently delete every note, sticky note, and todo. Export a backup first if you might need this data again.</p>
+            <h2 class="settings-panel__title">{{ icon("trash") }} Remove all data</h2>
             <form hx-delete="{{ url_for('settings.remove_all') }}"
                   hx-target="body"
                   hx-push-url="true"
@@ -52,7 +49,6 @@
 
         <section class="settings-panel">
             <h2 class="settings-panel__title">{{ icon("logout") }} Log out</h2>
-            <p class="settings-panel__desc">End your current session.</p>
             <form method="post" action="{{ url_for('logout') }}">
                 <button type="submit" class="button">{{ icon("logout") }} Log out</button>
             </form>
