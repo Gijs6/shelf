@@ -9,7 +9,7 @@
 
 {% block content %}
     <article>
-        <header class="page-header">
+        <header class="page-header page-header--todo">
             <hgroup class="page-header__heading">
                 {{ type_eyebrow("todo") }}
                 <h1 class="page-header__title">
@@ -30,21 +30,24 @@
                    class="button button--ghost"
                    data-shortcut="edit">{{ icon("edit") }} Edit</a>
                 {% if todo.archived %}
-                    <form hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
+                    <form class="page-header__actions-form"
+                          hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
                           hx-target="body"
                           hx-push-url="true"
                           data-shortcut="archive-toggle">
                         <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
                     </form>
                 {% else %}
-                    <form hx-patch="{{ url_for('todos.archive_todo', todo_id=todo.id) }}"
+                    <form class="page-header__actions-form"
+                          hx-patch="{{ url_for('todos.archive_todo', todo_id=todo.id) }}"
                           hx-target="body"
                           hx-push-url="true"
                           data-shortcut="archive-toggle">
                         <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
                     </form>
                 {% endif %}
-                <form hx-delete="{{ url_for('todos.delete_todo', todo_id=todo.id) }}"
+                <form class="page-header__actions-form"
+                      hx-delete="{{ url_for('todos.delete_todo', todo_id=todo.id) }}"
                       hx-target="body"
                       hx-push-url="true"
                       data-shortcut="delete">
@@ -64,7 +67,7 @@
                             value="{{ state }}"
                             data-state="{{ state }}"
                             aria-pressed="{{ 'true' if todo.state==state else 'false' }}"
-                            class="button button--sm {% if todo.state==state %}button--active{% else %}button--ghost{% endif %}">{{ state | replace('_', ' ') | title }}</button>
+                            class="button button--sm state-picker__option state-picker__option--{{ state }} {% if todo.state==state %}state-picker__option--selected{% else %}button--ghost{% endif %}">{{ state | replace('_', ' ') | title }}</button>
                 {% endfor %}
             </fieldset>
         </form>

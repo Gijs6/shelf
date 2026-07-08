@@ -18,138 +18,138 @@
         </div>
     </header>
 
-    <dialog id="search-help-modal" class="shortcuts-modal">
-        <div class="shortcuts-modal__header">
-            <h2 class="shortcuts-modal__title">Search syntax</h2>
+    <dialog id="search-help-modal" class="modal">
+        <div class="modal__header">
+            <h2 class="modal__title">Search syntax</h2>
             <form method="dialog">
-                <button type="submit" class="shortcuts-modal__close" aria-label="Close">{{ icon("x") }}</button>
+                <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
             </form>
         </div>
 
-        <div class="shortcuts-modal__group">
-            <h3 class="shortcuts-modal__group-title">Type</h3>
-            <dl class="shortcuts-modal__list">
-                <div class="shortcuts-modal__row">
-                    <dt>
+        <div class="modal__group">
+            <h3 class="modal__group-title">Type</h3>
+            <dl class="modal__list">
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>is:note</code> <code>is:todo</code> <code>is:sticky</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Only that type (repeat to combine)
                     </dd>
                 </div>
             </dl>
         </div>
 
-        <div class="shortcuts-modal__group">
-            <h3 class="shortcuts-modal__group-title">Todo filters</h3>
-            <dl class="shortcuts-modal__list">
-                <div class="shortcuts-modal__row">
-                    <dt>
+        <div class="modal__group">
+            <h3 class="modal__group-title">Todo filters</h3>
+            <dl class="modal__list">
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>state:open|active|done|cancelled</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         By todo state
                     </dd>
                 </div>
-                <div class="shortcuts-modal__row">
-                    <dt>
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>overdue:yes</code> / <code>no</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Overdue todos
                     </dd>
                 </div>
-                <div class="shortcuts-modal__row">
-                    <dt>
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>due:today</code> / <code>due:week</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Due today / within 7 days
                     </dd>
                 </div>
             </dl>
         </div>
 
-        <div class="shortcuts-modal__group">
-            <h3 class="shortcuts-modal__group-title">Sticky note filters</h3>
-            <dl class="shortcuts-modal__list">
-                <div class="shortcuts-modal__row">
-                    <dt>
+        <div class="modal__group">
+            <h3 class="modal__group-title">Sticky note filters</h3>
+            <dl class="modal__list">
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>pinned:yes</code> / <code>no</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Pinned sticky notes
                     </dd>
                 </div>
-                <div class="shortcuts-modal__row">
-                    <dt>
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>colour:pink</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         yellow, pink, blue, green, purple, orange
                     </dd>
                 </div>
             </dl>
         </div>
 
-        <div class="shortcuts-modal__group">
-            <h3 class="shortcuts-modal__group-title">Notes &amp; todos</h3>
-            <dl class="shortcuts-modal__list">
-                <div class="shortcuts-modal__row">
-                    <dt>
+        <div class="modal__group">
+            <h3 class="modal__group-title">Notes &amp; todos</h3>
+            <dl class="modal__list">
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>group:home</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Exact group name
                     </dd>
                 </div>
-                <div class="shortcuts-modal__row">
-                    <dt>
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>archived:yes</code> / <code>no</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Archived items
                     </dd>
                 </div>
             </dl>
         </div>
 
-        <div class="shortcuts-modal__group">
-            <h3 class="shortcuts-modal__group-title">Dates</h3>
-            <dl class="shortcuts-modal__list">
-                <div class="shortcuts-modal__row">
-                    <dt>
+        <div class="modal__group">
+            <h3 class="modal__group-title">Dates</h3>
+            <dl class="modal__list">
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>before:2026-01-01</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Created before a date (YYYY-MM-DD, all types)
                     </dd>
                 </div>
-                <div class="shortcuts-modal__row">
-                    <dt>
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>after:2026-01-01</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Created on/after a date (YYYY-MM-DD, all types) - for todo deadlines use <code>due:today</code> / <code>due:week</code> instead
                     </dd>
                 </div>
             </dl>
         </div>
 
-        <div class="shortcuts-modal__group">
-            <h3 class="shortcuts-modal__group-title">Sorting &amp; text</h3>
-            <dl class="shortcuts-modal__list">
-                <div class="shortcuts-modal__row">
-                    <dt>
+        <div class="modal__group">
+            <h3 class="modal__group-title">Sorting &amp; text</h3>
+            <dl class="modal__list">
+                <div class="modal__row">
+                    <dt class="modal__row-term">
                         <code>sort:title</code> / <code>sort:created</code> / <code>sort:updated</code>
                     </dt>
-                    <dd>
+                    <dd class="modal__row-desc">
                         Default: last updated
                     </dd>
                 </div>
-                <div class="shortcuts-modal__row">
-                    <dt>Any other words</dt>
-                    <dd>
+                <div class="modal__row">
+                    <dt class="modal__row-term">Any other words</dt>
+                    <dd class="modal__row-desc">
                         Matched against title &amp; content
                     </dd>
                 </div>
@@ -170,7 +170,7 @@
         <input type="search"
                id="q"
                name="q"
-               class="field__input"
+               class="field__input filters__input"
                placeholder="is:todo state:open group:home overdue:yes due:week sort:title ..."
                value="{{ query }}"
                autocomplete="off"

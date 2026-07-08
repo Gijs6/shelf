@@ -6,7 +6,8 @@
             <div class="sticky-note__content">
                 {% if sticky_note.title %}
                     <h3 class="sticky-note__title">
-                        <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}">{{ sticky_note.title }}</a>
+                        <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}"
+                           class="sticky-note__title-link">{{ sticky_note.title }}</a>
                     </h3>
                 {% endif %}
                 <div class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
@@ -18,7 +19,7 @@
                           hx-target="body"
                           hx-push-url="true"
                           data-shortcut="sticky-pin">
-                        <button type="submit" class="sticky-note__icon-button">
+                        <button type="submit" class="sticky-note__icon-button sticky-note__icon-button--pin">
                             <span class="visually-hidden">Toggle pin</span>
                             {{ icon("pin") }}
                         </button>

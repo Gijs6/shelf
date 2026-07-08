@@ -8,17 +8,17 @@
 {% block page_class %}page--sticky{% endblock %}
 
 {% block content %}
-    <header class="page-header">
+    <header class="page-header page-header--sticky">
         <div class="page-header__heading">
             <h1 class="page-header__title">Sticky notes</h1>
         </div>
         <nav class="page-header__actions" aria-label="Sticky note actions">
             <a href="{{ url_for('sticky_notes.expired') }}"
-               class="button button--ghost button--sm"
+               class="button button--ghost button--sm button--icon-only"
                aria-label="Expired sticky notes"
                data-shortcut="archived">{{ icon("archive") }}</a>
             <a href="{{ url_for('sticky_notes.trash') }}"
-               class="button button--ghost button--sm"
+               class="button button--ghost button--sm button--icon-only"
                aria-label="Trash"
                data-shortcut="trash">{{ icon("trash") }}</a>
             <a href="{{ url_for('sticky_notes.new_sticky_note') }}"

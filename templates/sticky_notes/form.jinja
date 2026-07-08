@@ -12,7 +12,7 @@
 {% block page_class %}page--sticky{% endblock %}
 
 {% block content %}
-    <header class="page-header">
+    <header class="page-header page-header--sticky">
         <div class="page-header__heading">
             <h1 class="page-header__title">
                 {% if sticky_note %}
@@ -45,7 +45,7 @@
         </div>
 
         <fieldset class="colour-picker">
-            <legend class="field__label">Colour</legend>
+            <legend class="field__label colour-picker__label">Colour</legend>
             {% for colour in colours %}
                 <label class="colour-picker__option colour-picker__option--{{ colour }}">
                     <input type="radio"
@@ -60,7 +60,7 @@
 
         <fieldset class="editor__meta">
             <legend class="visually-hidden">Details</legend>
-            <div class="field">
+            <div class="field editor__field">
                 <label for="expires_at" class="field__label">Expires at</label>
                 <input type="datetime-local"
                        id="expires_at"
@@ -69,7 +69,7 @@
                        value="{{ sticky_note.expires_at.strftime('%Y-%m-%dT%H:%M') if sticky_note and sticky_note.expires_at else (default_expires_at.strftime('%Y-%m-%dT%H:%M') if not sticky_note else '') }}" />
             </div>
 
-            <div class="field field--checkbox">
+            <div class="field field--checkbox editor__field">
                 <label for="pinned" class="field__label">
                     <input type="checkbox"
                            id="pinned"

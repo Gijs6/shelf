@@ -12,7 +12,7 @@
 {% block page_class %}page--todo{% endblock %}
 
 {% block content %}
-    <header class="page-header">
+    <header class="page-header page-header--todo">
         <div class="page-header__heading">
             <h1 class="page-header__title">
                 {% if todo and todo.id %}
@@ -47,7 +47,7 @@
 
         <fieldset class="editor__meta">
             <legend class="visually-hidden">Details</legend>
-            <div class="field">
+            <div class="field editor__field">
                 <label for="group" class="field__label">Group</label>
                 <input type="text"
                        id="group"
@@ -62,7 +62,7 @@
                 </datalist>
             </div>
 
-            <div class="field">
+            <div class="field editor__field">
                 <label for="deadline" class="field__label">Deadline</label>
                 <input type="datetime-local"
                        id="deadline"
@@ -71,7 +71,7 @@
                        value="{{ todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
             </div>
 
-            <div class="field">
+            <div class="field editor__field">
                 <label for="recur_interval" class="field__label">Repeat every</label>
                 <input type="number"
                        id="recur_interval"
@@ -82,7 +82,7 @@
                        value="{{ todo.recur_interval if todo and todo.recur_interval else '' }}" />
             </div>
 
-            <div class="field">
+            <div class="field editor__field">
                 <label for="recur_unit" class="field__label">Repeat unit</label>
                 <select id="recur_unit" name="recur_unit" class="field__input">
                     <option value="">No repeat</option>
@@ -93,7 +93,7 @@
                 </select>
             </div>
 
-            <div class="field">
+            <div class="field editor__field">
                 <label for="notify_before_days" class="field__label">Notify before deadline</label>
                 <input type="number"
                        id="notify_before_days"

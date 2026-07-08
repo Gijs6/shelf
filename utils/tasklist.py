@@ -42,7 +42,7 @@ class TaskListTreeprocessor(Treeprocessor):
                 mark, rest = match.groups()
                 checkbox = etree.Element("input")
                 checkbox.set("type", "checkbox")
-                checkbox.set("class", "task-checkbox")
+                checkbox.set("class", "task-list__checkbox")
                 if mark.lower() == "x":
                     checkbox.set("checked", "checked")
 
@@ -55,7 +55,7 @@ class TaskListTreeprocessor(Treeprocessor):
                 else:
                     checkbox.set("disabled", "disabled")
 
-                li.set("class", f"{li.get('class', '')} task-list-item".strip())
+                li.set("class", f"{li.get('class', '')} task-list__item".strip())
                 li.text = None
                 checkbox.tail = f" {rest}" if rest else " "
                 li.insert(0, checkbox)

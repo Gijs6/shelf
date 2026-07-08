@@ -3,7 +3,7 @@
 {% macro empty_state(icon_name, message, cta_href=none, cta_label=none) %}
     <div class="empty-state">
         {{ icon(icon_name, class="empty-state__icon") }}
-        <p>{{ message }}</p>
+        <p class="empty-state__message">{{ message }}</p>
         {% if cta_href %}<a href="{{ cta_href }}" class="button">{{ icon("plus") }} {{ cta_label }}</a>{% endif %}
     </div>
 {% endmacro %}

@@ -22,9 +22,17 @@
             <link rel="stylesheet"
                   href="{{ url_for('static', filename='styles/theming.css') }}" />
             <link rel="stylesheet"
+                  href="{{ url_for('static', filename='styles/code.css') }}" />
+            <link rel="stylesheet"
                   href="{{ url_for('static', filename='styles/base.css') }}" />
             <link rel="stylesheet"
                   href="{{ url_for('static', filename='styles/auth.css') }}" />
+            <link rel="stylesheet"
+                  href="{{ url_for('static', filename='styles/error.css') }}" />
+            <link rel="stylesheet"
+                  href="{{ url_for('static', filename='styles/dashboard.css') }}" />
+            <link rel="stylesheet"
+                  href="{{ url_for('static', filename='styles/settings.css') }}" />
             <link rel="stylesheet"
                   href="{{ url_for('static', filename='styles/sticky-notes.css') }}" />
             <link rel="stylesheet"
@@ -42,171 +50,171 @@
     <body class="{% block body_class %}{% endblock %}" hx-boost="true">
         {% block body_content %}{% endblock %}
 
-        <dialog id="shortcuts-modal" class="shortcuts-modal">
-            <div class="shortcuts-modal__header">
-                <h2 class="shortcuts-modal__title">Keyboard shortcuts</h2>
+        <dialog id="shortcuts-modal" class="modal">
+            <div class="modal__header">
+                <h2 class="modal__title">Keyboard shortcuts</h2>
                 <form method="dialog">
-                    <button type="submit" class="shortcuts-modal__close" aria-label="Close">{{ icon("x") }}</button>
+                    <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
                 </form>
             </div>
 
-            <div class="shortcuts-modal__group">
-                <h3 class="shortcuts-modal__group-title">Global</h3>
-                <dl class="shortcuts-modal__list">
-                    <div class="shortcuts-modal__row">
-                        <dt>Show this help</dt>
-                        <dd>
-                            <kbd>?</kbd>
+            <div class="modal__group">
+                <h3 class="modal__group-title">Global</h3>
+                <dl class="modal__list">
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Show this help</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">?</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Go back / close</dt>
-                        <dd>
-                            <kbd>Esc</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Go back / close</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">Esc</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Submit the current form</dt>
-                        <dd>
-                            <kbd>Ctrl</kbd><kbd>Enter</kbd>
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-
-            <div class="shortcuts-modal__group">
-                <h3 class="shortcuts-modal__group-title">Go to</h3>
-                <dl class="shortcuts-modal__list">
-                    <div class="shortcuts-modal__row">
-                        <dt>Search</dt>
-                        <dd>
-                            <kbd>/</kbd>
-                        </dd>
-                    </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Dashboard</dt>
-                        <dd>
-                            <kbd>g</kbd><kbd>d</kbd>
-                        </dd>
-                    </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Notes</dt>
-                        <dd>
-                            <kbd>g</kbd><kbd>n</kbd>
-                        </dd>
-                    </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Todos</dt>
-                        <dd>
-                            <kbd>g</kbd><kbd>t</kbd>
-                        </dd>
-                    </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Sticky notes</dt>
-                        <dd>
-                            <kbd>g</kbd><kbd>s</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Submit the current form</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">Ctrl</kbd><kbd class="modal__key">Enter</kbd>
                         </dd>
                     </div>
                 </dl>
             </div>
 
-            <div class="shortcuts-modal__group">
-                <h3 class="shortcuts-modal__group-title">Create</h3>
-                <dl class="shortcuts-modal__list">
-                    <div class="shortcuts-modal__row">
-                        <dt>New note</dt>
-                        <dd>
-                            <kbd>c</kbd><kbd>n</kbd>
+            <div class="modal__group">
+                <h3 class="modal__group-title">Go to</h3>
+                <dl class="modal__list">
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Search</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">/</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>New todo</dt>
-                        <dd>
-                            <kbd>c</kbd><kbd>t</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Dashboard</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">g</kbd><kbd class="modal__key">d</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>New sticky note</dt>
-                        <dd>
-                            <kbd>c</kbd><kbd>s</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Notes</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">g</kbd><kbd class="modal__key">n</kbd>
                         </dd>
                     </div>
-                </dl>
-            </div>
-
-            <div class="shortcuts-modal__group">
-                <h3 class="shortcuts-modal__group-title">On a notes/todos/sticky notes list</h3>
-                <dl class="shortcuts-modal__list">
-                    <div class="shortcuts-modal__row">
-                        <dt>New</dt>
-                        <dd>
-                            <kbd>n</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Todos</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">g</kbd><kbd class="modal__key">t</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Archived (Expired for sticky notes)</dt>
-                        <dd>
-                            <kbd>a</kbd>
-                        </dd>
-                    </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Trash</dt>
-                        <dd>
-                            <kbd>t</kbd>
-                        </dd>
-                    </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Recurring (todos only)</dt>
-                        <dd>
-                            <kbd>r</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Sticky notes</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">g</kbd><kbd class="modal__key">s</kbd>
                         </dd>
                     </div>
                 </dl>
             </div>
 
-            <div class="shortcuts-modal__group">
-                <h3 class="shortcuts-modal__group-title">On a note or todo</h3>
-                <dl class="shortcuts-modal__list">
-                    <div class="shortcuts-modal__row">
-                        <dt>Edit</dt>
-                        <dd>
-                            <kbd>e</kbd>
+            <div class="modal__group">
+                <h3 class="modal__group-title">Create</h3>
+                <dl class="modal__list">
+                    <div class="modal__row">
+                        <dt class="modal__row-term">New note</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">c</kbd><kbd class="modal__key">n</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Toggle archive</dt>
-                        <dd>
-                            <kbd>a</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">New todo</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">c</kbd><kbd class="modal__key">t</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Trash</dt>
-                        <dd>
-                            <kbd>d</kbd>
-                        </dd>
-                    </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Set state to open / active / done / cancelled</dt>
-                        <dd>
-                            <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">New sticky note</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">c</kbd><kbd class="modal__key">s</kbd>
                         </dd>
                     </div>
                 </dl>
             </div>
 
-            <div class="shortcuts-modal__group">
-                <h3 class="shortcuts-modal__group-title">On a focused sticky note</h3>
-                <dl class="shortcuts-modal__list">
-                    <div class="shortcuts-modal__row">
-                        <dt>Toggle pin</dt>
-                        <dd>
-                            <kbd>p</kbd>
+            <div class="modal__group">
+                <h3 class="modal__group-title">On a notes/todos/sticky notes list</h3>
+                <dl class="modal__list">
+                    <div class="modal__row">
+                        <dt class="modal__row-term">New</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">n</kbd>
                         </dd>
                     </div>
-                    <div class="shortcuts-modal__row">
-                        <dt>Trash</dt>
-                        <dd>
-                            <kbd>d</kbd>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Archived (Expired for sticky notes)</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">a</kbd>
+                        </dd>
+                    </div>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Trash</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">t</kbd>
+                        </dd>
+                    </div>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Recurring (todos only)</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">r</kbd>
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="modal__group">
+                <h3 class="modal__group-title">On a note or todo</h3>
+                <dl class="modal__list">
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Edit</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">e</kbd>
+                        </dd>
+                    </div>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Toggle archive</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">a</kbd>
+                        </dd>
+                    </div>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Trash</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">d</kbd>
+                        </dd>
+                    </div>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Set state to open / active / done / cancelled</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">1</kbd><kbd class="modal__key">2</kbd><kbd class="modal__key">3</kbd><kbd class="modal__key">4</kbd>
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="modal__group">
+                <h3 class="modal__group-title">On a focused sticky note</h3>
+                <dl class="modal__list">
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Toggle pin</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">p</kbd>
+                        </dd>
+                    </div>
+                    <div class="modal__row">
+                        <dt class="modal__row-term">Trash</dt>
+                        <dd class="modal__row-desc">
+                            <kbd class="modal__key">d</kbd>
                         </dd>
                     </div>
                 </dl>

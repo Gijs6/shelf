@@ -12,7 +12,7 @@
 {% block page_class %}page--note{% endblock %}
 
 {% block content %}
-    <header class="page-header">
+    <header class="page-header page-header--note">
         <div class="page-header__heading">
             <h1 class="page-header__title">
                 {% if note and note.id %}
@@ -47,7 +47,7 @@
 
         <fieldset class="editor__meta">
             <legend class="visually-hidden">Details</legend>
-            <div class="field">
+            <div class="field editor__field">
                 <label for="group" class="field__label">Group</label>
                 <input type="text"
                        id="group"

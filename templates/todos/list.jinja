@@ -7,21 +7,21 @@
 {% block page_class %}page--todo{% endblock %}
 
 {% block content %}
-    <header class="page-header">
+    <header class="page-header page-header--todo">
         <div class="page-header__heading">
             <h1 class="page-header__title">Todos</h1>
         </div>
         <nav class="page-header__actions" aria-label="Todo actions">
             <a href="{{ url_for('todos.recurring') }}"
-               class="button button--ghost button--sm"
+               class="button button--ghost button--sm button--icon-only"
                aria-label="Recurring todos"
                data-shortcut="recurring">{{ icon("repeat") }}</a>
             <a href="{{ url_for('todos.archived') }}"
-               class="button button--ghost button--sm"
+               class="button button--ghost button--sm button--icon-only"
                aria-label="Archived todos"
                data-shortcut="archived">{{ icon("archive") }}</a>
             <a href="{{ url_for('todos.trash') }}"
-               class="button button--ghost button--sm"
+               class="button button--ghost button--sm button--icon-only"
                aria-label="Trash"
                data-shortcut="trash">{{ icon("trash") }}</a>
             <a href="{{ url_for('todos.new_todo') }}"
@@ -33,7 +33,7 @@
     <nav class="filters" aria-label="Filter todos by state">
         {% for state in states %}
             <a href="{{ chip_links[state] }}"
-               class="filters__chip filters__chip--{{ state }} {% if state in selected_states %}is-selected{% endif %}"
+               class="filters__chip filters__chip--{{ state }} {% if state in selected_states %}filters__chip--selected{% endif %}"
                aria-pressed="{{ 'true' if state in selected_states else 'false' }}">{{ state | replace('_', ' ') | title }}</a>
         {% endfor %}
     </nav>

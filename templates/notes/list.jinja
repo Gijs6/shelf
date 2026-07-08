@@ -7,17 +7,17 @@
 {% block page_class %}page--note{% endblock %}
 
 {% block content %}
-    <header class="page-header">
+    <header class="page-header page-header--note">
         <div class="page-header__heading">
             <h1 class="page-header__title">Notes</h1>
         </div>
         <nav class="page-header__actions" aria-label="Note actions">
             <a href="{{ url_for('notes.archived') }}"
-               class="button button--ghost button--sm"
+               class="button button--ghost button--sm button--icon-only"
                aria-label="Archived notes"
                data-shortcut="archived">{{ icon("archive") }}</a>
             <a href="{{ url_for('notes.trash') }}"
-               class="button button--ghost button--sm"
+               class="button button--ghost button--sm button--icon-only"
                aria-label="Trash"
                data-shortcut="trash">{{ icon("trash") }}</a>
             <a href="{{ url_for('notes.new_note') }}"

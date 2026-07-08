@@ -22,18 +22,10 @@
     border: 1px solid var(--color-border);
 }
 
-.auth-layout__panel h1 {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
+.auth-layout__heading {
     margin: 0 0 var(--space-lg) 0;
     font-size: var(--font-size-xl);
     font-weight: 700;
-}
-
-.auth-layout__panel .button {
-    width: 100%;
-    justify-content: center;
 }
 
 .auth-layout__footer {

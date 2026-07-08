@@ -56,14 +56,13 @@
     font-weight: 700;
 }
 
-.sticky-note__title a {
+.sticky-note__title-link {
     color: inherit;
     text-decoration: none;
 }
 
 .sticky-note__actions {
     display: flex;
-    align-items: center;
     gap: var(--space-xs);
 }
 
@@ -82,7 +81,7 @@
     opacity: 1;
 }
 
-.sticky-note--pinned .sticky-note__actions :first-child .sticky-note__icon-button {
+.sticky-note--pinned .sticky-note__icon-button--pin {
     opacity: 1;
 }
 
@@ -129,7 +128,7 @@
     border: none;
 }
 
-.colour-picker .field__label {
+.colour-picker__label {
     margin-bottom: var(--space-xs);
 }
 
