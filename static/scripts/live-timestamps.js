@@ -13,7 +13,7 @@
 
         let unit;
 
-        if (secs < 10) return "now";
+        if (secs < 1) return "now";
         else if (secs < 60) unit = fmt(secs, "second");
         else if (secs < 3600) unit = fmt(Math.floor(secs / 60), "minute");
         else if (secs < 86400) unit = fmt(Math.floor(secs / 3600), "hour");

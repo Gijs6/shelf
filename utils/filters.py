@@ -42,7 +42,7 @@ def timeago_filter(value, local=True):
         unit = unit if n == 1 else unit + "s"
         return f"{n} {unit}"
 
-    if secs < 10:
+    if secs < 1:
         return "now"
 
     if secs < 60:
