@@ -145,7 +145,8 @@
             <h2 class="settings-panel__title">{{ icon("logout") }} Session</h2>
             {% if last_login %}
                 <p>
-                    Logged in since {{ last_login | strftime("%d %b %Y, %H:%M") }} ({{ last_login | timeago }}).<br />
+                    Logged in since {{ last_login | strftime("%d %b %Y, %H:%M") }} ({{ last_login | timeago }}).
+                    <br />
                     Session expires {{ session_expires_at | strftime("%d %b %Y, %H:%M") }} ({{ session_expires_at | timeago }}).
                 </p>
             {% endif %}
