@@ -74,7 +74,7 @@
     border: none;
     background-color: transparent;
     color: inherit;
-    opacity: 0.5;
+    opacity: 0.7;
     cursor: pointer;
 }
 
@@ -111,13 +111,13 @@
 .sticky-note__made {
     margin: 0;
     color: inherit;
-    opacity: 0.7;
+    opacity: 0.92;
     font-size: var(--font-size-sm);
 }
 
 .sticky-note__expires:not(:last-child)::after {
     content: "·";
-    opacity: 0.7;
+    opacity: 0.92;
 }
 
 .colour-picker {

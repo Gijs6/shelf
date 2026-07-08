@@ -196,12 +196,12 @@
     --color-sticky-subtle: color-mix(in srgb, var(--color-sticky) 15%, var(--color-surface));
     --color-fg-on-sticky: var(--color-black);
 
-    --color-sticky-yellow: var(--color-yellow-6);
-    --color-sticky-pink: var(--color-pink-5);
-    --color-sticky-blue: var(--color-blue-4);
-    --color-sticky-green: var(--color-green-6);
-    --color-sticky-purple: var(--color-violet-4);
-    --color-sticky-orange: var(--color-orange-5);
+    --color-sticky-yellow: var(--color-yellow-3);
+    --color-sticky-pink: var(--color-pink-3);
+    --color-sticky-blue: var(--color-blue-3);
+    --color-sticky-green: var(--color-green-3);
+    --color-sticky-purple: var(--color-violet-3);
+    --color-sticky-orange: var(--color-orange-3);
 }
 
 :root {
