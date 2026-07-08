@@ -1,0 +1,22 @@
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+    gap: var(--space-lg);
+}
+
+.settings-panel {
+    padding: var(--space-lg);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+}
+
+.settings-panel__title {
+    margin: 0 0 var(--space-sm) 0;
+    font-size: var(--font-size-lg);
+}
+
+.settings-panel__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}

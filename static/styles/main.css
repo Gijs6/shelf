@@ -5,5 +5,8 @@
 @import "code.css";
 @import "base.css";
 @import "auth.css";
+@import "error.css";
+@import "dashboard.css";
+@import "settings.css";
 @import "sticky-notes.css";
 @import "todos.css";
