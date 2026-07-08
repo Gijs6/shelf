@@ -24,7 +24,9 @@
         </div>
     </header>
 
-    <form {% if todo and todo.id %} hx-put="{{ url_for('todos.update_todo', todo_id=todo.id) }}" hx-target="body" hx-push-url="true" {% else %} method="post" action="{{ url_for('todos.create_todo') }}" {% endif %}
+    <form {% if todo and todo.id %} hx-put="{{ url_for('todos.update_todo', todo_id=todo.id) }}" {% else %} hx-post="{{ url_for('todos.create_todo') }}" {% endif %}
+          hx-target="body"
+          hx-push-url="true"
           class="editor"
           data-require-either="title,content">
         <div class="editor__main">

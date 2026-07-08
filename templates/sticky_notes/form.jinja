@@ -24,7 +24,9 @@
         </div>
     </header>
 
-    <form {% if sticky_note %} hx-put="{{ url_for('sticky_notes.update_sticky_note', sticky_note_id=sticky_note.id) }}" hx-target="body" hx-push-url="true" {% else %} method="post" action="{{ url_for('sticky_notes.create_sticky_note') }}" {% endif %}
+    <form {% if sticky_note %} hx-put="{{ url_for('sticky_notes.update_sticky_note', sticky_note_id=sticky_note.id) }}" {% else %} hx-post="{{ url_for('sticky_notes.create_sticky_note') }}" {% endif %}
+          hx-target="body"
+          hx-push-url="true"
           class="editor">
         <div class="editor__main">
             <label for="title" class="visually-hidden">Title</label>

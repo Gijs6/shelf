@@ -24,7 +24,9 @@
         </div>
     </header>
 
-    <form {% if note and note.id %} hx-put="{{ url_for('notes.update_note', note_id=note.id) }}" hx-target="body" hx-push-url="true" {% else %} method="post" action="{{ url_for('notes.create_note') }}" {% endif %}
+    <form {% if note and note.id %} hx-put="{{ url_for('notes.update_note', note_id=note.id) }}" {% else %} hx-post="{{ url_for('notes.create_note') }}" {% endif %}
+          hx-target="body"
+          hx-push-url="true"
           class="editor"
           data-require-either="title,content">
         <div class="editor__main">
