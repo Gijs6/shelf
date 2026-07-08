@@ -1,9 +1,9 @@
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy import and_, func, or_
 
-from models import TODO_STATES, Note, StickyNote, Todo, make_snippet
+from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, make_snippet
 
 
 TYPE_ALIASES = {
@@ -25,8 +25,19 @@ ALL_TYPES = {"note", "todo", "sticky"}
 TOKEN_RE = re.compile(r"(\S+):(\S+)|(\S+)")
 
 
+SORT_KEYS = ("title", "created", "updated")
+DUE_KEYS = ("today", "week")
+
+
 def parse_bool(value):
     return value.lower() in ("yes", "true", "1", "y")
+
+
+def parse_date(value):
+    try:
+        return datetime.strptime(value, "%Y-%m-%d")
+    except ValueError:
+        return None
 
 
 def parse_query(raw_query):
@@ -36,6 +47,11 @@ def parse_query(raw_query):
     archived = None
     pinned = None
     overdue = None
+    before = None
+    after = None
+    due = None
+    sort = None
+    colour = None
     words = []
 
     for match in TOKEN_RE.finditer(raw_query or ""):
@@ -58,6 +74,16 @@ def parse_query(raw_query):
             pinned = parse_bool(value)
         elif key == "overdue":
             overdue = parse_bool(value)
+        elif key == "before" and parse_date(value) is not None:
+            before = parse_date(value)
+        elif key == "after" and parse_date(value) is not None:
+            after = parse_date(value)
+        elif key == "due" and value.lower() in DUE_KEYS:
+            due = value.lower()
+        elif key == "sort" and value.lower() in SORT_KEYS:
+            sort = value.lower()
+        elif key == "colour" and value.lower() in STICKY_COLOURS:
+            colour = value.lower()
         else:
             words.append(f"{key}:{value}")
 
@@ -70,6 +96,10 @@ def parse_query(raw_query):
         effective_types &= {"todo"}
     if archived is not None:
         effective_types &= {"note", "todo"}
+    if due is not None:
+        effective_types &= {"todo"}
+    if colour is not None:
+        effective_types &= {"sticky"}
 
     return {
         "types": effective_types,
@@ -78,6 +108,11 @@ def parse_query(raw_query):
         "archived": archived,
         "pinned": pinned,
         "overdue": overdue,
+        "before": before,
+        "after": after,
+        "due": due,
+        "sort": sort,
+        "colour": colour,
         "text": " ".join(words).strip(),
     }
 
@@ -97,6 +132,10 @@ def search(raw_query, limit=50):
             )
         if parsed["group"]:
             query = query.filter(func.lower(Note.group_name) == parsed["group"].lower())
+        if parsed["before"] is not None:
+            query = query.filter(Note.created_at < parsed["before"])
+        if parsed["after"] is not None:
+            query = query.filter(Note.created_at >= parsed["after"])
         if parsed["text"]:
             like = f"%{parsed['text']}%"
             query = query.filter(or_(Note.title.ilike(like), Note.content.ilike(like)))
@@ -106,6 +145,7 @@ def search(raw_query, limit=50):
                     "kind": "note",
                     "title": note.display_title,
                     "snippet": note.snippet,
+                    "created_at": note.created_at,
                     "updated_at": note.updated_at,
                     "endpoint": "notes.view_note",
                     "url_kwargs": {"note_id": note.id},
@@ -134,6 +174,28 @@ def search(raw_query, limit=50):
                 Todo.deadline < current_time,
             )
             query = query.filter(is_overdue if parsed["overdue"] else ~is_overdue)
+        if parsed["before"] is not None:
+            query = query.filter(Todo.created_at < parsed["before"])
+        if parsed["after"] is not None:
+            query = query.filter(Todo.created_at >= parsed["after"])
+        if parsed["due"] == "today":
+            day_start = datetime.now().replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+            query = query.filter(
+                Todo.deadline.isnot(None),
+                Todo.deadline >= day_start,
+                Todo.deadline < day_start + timedelta(days=1),
+                Todo.state.notin_(["done", "cancelled"]),
+            )
+        elif parsed["due"] == "week":
+            current_time = datetime.now()
+            query = query.filter(
+                Todo.deadline.isnot(None),
+                Todo.deadline >= current_time,
+                Todo.deadline < current_time + timedelta(days=7),
+                Todo.state.notin_(["done", "cancelled"]),
+            )
         if parsed["text"]:
             like = f"%{parsed['text']}%"
             query = query.filter(or_(Todo.title.ilike(like), Todo.content.ilike(like)))
@@ -143,6 +205,7 @@ def search(raw_query, limit=50):
                     "kind": "todo",
                     "title": todo.display_title,
                     "snippet": todo.snippet,
+                    "created_at": todo.created_at,
                     "updated_at": todo.updated_at,
                     "endpoint": "todos.view_todo",
                     "url_kwargs": {"todo_id": todo.id},
@@ -157,6 +220,12 @@ def search(raw_query, limit=50):
         query = StickyNote.query.filter(StickyNote.deleted_at.is_(None))
         if parsed["pinned"] is not None:
             query = query.filter(StickyNote.pinned == parsed["pinned"])
+        if parsed["colour"]:
+            query = query.filter(StickyNote.colour == parsed["colour"])
+        if parsed["before"] is not None:
+            query = query.filter(StickyNote.created_at < parsed["before"])
+        if parsed["after"] is not None:
+            query = query.filter(StickyNote.created_at >= parsed["after"])
         if parsed["text"]:
             like = f"%{parsed['text']}%"
             query = query.filter(
@@ -168,13 +237,21 @@ def search(raw_query, limit=50):
                     "kind": "sticky",
                     "title": sticky_note.display_title,
                     "snippet": make_snippet(sticky_note.content),
+                    "created_at": sticky_note.created_at,
                     "updated_at": sticky_note.updated_at,
                     "endpoint": "sticky_notes.edit_sticky_note",
                     "url_kwargs": {"sticky_note_id": sticky_note.id},
                     "pinned": sticky_note.pinned,
                     "expired": sticky_note.expired,
+                    "colour": sticky_note.colour,
                 }
             )
 
-    results.sort(key=lambda result: result["updated_at"], reverse=True)
+    if parsed["sort"] == "title":
+        results.sort(key=lambda result: result["title"].lower())
+    elif parsed["sort"] == "created":
+        results.sort(key=lambda result: result["created_at"], reverse=True)
+    else:
+        results.sort(key=lambda result: result["updated_at"], reverse=True)
+
     return results[:limit], parsed

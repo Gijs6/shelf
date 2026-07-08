@@ -10,7 +10,146 @@
         <div class="page-header__heading">
             <h1 class="page-header__title">{{ icon("search") }} Search</h1>
         </div>
+        <div class="page-header__actions">
+            <button type="button"
+                    class="button button--ghost"
+                    data-search-help-toggle
+                    aria-haspopup="dialog">{{ icon("info") }} Search syntax</button>
+        </div>
     </header>
+
+    <dialog id="search-help-modal" class="shortcuts-modal">
+        <div class="shortcuts-modal__header">
+            <h2 class="shortcuts-modal__title">Search syntax</h2>
+            <form method="dialog">
+                <button type="submit" class="shortcuts-modal__close" aria-label="Close">{{ icon("x") }}</button>
+            </form>
+        </div>
+
+        <div class="shortcuts-modal__group">
+            <h3 class="shortcuts-modal__group-title">Type</h3>
+            <dl class="shortcuts-modal__list">
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>is:note</code> <code>is:todo</code> <code>is:sticky</code>
+                    </dt>
+                    <dd>
+                        Only that type (repeat to combine)
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="shortcuts-modal__group">
+            <h3 class="shortcuts-modal__group-title">Todo filters</h3>
+            <dl class="shortcuts-modal__list">
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>state:open|active|done|cancelled</code>
+                    </dt>
+                    <dd>
+                        By todo state
+                    </dd>
+                </div>
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>overdue:yes</code> / <code>no</code>
+                    </dt>
+                    <dd>
+                        Overdue todos
+                    </dd>
+                </div>
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>due:today</code> / <code>due:week</code>
+                    </dt>
+                    <dd>
+                        Due today / within 7 days
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="shortcuts-modal__group">
+            <h3 class="shortcuts-modal__group-title">Sticky note filters</h3>
+            <dl class="shortcuts-modal__list">
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>pinned:yes</code> / <code>no</code>
+                    </dt>
+                    <dd>
+                        Pinned sticky notes
+                    </dd>
+                </div>
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>colour:pink</code>
+                    </dt>
+                    <dd>
+                        yellow, pink, blue, green, purple, orange
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="shortcuts-modal__group">
+            <h3 class="shortcuts-modal__group-title">Notes &amp; todos</h3>
+            <dl class="shortcuts-modal__list">
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>group:home</code>
+                    </dt>
+                    <dd>
+                        Exact group name
+                    </dd>
+                </div>
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>archived:yes</code> / <code>no</code>
+                    </dt>
+                    <dd>
+                        Archived items
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="shortcuts-modal__group">
+            <h3 class="shortcuts-modal__group-title">Dates</h3>
+            <dl class="shortcuts-modal__list">
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>before:2026-01-01</code>
+                    </dt>
+                    <dd>
+                        Created before a date
+                    </dd>
+                </div>
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>after:2026-01-01</code>
+                    </dt>
+                    <dd>
+                        Created on/after a date
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="shortcuts-modal__group">
+            <h3 class="shortcuts-modal__group-title">Sorting &amp; text</h3>
+            <dl class="shortcuts-modal__list">
+                <div class="shortcuts-modal__row">
+                    <dt>
+                        <code>sort:title</code> / <code>sort:created</code>
+                    </dt>
+                    <dd>
+                        Default: last updated
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </dialog>
 
     <form method="get"
           class="filters"
@@ -26,7 +165,7 @@
                id="q"
                name="q"
                class="field__input"
-               placeholder="is:todo state:open group:home archived:yes overdue:yes ..."
+               placeholder="is:todo state:open group:home overdue:yes due:week sort:title ..."
                value="{{ query }}"
                autocomplete="off"
                autofocus />
@@ -35,7 +174,7 @@
 
     <div id="search-results">
         {% if not query %}
-            {{ empty_state('search', 'Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes') }}
+            {{ empty_state('search', 'Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes, due:today, due:week, before:2026-01-01, after:2026-01-01, sort:title, sort:created, colour:pink') }}
         {% elif results %}
             <ul class="card-list">
                 {% for result in results %}

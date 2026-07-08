@@ -24,7 +24,7 @@
         if (e.defaultPrevented) return;
 
         if (e.key === "Escape") {
-            if (shortcutsModal.open) return;
+            if (document.querySelector("dialog[open]")) return;
             clearChord();
             history.back();
             return;
