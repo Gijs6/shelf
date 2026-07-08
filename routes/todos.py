@@ -1,10 +1,21 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    Response,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 
 from datetime import datetime
 
 from models import RECUR_UNITS, TODO_STATES, Note, Todo, db, now
 from utils.checklist import toggle_item_checkbox
 from utils.groups import all_group_names, group_sections
+from utils.ical import build_todo_calendar
+from utils.settings import CALENDAR_TOKEN_KEY, get_setting
 
 
 todos_bp = Blueprint("todos", __name__, url_prefix="/todos")
@@ -106,6 +117,24 @@ def recurring():
         .all()
     )
     return render_template("todos/recurring.jinja", todos=todos)
+
+
+@todos_bp.get("/calendar.ics")
+def ical_feed():
+    token = get_setting(CALENDAR_TOKEN_KEY)
+    if not token or request.args.get("token") != token:
+        abort(403)
+
+    todos = (
+        Todo.query.filter(
+            Todo.deleted_at.is_(None),
+            Todo.deadline.isnot(None),
+            Todo.state.notin_(["done", "cancelled"]),
+        )
+        .order_by(Todo.deadline.asc())
+        .all()
+    )
+    return Response(build_todo_calendar(todos), mimetype="text/calendar")
 
 
 @todos_bp.get("/new")

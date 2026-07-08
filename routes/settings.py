@@ -9,6 +9,7 @@ from flask import (
 )
 
 import json
+import secrets
 from datetime import datetime
 
 from models import (
@@ -22,6 +23,7 @@ from models import (
     generate_id,
     now,
 )
+from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
 
 
 settings_bp = Blueprint("settings", __name__, url_prefix="/settings")
@@ -139,7 +141,27 @@ def apply_todo(data):
 
 @settings_bp.get("/")
 def index():
-    return render_template("settings/index.jinja")
+    calendar_token = get_setting(CALENDAR_TOKEN_KEY)
+    calendar_url = (
+        url_for("todos.ical_feed", token=calendar_token, _external=True)
+        if calendar_token
+        else None
+    )
+    return render_template("settings/index.jinja", calendar_url=calendar_url)
+
+
+@settings_bp.post("/calendar-token")
+def generate_calendar_token():
+    set_setting(CALENDAR_TOKEN_KEY, secrets.token_urlsafe(24))
+    flash("Calendar token generated.", "success")
+    return redirect(url_for("settings.index"), code=303)
+
+
+@settings_bp.delete("/calendar-token")
+def revoke_calendar_token():
+    delete_setting(CALENDAR_TOKEN_KEY)
+    flash("Calendar token revoked.", "success")
+    return redirect(url_for("settings.index"), code=303)
 
 
 @settings_bp.get("/export")

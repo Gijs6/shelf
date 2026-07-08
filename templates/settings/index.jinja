@@ -48,6 +48,44 @@
         </section>
 
         <section class="settings-panel">
+            <h2 class="settings-panel__title">{{ icon("calendar") }} Calendar feed</h2>
+            {% if calendar_url %}
+                <p>Subscribe to this URL from Google/Apple Calendar to see todo deadlines. Anyone with this URL can read it, so treat it like a password.</p>
+                <div class="field">
+                    <label for="calendar-url" class="field__label">Feed URL</label>
+                    <input type="text"
+                           id="calendar-url"
+                           class="field__input"
+                           value="{{ calendar_url }}"
+                           readonly />
+                </div>
+                <div class="settings-panel__actions">
+                    <button type="button"
+                            class="button button--ghost"
+                            data-copy-target="calendar-url">{{ icon("copy") }} Copy</button>
+                    <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
+                          hx-target="body"
+                          hx-push-url="true"
+                          hx-confirm="Regenerate the token? The old feed URL will stop working.">
+                        <button type="submit" class="button button--ghost">{{ icon("repeat") }} Regenerate</button>
+                    </form>
+                    <form hx-delete="{{ url_for('settings.revoke_calendar_token') }}"
+                          hx-target="body"
+                          hx-push-url="true">
+                        <button type="submit" class="button button--danger">{{ icon("trash") }} Revoke</button>
+                    </form>
+                </div>
+            {% else %}
+                <p>Generate a token to get a private URL you can subscribe to from a calendar app.</p>
+                <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
+                      hx-target="body"
+                      hx-push-url="true">
+                    <button type="submit" class="button">{{ icon("calendar") }} Generate token</button>
+                </form>
+            {% endif %}
+        </section>
+
+        <section class="settings-panel">
             <h2 class="settings-panel__title">{{ icon("logout") }} Log out</h2>
             <form method="post" action="{{ url_for('logout') }}">
                 <button type="submit" class="button">{{ icon("logout") }} Log out</button>

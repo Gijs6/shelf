@@ -158,7 +158,7 @@ def logout():
 
 @app.before_request
 def require_login():
-    allowed = ["login", "login_post", "logout", "static"]
+    allowed = ["login", "login_post", "logout", "static", "todos.ical_feed"]
     if request.endpoint and request.endpoint not in allowed:
         if not is_logged_in():
             return redirect(url_for("login"))

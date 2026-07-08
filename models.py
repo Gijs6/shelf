@@ -31,6 +31,11 @@ def make_snippet(content, length=SNIPPET_LENGTH):
     return text[:length].rstrip() + "…"
 
 
+class Setting(db.Model):
+    key = db.Column(db.String(50), primary_key=True)
+    value = db.Column(db.String(200), nullable=True)
+
+
 class Note(db.Model):
     id = db.Column(db.String(ID_LENGTH), primary_key=True, default=generate_id)
     title = db.Column(db.String(200), nullable=True)
