@@ -122,7 +122,7 @@
                         <code>before:2026-01-01</code>
                     </dt>
                     <dd>
-                        Created before a date
+                        Created before a date (YYYY-MM-DD, all types)
                     </dd>
                 </div>
                 <div class="shortcuts-modal__row">
@@ -130,7 +130,7 @@
                         <code>after:2026-01-01</code>
                     </dt>
                     <dd>
-                        Created on/after a date
+                        Created on/after a date (YYYY-MM-DD, all types) - for todo deadlines use <code>due:today</code> / <code>due:week</code> instead
                     </dd>
                 </div>
             </dl>
@@ -141,10 +141,16 @@
             <dl class="shortcuts-modal__list">
                 <div class="shortcuts-modal__row">
                     <dt>
-                        <code>sort:title</code> / <code>sort:created</code>
+                        <code>sort:title</code> / <code>sort:created</code> / <code>sort:updated</code>
                     </dt>
                     <dd>
                         Default: last updated
+                    </dd>
+                </div>
+                <div class="shortcuts-modal__row">
+                    <dt>Any other words</dt>
+                    <dd>
+                        Matched against title &amp; content
                     </dd>
                 </div>
             </dl>
