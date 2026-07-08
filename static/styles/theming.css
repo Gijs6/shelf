@@ -93,8 +93,8 @@ body {
 }
 
 .field__checkbox {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: var(--space-md);
+    height: var(--space-md);
     margin: 0;
     accent-color: var(--color-accent);
 }
