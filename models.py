@@ -117,7 +117,11 @@ class Todo(db.Model):
 
     @property
     def visible_from(self):
-        if not self.recurring or self.notify_before_days is None or self.deadline is None:
+        if (
+            not self.recurring
+            or self.notify_before_days is None
+            or self.deadline is None
+        ):
             return None
         return self.deadline - timedelta(days=self.notify_before_days)
 

@@ -129,7 +129,9 @@ def apply_todo(data):
     recur_unit = data.get("recur_unit")
     todo.recur_unit = recur_unit if recur_unit in RECUR_UNITS else None
     todo.recur_interval = data.get("recur_interval") if todo.recur_unit else None
-    todo.notify_before_days = data.get("notify_before_days") if todo.recur_unit else None
+    todo.notify_before_days = (
+        data.get("notify_before_days") if todo.recur_unit else None
+    )
     todo.deleted_at = parse_dt(data.get("deleted_at"))
     todo.archived_at = parse_dt(data.get("archived_at"))
     return todo

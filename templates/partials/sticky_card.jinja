@@ -44,7 +44,8 @@
                         </p>
                     {% endif %}
                     <p class="sticky-note__made">
-                        Made <time datetime="{{ sticky_note.created_at | isoformat(local=False) }}" data-live>{{ sticky_note.created_at | timeago(local=False) }}</time>
+                        Made <time datetime="{{ sticky_note.created_at | isoformat(local=False) }}"
+       data-live>{{ sticky_note.created_at | timeago(local=False) }}</time>
                     </p>
                 </footer>
             {% endif %}
