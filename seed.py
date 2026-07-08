@@ -111,24 +111,28 @@ NOTE_SEEDS = [
 ]
 
 STICKY_SEEDS = [
-    {"title": "Buy milk", "colour": "yellow"},
-    {"title": "Call dentist", "colour": "pink", "pinned": True},
-    {"title": "Pick up parcel", "colour": "orange"},
-    {"title": "Water plants", "colour": "green"},
-    {"title": "Pay rent", "colour": "blue", "pinned": True},
-    {"title": "Laundry", "colour": "yellow"},
+    {"content": "Buy milk", "colour": "yellow"},
+    {"content": "Call dentist", "colour": "pink", "pinned": True},
+    {"content": "Pick up parcel", "colour": "orange"},
+    {"content": "Water plants", "colour": "green"},
+    {
+        "title": "Pay rent",
+        "content": "Transfer by the 1st, landlord's account details are in the notes app.",
+        "colour": "blue",
+        "pinned": True,
+    },
+    {"content": "Laundry", "colour": "yellow"},
     {
         "title": "Groceries",
         "content": "- [x] bread\n- [ ] cheese\n- [ ] coffee\n- [ ] something for the weekend",
         "colour": "green",
     },
-    {"title": "Renew library books", "colour": "pink", "expires_days": -3},
-    {"title": "Bring plants inside", "colour": "orange", "expires_days": 2},
-    {"title": "Take out trash", "colour": "green"},
-    {"title": "Check tyre pressure", "colour": "blue"},
+    {"content": "Renew library books", "colour": "pink", "expires_days": -3},
+    {"content": "Bring plants inside", "colour": "orange", "expires_days": 2},
+    {"content": "Take out trash", "colour": "green"},
+    {"content": "Check tyre pressure", "colour": "blue"},
     {
         "title": "Concert tickets",
-        "content": "Sale starts Friday 10:00, don't miss it.",
         "colour": "purple",
         "expires_days": 5,
     },
@@ -296,8 +300,8 @@ def seed_sticky_notes(rng):
 
         db.session.add(
             StickyNote(
-                title=seed["title"],
-                content=seed.get("content", seed["title"]),
+                title=seed.get("title"),
+                content=seed.get("content"),
                 colour=seed["colour"],
                 pinned=seed.get("pinned", False),
                 expires_at=days_from_now(expires_days)
