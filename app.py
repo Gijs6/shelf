@@ -11,6 +11,7 @@ from models import TODO_STATES, Note, StickyNote, Todo, db, now
 from routes import register_routes
 from utils.filters import register_filters
 from utils.recurring import process_due_recurrences
+from utils.version import get_version
 
 
 load_dotenv(override=True)
@@ -28,6 +29,7 @@ register_filters(app)
 register_routes(app)
 
 app.jinja_env.globals["TODO_STATES"] = TODO_STATES
+app.jinja_env.globals["APP_VERSION"] = get_version()
 
 os.makedirs(app.instance_path, exist_ok=True)
 

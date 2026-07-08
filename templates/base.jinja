@@ -27,4 +27,12 @@
     <main class="page {% block page_class %}{% endblock %}">
         {% block content %}{% endblock %}
     </main>
+
+    {% if APP_VERSION %}
+        <footer class="app-footer">
+            <p>
+                Shelf v<code class="app-footer__version">{{ APP_VERSION }}</code>
+            </p>
+        </footer>
+    {% endif %}
 {% endblock %}

@@ -22,6 +22,7 @@ build() {
 
 deploy() {
   build
+  echo "$(date +%Y.%m):$(git rev-parse --short HEAD)" > VERSION
   lift deploy
 }
 

@@ -10,6 +10,23 @@
     border-bottom: 1px solid var(--color-border);
 }
 
+.app-footer {
+    display: flex;
+    padding: var(--space-lg) var(--space-xl);
+    color: var(--color-fg-faint);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+}
+
+footer p {
+    margin: 0;
+}
+
+.app-footer__version {
+    border: none;
+    background: none;
+}
+
 @media (max-width: 800px) {
     .navbar {
         gap: var(--space-sm);
