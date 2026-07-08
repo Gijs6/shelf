@@ -71,8 +71,10 @@ class StickyNote(db.Model):
 
     @property
     def expired(self):
-        return self.expires_at is not None and self.expires_at < now().replace(
-            tzinfo=None
+        return (
+            not self.pinned
+            and self.expires_at is not None
+            and self.expires_at < now().replace(tzinfo=None)
         )
 
     @property
