@@ -14,7 +14,7 @@
 
         <section class="auth-layout__panel">
             <h1>{{ icon("login") }} Sign in</h1>
-            <form method="POST" action="{{ url_for('login_post') }}" class="form">
+            <form method="post" action="{{ url_for('login_post') }}" class="form">
                 <div class="field">
                     <label for="password" class="field__label">{{ icon("lock") }} Password</label>
                     <input type="password"
