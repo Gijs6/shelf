@@ -57,6 +57,43 @@
         </section>
 
         <section class="settings-panel">
+            <h2 class="settings-panel__title">{{ icon("sticky") }} Expired sticky notes</h2>
+            {% if expired_sticky_note_count %}
+                <p>
+                    {{ expired_sticky_note_count }} expired sticky
+                    {{ expired_sticky_note_count | pluralize("note") }} not yet in trash.
+                </p>
+                <form hx-delete="{{ url_for('settings.clear_expired_sticky_notes') }}"
+                      hx-target="body"
+                      hx-push-url="true"
+                      hx-confirm="Move all expired sticky notes to trash?">
+                    <button type="submit" class="button button--danger">{{ icon("trash") }} Clear expired</button>
+                </form>
+            {% else %}
+                <p>No expired sticky notes.</p>
+            {% endif %}
+        </section>
+
+        <section class="settings-panel">
+            <h2 class="settings-panel__title">{{ icon("folder") }} Groups</h2>
+            {% if group_counts %}
+                <ul class="settings-list">
+                    {% for name, counts in group_counts.items() %}
+                        <li class="settings-list__item">
+                            <span>{{ name }}</span>
+                            <span class="settings-list__meta">
+                                {{ counts.notes }} {{ counts.notes | pluralize("note") }},
+                                {{ counts.todos }} {{ counts.todos | pluralize("todo") }}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No groups in use yet.</p>
+            {% endif %}
+        </section>
+
+        <section class="settings-panel">
             <h2 class="settings-panel__title">{{ icon("trash") }} Remove all data</h2>
             <form hx-delete="{{ url_for('settings.remove_all') }}"
                   hx-target="body"

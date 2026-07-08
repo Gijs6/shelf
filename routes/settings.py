@@ -24,6 +24,7 @@ from models import (
     generate_id,
     now,
 )
+from utils.groups import group_name_counts
 from utils.session import SESSION_LIFETIME
 from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
 
@@ -141,6 +142,16 @@ def apply_todo(data):
     return todo
 
 
+def expired_sticky_notes():
+    return [
+        sticky_note
+        for sticky_note in StickyNote.query.filter(
+            StickyNote.deleted_at.is_(None)
+        ).all()
+        if sticky_note.expired
+    ]
+
+
 @settings_bp.get("/")
 def index():
     calendar_token = get_setting(CALENDAR_TOKEN_KEY)
@@ -165,6 +176,8 @@ def index():
         session_expires_at=session_expires_at,
         trash_counts=trash_counts,
         total_trash=sum(trash_counts.values()),
+        expired_sticky_note_count=len(expired_sticky_notes()),
+        group_counts=group_name_counts(),
     )
 
 
@@ -258,6 +271,21 @@ def purge_all_trash():
     flash(
         f"Purged {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
         f"{counts['todos']} todos from trash.",
+        "success",
+    )
+    return redirect(url_for("settings.index"), code=303)
+
+
+@settings_bp.delete("/expired-sticky-notes")
+def clear_expired_sticky_notes():
+    notes = expired_sticky_notes()
+    for sticky_note in notes:
+        sticky_note.deleted_at = now()
+    db.session.commit()
+
+    count = len(notes)
+    flash(
+        f"Moved {count} expired sticky {'note' if count == 1 else 'notes'} to trash.",
         "success",
     )
     return redirect(url_for("settings.index"), code=303)

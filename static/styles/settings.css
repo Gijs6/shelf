@@ -20,3 +20,23 @@
     flex-wrap: wrap;
     gap: var(--space-xs);
 }
+
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.settings-list__item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+}
+
+.settings-list__meta {
+    color: var(--color-fg-muted);
+    white-space: nowrap;
+}
