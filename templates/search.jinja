@@ -16,7 +16,7 @@
           class="filters"
           role="search"
           hx-get="{{ url_for('search.search_view') }}"
-          hx-trigger="input changed delay:300ms from:find input, submit"
+          hx-trigger="input changed from:find input, submit"
           hx-select="#search-results"
           hx-target="#search-results"
           hx-swap="outerHTML"
