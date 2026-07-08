@@ -1,13 +1,13 @@
 (function () {
-    var routes = JSON.parse(document.getElementById('nav-routes').textContent);
-    var shortcutsModal = document.getElementById('shortcuts-modal');
+    var routes = JSON.parse(document.getElementById("nav-routes").textContent);
+    var shortcutsModal = document.getElementById("shortcuts-modal");
 
     var CHORD_DESTINATIONS = {
         g: { d: routes.dashboard, n: routes.notes, t: routes.todos, s: routes.stickyNotes },
         c: { n: routes.newNote, t: routes.newTodo, s: routes.newStickyNote }
     };
 
-    var TODO_STATE_ORDER = ['open', 'active', 'done', 'cancelled'];
+    var TODO_STATE_ORDER = ["open", "active", "done", "cancelled"];
 
     var pendingChord = null;
     var chordTimer = null;
@@ -20,18 +20,18 @@
         }
     }
 
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener("keydown", function (e) {
         if (e.defaultPrevented) return;
 
-        if (e.key === 'Escape') {
+        if (e.key === "Escape") {
             if (shortcutsModal.open) return;
             clearChord();
             history.back();
             return;
         }
 
-        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            var form = e.target.closest('form') || document.querySelector('form.editor');
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+            var form = e.target.closest("form") || document.querySelector("form.editor");
             if (form) {
                 e.preventDefault();
                 form.requestSubmit();
@@ -39,7 +39,7 @@
             return;
         }
 
-        var typing = e.target.matches('input, textarea, select') || e.target.isContentEditable;
+        var typing = e.target.matches("input, textarea, select") || e.target.isContentEditable;
         if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
 
         if (pendingChord) {
@@ -52,36 +52,36 @@
             return;
         }
 
-        if (e.key === 'g' || e.key === 'c') {
+        if (e.key === "g" || e.key === "c") {
             pendingChord = e.key;
             chordTimer = setTimeout(clearChord, 1500);
             return;
         }
 
-        if (e.key === '?') {
+        if (e.key === "?") {
             e.preventDefault();
             shortcutsModal.showModal();
-        } else if (e.key === '/') {
+        } else if (e.key === "/") {
             e.preventDefault();
-            var searchInput = document.getElementById('q');
+            var searchInput = document.getElementById("q");
             if (searchInput) {
                 searchInput.focus();
             } else {
                 window.location.href = routes.search;
             }
-        } else if (e.key === 'n' || e.key === 'N') {
+        } else if (e.key === "n" || e.key === "N") {
             var newLink = document.querySelector('[data-shortcut="new"]');
             if (newLink) {
                 e.preventDefault();
                 newLink.click();
             }
-        } else if (e.key === 'e' || e.key === 'E') {
+        } else if (e.key === "e" || e.key === "E") {
             var editLink = document.querySelector('[data-shortcut="edit"]');
             if (editLink) {
                 e.preventDefault();
                 editLink.click();
             }
-        } else if (e.key === 'a') {
+        } else if (e.key === "a") {
             var archiveToggle = document.querySelector('[data-shortcut="archive-toggle"]');
             if (archiveToggle) {
                 e.preventDefault();
@@ -93,27 +93,27 @@
                 e.preventDefault();
                 archivedLink.click();
             }
-        } else if (e.key === 't') {
+        } else if (e.key === "t") {
             var trashLink = document.querySelector('[data-shortcut="trash"]');
             if (trashLink) {
                 e.preventDefault();
                 trashLink.click();
             }
-        } else if (e.key === 'r') {
+        } else if (e.key === "r") {
             var recurringLink = document.querySelector('[data-shortcut="recurring"]');
             if (recurringLink) {
                 e.preventDefault();
                 recurringLink.click();
             }
-        } else if (e.key === 'p') {
-            var pinCard = e.target.closest('.sticky-note');
+        } else if (e.key === "p") {
+            var pinCard = e.target.closest(".sticky-note");
             var pinForm = pinCard && pinCard.querySelector('[data-shortcut="sticky-pin"]');
             if (pinForm) {
                 e.preventDefault();
                 pinForm.requestSubmit();
             }
-        } else if (e.key === 'd') {
-            var stickyCard = e.target.closest('.sticky-note');
+        } else if (e.key === "d") {
+            var stickyCard = e.target.closest(".sticky-note");
             var stickyDeleteForm = stickyCard && stickyCard.querySelector('[data-shortcut="sticky-delete"]');
             if (stickyDeleteForm) {
                 e.preventDefault();
@@ -125,7 +125,7 @@
                 e.preventDefault();
                 deleteForm.requestSubmit();
             }
-        } else if (e.key >= '1' && e.key <= '4') {
+        } else if (e.key >= "1" && e.key <= "4") {
             var state = TODO_STATE_ORDER[Number(e.key) - 1];
             var stateButton = document.querySelector('.state-picker button[data-state="' + state + '"]');
             if (stateButton) {

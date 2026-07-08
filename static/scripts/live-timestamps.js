@@ -26,13 +26,13 @@
     }
 
     function updateLiveTimes() {
-        document.querySelectorAll('time[data-live]').forEach(function (el) {
-            const dt = new Date(el.getAttribute('datetime'));
+        document.querySelectorAll("time[data-live]").forEach(function (el) {
+            const dt = new Date(el.getAttribute("datetime"));
             if (!isNaN(dt)) el.textContent = timeago(dt);
         });
     }
 
     updateLiveTimes();
     setInterval(updateLiveTimes, 1000);
-    document.addEventListener('htmx:afterSettle', updateLiveTimes);
+    document.addEventListener("htmx:afterSettle", updateLiveTimes);
 })();
