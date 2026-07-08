@@ -41,7 +41,6 @@
 .navbar__link {
     padding: var(--space-xs) var(--space-sm);
     color: var(--color-fg-muted);
-    font-size: var(--font-size-sm);
     font-weight: 600;
     text-decoration: none;
 }
