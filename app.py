@@ -73,6 +73,32 @@ def index():
     dashboard_sticky_notes = [s for s in sticky_notes if s.pinned or not s.expired][:6]
 
     current_time = datetime.now()
+    week_ago = current_time - timedelta(days=7)
+
+    stats = {
+        "notes": Note.query.filter(
+            Note.deleted_at.is_(None), Note.archived_at.is_(None)
+        ).count(),
+        "open_todos": Todo.query.filter(
+            Todo.deleted_at.is_(None),
+            Todo.archived_at.is_(None),
+            Todo.state.in_(["open", "active"]),
+        ).count(),
+        "overdue_todos": Todo.query.filter(
+            Todo.deleted_at.is_(None),
+            Todo.state.notin_(["done", "cancelled"]),
+            Todo.deadline.isnot(None),
+            Todo.deadline < current_time,
+        ).count(),
+        "sticky_notes": StickyNote.query.filter(
+            StickyNote.deleted_at.is_(None)
+        ).count(),
+        "completed_week": Todo.query.filter(
+            Todo.deleted_at.is_(None),
+            Todo.completed_at.isnot(None),
+            Todo.completed_at >= week_ago,
+        ).count(),
+    }
 
     due_todos = (
         Todo.query.filter(
@@ -99,6 +125,7 @@ def index():
         sticky_notes=dashboard_sticky_notes,
         upcoming_todos=upcoming_todos,
         current_time=current_time,
+        stats=stats,
     )
 
 
