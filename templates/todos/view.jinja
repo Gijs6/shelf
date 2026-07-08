@@ -70,7 +70,7 @@
         </form>
 
         <div class="detail-meta">
-            {% if todo.group_name %}<span class="detail-meta__group">{{ icon("folder") }} {{ todo.group_name }}</span>{% endif %}
+            {% if todo.group_name %}<span class="detail-meta__item">{{ icon("folder") }} {{ todo.group_name }}</span>{% endif %}
             <span class="detail-meta__item">
                 Made {{ todo.created_at | strftime(local=False) }} - edited
                 {{ updated_at_span(todo) }}

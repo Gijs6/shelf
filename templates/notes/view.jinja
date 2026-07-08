@@ -50,7 +50,7 @@
         </header>
 
         <div class="detail-meta">
-            {% if note.group_name %}<span class="detail-meta__group">{{ icon("folder") }} {{ note.group_name }}</span>{% endif %}
+            {% if note.group_name %}<span class="detail-meta__item">{{ icon("folder") }} {{ note.group_name }}</span>{% endif %}
             <span class="detail-meta__item">
                 Made {{ note.created_at | strftime(local=False) }} - edited
                 {{ updated_at_span(note) }}

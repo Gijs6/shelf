@@ -485,16 +485,6 @@ body {
     margin-right: var(--space-xs);
 }
 
-.detail-meta__group {
-    color: var(--color-fg-muted);
-    text-decoration: none;
-    font-size: var(--font-size-sm);
-}
-
-.detail-meta__group:hover {
-    color: var(--color-section);
-}
-
 .list-section__title {
     font-size: var(--font-size-md);
     font-weight: 700;
