@@ -63,6 +63,7 @@
                             name="state"
                             value="{{ state }}"
                             data-state="{{ state }}"
+                            aria-pressed="{{ 'true' if todo.state==state else 'false' }}"
                             class="button button--sm {% if todo.state==state %}button--active{% else %}button--ghost{% endif %}">{{ state | replace('_', ' ') | title }}</button>
                 {% endfor %}
             </fieldset>
