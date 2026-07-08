@@ -33,7 +33,7 @@
                 </div>
 
                 <footer class="sticky-note__footer">
-                    {% if sticky_note.expires %}
+                    {% if sticky_note.expires_at and not sticky_note.pinned %}
                         <p class="sticky-note__expires">
                             {% if sticky_note.expired %}
                                 Expired
