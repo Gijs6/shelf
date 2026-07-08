@@ -1,0 +1,6 @@
+{% macro updated_at_span(item, oob=False) %}
+    <span id="detail-updated-at"{% if oob %} hx-swap-oob="true"{% endif %}>
+        <time datetime="{{ item.updated_at | isoformat(local=False) }}" data-live>{{ item.updated_at | timeago(local=False) }}</time>
+        ({{ item.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
+    </span>
+{% endmacro %}

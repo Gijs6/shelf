@@ -3,6 +3,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from datetime import datetime
 
 from models import RECUR_UNITS, TODO_STATES, Note, Todo, db, now
+from utils.checklist import toggle_item_checkbox
 from utils.groups import all_group_names, group_sections
 
 
@@ -179,6 +180,14 @@ def view_todo(todo_id):
         Todo.id == todo_id, Todo.deleted_at.is_(None)
     ).first_or_404()
     return render_template("todos/view.jinja", todo=todo, states=TODO_STATES)
+
+
+@todos_bp.patch("/<todo_id>/checkbox")
+def toggle_todo_checkbox(todo_id):
+    todo = Todo.query.filter(
+        Todo.id == todo_id, Todo.deleted_at.is_(None)
+    ).first_or_404()
+    return toggle_item_checkbox(todo, show_updated_at=True)
 
 
 @todos_bp.get("/<todo_id>/edit")

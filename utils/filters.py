@@ -2,6 +2,9 @@ import markdown
 from datetime import datetime, timezone
 from markupsafe import Markup
 
+from utils.autolink import AutoLinkExtension
+from utils.tasklist import TaskListExtension
+
 
 def ensure_tz(dt, local=True):
     if dt is None:
@@ -64,23 +67,23 @@ def pluralize_filter(n, unit):
     return unit if n == 1 else unit + "s"
 
 
-MARKDOWN_EXTENSIONS = [
-    "fenced_code",
-    "nl2br",
-    "tables",
-    "sane_lists",
-    "codehilite",
-    "admonition",
-]
-
-
-def markdown_filter(text):
+def markdown_filter(text, kind=None, item_id=None):
     if not text:
         return ""
+    extensions = [
+        "fenced_code",
+        "nl2br",
+        "tables",
+        "sane_lists",
+        "codehilite",
+        "admonition",
+        AutoLinkExtension(),
+        TaskListExtension(kind=kind or "", item_id=item_id or ""),
+    ]
     return Markup(
         markdown.markdown(
             text,
-            extensions=MARKDOWN_EXTENSIONS,
+            extensions=extensions,
             extension_configs={"codehilite": {"guess_lang": True}},
         )
     )

@@ -2,6 +2,7 @@
 
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/eyebrow.jinja" import type_eyebrow %}
+{% from "partials/updated_at.jinja" import updated_at_span %}
 
 {% block title %}{{ note.display_title }}{% endblock %}
 {% block page_class %}page--note{% endblock %}
@@ -52,11 +53,10 @@
             {% if note.group_name %}<span class="detail-meta__group">{{ icon("folder") }} {{ note.group_name }}</span>{% endif %}
             <span class="detail-meta__item">
                 Made {{ note.created_at | strftime(local=False) }} - edited
-                <time datetime="{{ note.updated_at | isoformat(local=False) }}" data-live>{{ note.updated_at | timeago(local=False) }}</time>
-                ({{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
+                {{ updated_at_span(note) }}
             </span>
         </div>
 
-        <div class="markdown">{{ note.content | markdown }}</div>
+        <div class="markdown">{{ note.content | markdown(kind="note", item_id=note.id) }}</div>
     </article>
 {% endblock %}

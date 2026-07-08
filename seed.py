@@ -119,7 +119,7 @@ STICKY_SEEDS = [
     {"title": "Laundry", "colour": "yellow"},
     {
         "title": "Groceries",
-        "content": "Bread, cheese, coffee, something for the weekend.",
+        "content": "- [x] bread\n- [ ] cheese\n- [ ] coffee\n- [ ] something for the weekend",
         "colour": "green",
     },
     {"title": "Renew library books", "colour": "pink", "expires_days": -3},
@@ -141,16 +141,24 @@ TODO_SEEDS = [
         "state": "open",
         "content": (
             "Whole place needs a proper clean.\n\n"
-            "- vacuum floors\n"
-            "- wipe kitchen surfaces\n"
-            "- sort clutter on desk\n"
-            "- bathroom cleanup"
+            "- [ ] vacuum floors\n"
+            "- [ ] wipe kitchen surfaces\n"
+            "- [ ] sort clutter on desk\n"
+            "- [ ] bathroom cleanup"
         ),
     },
     {
         "title": "Do groceries",
         "state": "active",
-        "content": "Basic food supplies running low.\n\nNeed:\n- milk\n- bread\n- eggs\n- coffee\n- fruit",
+        "content": (
+            "Basic food supplies running low.\n\n"
+            "Need:\n\n"
+            "- [x] milk\n"
+            "- [x] bread\n"
+            "- [ ] eggs\n"
+            "- [ ] coffee\n"
+            "- [ ] fruit"
+        ),
     },
     {
         "title": "Call dentist",
@@ -183,12 +191,22 @@ TODO_SEEDS = [
     {
         "title": "Plan weekend",
         "state": "open",
-        "content": "Keep it simple.\n\nMaybe:\n- clean a bit\n- go outside if weather is ok\n- rest",
+        "content": (
+            "Keep it simple.\n\nMaybe:\n\n"
+            "- [ ] clean a bit\n"
+            "- [ ] go outside if weather is ok\n"
+            "- [ ] rest"
+        ),
     },
     {
         "title": "Buy household items",
         "state": "done",
-        "content": "Lightbulbs, cleaning supplies.\n\nAlso check if anything else is running low.",
+        "content": (
+            "Lightbulbs, cleaning supplies.\n\n"
+            "- [x] lightbulbs\n"
+            "- [x] cleaning supplies\n"
+            "- [x] checked what else is running low"
+        ),
     },
     {
         "title": "Call family",
@@ -213,10 +231,10 @@ TODO_SEEDS = [
         "content": (
             "Desk setup has been bugging me for a while, finally have a free day to deal with it.\n\n"
             "## Plan\n\n"
-            "1. Take everything off the desk and sort into keep / trash / storage\n"
-            "2. Move monitor arm to the other side, cable runs are cleaner that way\n"
-            "3. Get rid of the second chair, it's just collecting stuff\n"
-            "4. Figure out where the box of old cables actually needs to go\n\n"
+            "1. [ ] Take everything off the desk and sort into keep / trash / storage\n"
+            "2. [ ] Move monitor arm to the other side, cable runs are cleaner that way\n"
+            "3. [ ] Get rid of the second chair, it's just collecting stuff\n"
+            "4. [ ] Figure out where the box of old cables actually needs to go\n\n"
             "## Cables\n\n"
             "Should probably just buy a cable tray instead of doing another zip-tie job "
             "that falls apart in three months.\n\n"
@@ -234,10 +252,10 @@ TODO_SEEDS = [
             "Deadline is coming up, so actually collecting everything instead of putting "
             "it off again.\n\n"
             "## To collect\n\n"
-            "- annual income statement\n"
-            "- freelance receipts (spread across three folders, really need to fix that)\n"
-            "- mortgage overview\n"
-            "- savings account statement as of December 31st\n\n"
+            "- [x] annual income statement\n"
+            "- [ ] freelance receipts (spread across three folders, really need to fix that)\n"
+            "- [ ] mortgage overview\n"
+            "- [x] savings account statement as of December 31st\n\n"
             "## Questions for the accountant\n\n"
             "1. Does the new laptop still count as a deduction this year or only next year\n"
             "2. What to do with the bit of freelance work from last year, separate or just include it\n\n"

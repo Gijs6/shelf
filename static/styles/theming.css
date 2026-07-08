@@ -566,3 +566,19 @@ body {
 .markdown .admonition.error .admonition-title {
     color: var(--color-danger);
 }
+
+.task-list {
+    padding: 0;
+    list-style: none;
+}
+
+.task-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-xs);
+}
+
+.task-checkbox {
+    margin-top: var(--space-2xs);
+    cursor: pointer;
+}

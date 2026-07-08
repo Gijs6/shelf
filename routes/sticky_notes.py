@@ -3,6 +3,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from datetime import datetime, timedelta
 
 from models import STICKY_COLOURS, StickyNote, db, now
+from utils.checklist import toggle_item_checkbox
 
 
 sticky_notes_bp = Blueprint("sticky_notes", __name__, url_prefix="/sticky-notes")
@@ -98,6 +99,14 @@ def edit_sticky_note(sticky_note_id):
     return render_template(
         "sticky_notes/form.jinja", sticky_note=sticky_note, colours=STICKY_COLOURS
     )
+
+
+@sticky_notes_bp.patch("/<sticky_note_id>/checkbox")
+def toggle_sticky_note_checkbox(sticky_note_id):
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
+    ).first_or_404()
+    return toggle_item_checkbox(sticky_note)
 
 
 @sticky_notes_bp.put("/<sticky_note_id>")

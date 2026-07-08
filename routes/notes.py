@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from models import Note, Todo, db, now
+from utils.checklist import toggle_item_checkbox
 from utils.groups import all_group_names, group_sections
 
 
@@ -69,6 +70,14 @@ def view_note(note_id):
         Note.id == note_id, Note.deleted_at.is_(None)
     ).first_or_404()
     return render_template("notes/view.jinja", note=note)
+
+
+@notes_bp.patch("/<note_id>/checkbox")
+def toggle_note_checkbox(note_id):
+    note = Note.query.filter(
+        Note.id == note_id, Note.deleted_at.is_(None)
+    ).first_or_404()
+    return toggle_item_checkbox(note, show_updated_at=True)
 
 
 @notes_bp.get("/<note_id>/edit")

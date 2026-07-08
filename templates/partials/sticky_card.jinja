@@ -9,7 +9,7 @@
                         <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}">{{ sticky_note.title }}</a>
                     </h3>
                 {% endif %}
-                <div class="sticky-note__body">{{ sticky_note.content | markdown }}</div>
+                <div class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
             </div>
 
             {% if not compact %}
