@@ -30,8 +30,8 @@
                                     </a>
                                 </h3>
                                 <p class="entry-card__timestamp">
-                                    <time datetime="{{ todo.updated_at.isoformat() }}" data-live>{{ todo.updated_at | timeago }}</time>
-                                    ({{ todo.updated_at | strftime("%d %b %Y, %H:%M") }})
+                                    <time datetime="{{ todo.updated_at | isoformat(local=False) }}" data-live>{{ todo.updated_at | timeago(local=False) }}</time>
+                                    ({{ todo.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
                                 </p>
                                 {% if todo.title %}<p class="entry-card__preview">{{ todo.snippet }}</p>{% endif %}
                                 <p class="entry-card__due{% if todo.deadline < current_time %} entry-card__due--overdue{% endif %}">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</p>
@@ -58,8 +58,8 @@
                                     </a>
                                 </h3>
                                 <p class="entry-card__timestamp">
-                                    <time datetime="{{ note.updated_at.isoformat() }}" data-live>{{ note.updated_at | timeago }}</time>
-                                    ({{ note.updated_at | strftime("%d %b %Y, %H:%M") }})
+                                    <time datetime="{{ note.updated_at | isoformat(local=False) }}" data-live>{{ note.updated_at | timeago(local=False) }}</time>
+                                    ({{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
                                 </p>
                                 {% if note.title %}<p class="entry-card__preview">{{ note.snippet }}</p>{% endif %}
                             </article>

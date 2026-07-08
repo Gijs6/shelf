@@ -3,23 +3,30 @@ from datetime import datetime, timezone
 from markupsafe import Markup
 
 
-def ensure_tz(dt):
+def ensure_tz(dt, local=True):
     if dt is None:
         return None
     if dt.tzinfo is None:
-        return dt.replace(tzinfo=timezone.utc)
-    return dt
+        dt = dt.astimezone() if local else dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone()
 
 
-def strftime_filter(value, fmt="%d %b %Y"):
-    value = ensure_tz(value)
+def strftime_filter(value, fmt="%d %b %Y", local=True):
+    value = ensure_tz(value, local=local)
     if value is None:
         return "-"
-    return value.astimezone().strftime(fmt)
+    return value.strftime(fmt)
 
 
-def timeago_filter(value):
-    value = ensure_tz(value)
+def isoformat_filter(value, local=True):
+    value = ensure_tz(value, local=local)
+    if value is None:
+        return ""
+    return value.isoformat()
+
+
+def timeago_filter(value, local=True):
+    value = ensure_tz(value, local=local)
     if value is None:
         return "never"
 
@@ -62,6 +69,7 @@ def markdown_filter(text):
 FILTERS = {
     "strftime": strftime_filter,
     "timeago": timeago_filter,
+    "isoformat": isoformat_filter,
     "markdown": markdown_filter,
 }
 

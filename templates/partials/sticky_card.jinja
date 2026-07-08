@@ -40,11 +40,11 @@
                             {% else %}
                                 Expires
                             {% endif %}
-                            <time datetime="{{ sticky_note.expires_at.isoformat() }}">{{ sticky_note.expires_at | strftime }}</time>
+                            <time datetime="{{ sticky_note.expires_at | isoformat }}">{{ sticky_note.expires_at | strftime }}</time>
                         </p>
                     {% endif %}
                     <p class="sticky-note__made">
-                        Made <time datetime="{{ sticky_note.created_at.isoformat() }}" data-live>{{ sticky_note.created_at | timeago }}</time>
+                        Made <time datetime="{{ sticky_note.created_at | isoformat(local=False) }}" data-live>{{ sticky_note.created_at | timeago(local=False) }}</time>
                     </p>
                 </footer>
             {% endif %}

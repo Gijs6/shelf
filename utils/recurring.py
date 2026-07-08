@@ -1,5 +1,5 @@
 import calendar
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from models import Todo, db, now
 
@@ -19,7 +19,7 @@ def advance_deadline(deadline, interval, unit):
 
 
 def next_due_date(deadline, interval, unit):
-    current_time = now().replace(tzinfo=None)
+    current_time = datetime.now()
     next_deadline = advance_deadline(deadline, interval, unit)
     while next_deadline <= current_time:
         next_deadline = advance_deadline(next_deadline, interval, unit)
@@ -31,7 +31,7 @@ def process_due_recurrences():
         Todo.recur_interval.isnot(None),
         Todo.recur_unit.isnot(None),
         Todo.deadline.isnot(None),
-        Todo.deadline <= now().replace(tzinfo=None),
+        Todo.deadline <= datetime.now(),
         Todo.deleted_at.is_(None),
     ).all()
 
@@ -52,6 +52,8 @@ def process_due_recurrences():
 
         todo.recur_interval = None
         todo.recur_unit = None
+        todo.notify_before_days = None
+        todo.updated_at = now()
 
     if due:
         db.session.commit()

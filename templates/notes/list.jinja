@@ -38,8 +38,8 @@
                                 </a>
                             </h3>
                             <p class="entry-card__timestamp">
-                                <time datetime="{{ note.updated_at.isoformat() }}" data-live>{{ note.updated_at | timeago }}</time>
-                                ({{ note.updated_at | strftime("%d %b %Y, %H:%M") }})
+                                <time datetime="{{ note.updated_at | isoformat(local=False) }}" data-live>{{ note.updated_at | timeago(local=False) }}</time>
+                                ({{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
                             </p>
                             {% if note.title %}<p class="entry-card__preview">{{ note.snippet }}</p>{% endif %}
                         </article>

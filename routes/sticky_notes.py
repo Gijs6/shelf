@@ -60,9 +60,7 @@ def trash():
 
 @sticky_notes_bp.get("/new")
 def new_sticky_note():
-    default_expires_at = now().replace(tzinfo=None) + timedelta(
-        days=DEFAULT_EXPIRY_DAYS
-    )
+    default_expires_at = datetime.now() + timedelta(days=DEFAULT_EXPIRY_DAYS)
     return render_template(
         "sticky_notes/form.jinja",
         sticky_note=None,
@@ -125,7 +123,9 @@ def update_sticky_note(sticky_note_id):
 
 @sticky_notes_bp.patch("/<sticky_note_id>/pin")
 def toggle_pin(sticky_note_id):
-    sticky_note = StickyNote.query.get_or_404(sticky_note_id)
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
+    ).first_or_404()
     sticky_note.pinned = not sticky_note.pinned
     db.session.commit()
     return redirect(url_for("sticky_notes.list_sticky_notes"), code=303)

@@ -1,8 +1,9 @@
 import re
+from datetime import datetime
 
 from sqlalchemy import and_, func, or_
 
-from models import TODO_STATES, Note, StickyNote, Todo, make_snippet, now
+from models import TODO_STATES, Note, StickyNote, Todo, make_snippet
 
 
 TYPE_ALIASES = {
@@ -126,7 +127,7 @@ def search(raw_query, limit=50):
         if parsed["group"]:
             query = query.filter(func.lower(Todo.group_name) == parsed["group"].lower())
         if parsed["overdue"] is not None:
-            current_time = now().replace(tzinfo=None)
+            current_time = datetime.now()
             is_overdue = and_(
                 Todo.deadline.isnot(None),
                 Todo.state.notin_(["done", "cancelled"]),

@@ -1,6 +1,6 @@
 import secrets
 import string
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -74,7 +74,7 @@ class StickyNote(db.Model):
         return (
             not self.pinned
             and self.expires_at is not None
-            and self.expires_at < now().replace(tzinfo=None)
+            and self.expires_at < datetime.now()
         )
 
     @property
@@ -116,6 +116,17 @@ class Todo(db.Model):
         return self.recur_interval is not None and self.recur_unit is not None
 
     @property
+    def visible_from(self):
+        if not self.recurring or self.notify_before_days is None or self.deadline is None:
+            return None
+        return self.deadline - timedelta(days=self.notify_before_days)
+
+    @property
+    def visible(self):
+        cutoff = self.visible_from
+        return cutoff is None or datetime.now() >= cutoff
+
+    @property
     def snippet(self):
         return make_snippet(self.content)
 
@@ -128,5 +139,5 @@ class Todo(db.Model):
         return (
             self.deadline is not None
             and self.state not in ("done", "cancelled")
-            and self.deadline < now().replace(tzinfo=None)
+            and self.deadline < datetime.now()
         )

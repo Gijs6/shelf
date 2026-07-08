@@ -16,6 +16,11 @@
                     <span class="page-header__badges">
                         <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
                         {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+                        {% if todo.archived %}<span class="badge">Archived</span>{% endif %}
+                        {% if todo.recurring %}
+                            <span class="badge"
+                                  title="Repeats every {{ todo.recur_interval }} {{ todo.recur_unit }}(s)">{{ icon("repeat") }}</span>
+                        {% endif %}
                     </span>
                 </h1>
             </hgroup>
@@ -63,9 +68,9 @@
         <div class="detail-meta">
             {% if todo.group_name %}<span class="detail-meta__group">{{ icon("folder") }} {{ todo.group_name }}</span>{% endif %}
             <span class="detail-meta__item">
-                Made {{ todo.created_at | strftime }} - edited
-                <time datetime="{{ todo.updated_at.isoformat() }}" data-live>{{ todo.updated_at | timeago }}</time>
-                ({{ todo.updated_at | strftime("%d %b %Y, %H:%M") }})
+                Made {{ todo.created_at | strftime(local=False) }} - edited
+                <time datetime="{{ todo.updated_at | isoformat(local=False) }}" data-live>{{ todo.updated_at | timeago(local=False) }}</time>
+                ({{ todo.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
             </span>
             {% if todo.deadline %}
                 <span class="detail-meta__item">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</span>
@@ -77,11 +82,11 @@
             {% if todo.state == "active" and todo.active_at %}
                 <span class="detail-meta__item">
                     Active since
-                    <time datetime="{{ todo.active_at.isoformat() }}" data-live>{{ todo.active_at | timeago }}</time>
-                    ({{ todo.active_at | strftime("%d %b %Y, %H:%M") }})
+                    <time datetime="{{ todo.active_at | isoformat(local=False) }}" data-live>{{ todo.active_at | timeago(local=False) }}</time>
+                    ({{ todo.active_at | strftime("%d %b %Y, %H:%M", local=False) }})
                 </span>
             {% endif %}
-            {% if todo.completed_at %}<span class="detail-meta__item">Completed {{ todo.completed_at | strftime }}</span>{% endif %}
+            {% if todo.completed_at %}<span class="detail-meta__item">Completed {{ todo.completed_at | strftime(local=False) }}</span>{% endif %}
         </div>
 
         <div class="markdown">{{ todo.content | markdown }}</div>

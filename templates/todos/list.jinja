@@ -12,6 +12,9 @@
             <h1 class="page-header__title">Todos</h1>
         </div>
         <nav class="page-header__actions" aria-label="Todo actions">
+            <a href="{{ url_for('todos.recurring') }}"
+               class="button button--ghost button--sm"
+               aria-label="Recurring todos">{{ icon("repeat") }}</a>
             <a href="{{ url_for('todos.archived') }}"
                class="button button--ghost button--sm"
                aria-label="Archived todos">{{ icon("archive") }}</a>
@@ -54,8 +57,8 @@
                                 </a>
                             </h3>
                             <p class="entry-card__timestamp">
-                                <time datetime="{{ todo.updated_at.isoformat() }}" data-live>{{ todo.updated_at | timeago }}</time>
-                                ({{ todo.updated_at | strftime("%d %b %Y, %H:%M") }})
+                                <time datetime="{{ todo.updated_at | isoformat(local=False) }}" data-live>{{ todo.updated_at | timeago(local=False) }}</time>
+                                ({{ todo.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
                             </p>
                             {% if todo.title %}<p class="entry-card__preview">{{ todo.snippet }}</p>{% endif %}
                             {% if todo.deadline %}

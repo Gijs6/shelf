@@ -23,8 +23,8 @@
                         </h3>
                         <p class="entry-card__timestamp">
                             Deleted
-                            <time datetime="{{ note.deleted_at.isoformat() }}" data-live>{{ note.deleted_at | timeago }}</time>
-                            ({{ note.deleted_at | strftime("%d %b %Y, %H:%M") }})
+                            <time datetime="{{ note.deleted_at | isoformat(local=False) }}" data-live>{{ note.deleted_at | timeago(local=False) }}</time>
+                            ({{ note.deleted_at | strftime("%d %b %Y, %H:%M", local=False) }})
                         </p>
                         <footer class="entry-card__meta">
                             <form hx-patch="{{ url_for('notes.restore_note', note_id=note.id) }}"

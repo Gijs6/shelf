@@ -54,6 +54,7 @@ def list_todos():
 
     query = query.filter(Todo.state.in_(selected_states))
     todos = query.order_by(Todo.created_at.desc()).all()
+    todos = [t for t in todos if t.visible]
 
     selected = set(selected_states)
     chip_links = {}
@@ -90,6 +91,20 @@ def archived():
         .all()
     )
     return render_template("todos/archived.jinja", todos=todos)
+
+
+@todos_bp.get("/recurring")
+def recurring():
+    todos = (
+        Todo.query.filter(
+            Todo.deleted_at.is_(None),
+            Todo.recur_interval.isnot(None),
+            Todo.recur_unit.isnot(None),
+        )
+        .order_by(Todo.deadline.asc())
+        .all()
+    )
+    return render_template("todos/recurring.jinja", todos=todos)
 
 
 @todos_bp.get("/new")
@@ -245,12 +260,15 @@ def set_state(todo_id):
         flash("Invalid state.", "error")
         return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
 
+    was_done = todo.state == "done"
     todo.state = state
     todo.completed_at = now() if state == "done" else None
     todo.active_at = now() if state == "active" else None
     todo.updated_at = now()
     if state == "done" and todo.archived_at is None:
         todo.archived_at = now()
+    elif was_done and state != "done":
+        todo.archived_at = None
     db.session.commit()
     flash("Todo updated.", "success")
     return redirect(

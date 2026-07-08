@@ -26,8 +26,8 @@
                         </h3>
                         <p class="entry-card__timestamp">
                             Archived
-                            <time datetime="{{ note.archived_at.isoformat() }}" data-live>{{ note.archived_at | timeago }}</time>
-                            ({{ note.archived_at | strftime("%d %b %Y, %H:%M") }})
+                            <time datetime="{{ note.archived_at | isoformat(local=False) }}" data-live>{{ note.archived_at | timeago(local=False) }}</time>
+                            ({{ note.archived_at | strftime("%d %b %Y, %H:%M", local=False) }})
                         </p>
                         <footer class="entry-card__meta">
                             <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"

@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 import os
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
@@ -72,7 +72,7 @@ def index():
     )
     dashboard_sticky_notes = [s for s in sticky_notes if s.pinned or not s.expired][:6]
 
-    current_time = now().replace(tzinfo=None)
+    current_time = datetime.now()
 
     due_todos = (
         Todo.query.filter(
@@ -87,11 +87,7 @@ def index():
 
     upcoming_todos = []
     for todo in due_todos:
-        if (
-            todo.recurring
-            and todo.notify_before_days is not None
-            and todo.deadline - current_time > timedelta(days=todo.notify_before_days)
-        ):
+        if not todo.visible:
             continue
         upcoming_todos.append(todo)
         if len(upcoming_todos) == 5:

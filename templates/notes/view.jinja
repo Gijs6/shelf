@@ -11,7 +11,14 @@
         <header class="page-header">
             <hgroup class="page-header__heading">
                 {{ type_eyebrow("note") }}
-                <h1 class="page-header__title">{{ note.display_title }}</h1>
+                <h1 class="page-header__title">
+                    {{ note.display_title }}
+                    {% if note.archived %}
+                        <span class="page-header__badges">
+                            <span class="badge">Archived</span>
+                        </span>
+                    {% endif %}
+                </h1>
             </hgroup>
             <div class="page-header__actions">
                 <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
@@ -42,9 +49,9 @@
         <div class="detail-meta">
             {% if note.group_name %}<span class="detail-meta__group">{{ icon("folder") }} {{ note.group_name }}</span>{% endif %}
             <span class="detail-meta__item">
-                Made {{ note.created_at | strftime }} - edited
-                <time datetime="{{ note.updated_at.isoformat() }}" data-live>{{ note.updated_at | timeago }}</time>
-                ({{ note.updated_at | strftime("%d %b %Y, %H:%M") }})
+                Made {{ note.created_at | strftime(local=False) }} - edited
+                <time datetime="{{ note.updated_at | isoformat(local=False) }}" data-live>{{ note.updated_at | timeago(local=False) }}</time>
+                ({{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
             </span>
         </div>
 
