@@ -11,6 +11,7 @@ from models import TODO_STATES, Note, StickyNote, Todo, db, now
 from routes import register_routes
 from utils.filters import register_filters
 from utils.recurring import process_due_recurrences
+from utils.session import SESSION_LIFETIME
 from utils.version import get_version
 
 
@@ -21,7 +22,6 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", os.urandom(100).hex())
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URI", "sqlite:///shelf.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-SESSION_LIFETIME = timedelta(days=31)
 app.config["PERMANENT_SESSION_LIFETIME"] = SESSION_LIFETIME
 
 db.init_app(app)

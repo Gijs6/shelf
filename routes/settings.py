@@ -5,6 +5,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    session,
     url_for,
 )
 
@@ -23,6 +24,7 @@ from models import (
     generate_id,
     now,
 )
+from utils.session import SESSION_LIFETIME
 from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
 
 
@@ -147,7 +149,23 @@ def index():
         if calendar_token
         else None
     )
-    return render_template("settings/index.jinja", calendar_url=calendar_url)
+    last_login = session.get("last_login")
+    session_expires_at = last_login + SESSION_LIFETIME if last_login else None
+    trash_counts = {
+        "notes": Note.query.filter(Note.deleted_at.isnot(None)).count(),
+        "sticky_notes": StickyNote.query.filter(
+            StickyNote.deleted_at.isnot(None)
+        ).count(),
+        "todos": Todo.query.filter(Todo.deleted_at.isnot(None)).count(),
+    }
+    return render_template(
+        "settings/index.jinja",
+        calendar_url=calendar_url,
+        last_login=last_login,
+        session_expires_at=session_expires_at,
+        trash_counts=trash_counts,
+        total_trash=sum(trash_counts.values()),
+    )
 
 
 @settings_bp.post("/calendar-token")
@@ -217,6 +235,29 @@ def import_data():
     flash(
         f"Imported {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
         f"{counts['todos']} todos.",
+        "success",
+    )
+    return redirect(url_for("settings.index"), code=303)
+
+
+@settings_bp.delete("/trash")
+def purge_all_trash():
+    counts = {
+        "notes": Note.query.filter(Note.deleted_at.isnot(None)).delete(
+            synchronize_session=False
+        ),
+        "sticky_notes": StickyNote.query.filter(
+            StickyNote.deleted_at.isnot(None)
+        ).delete(synchronize_session=False),
+        "todos": Todo.query.filter(Todo.deleted_at.isnot(None)).delete(
+            synchronize_session=False
+        ),
+    }
+    db.session.commit()
+
+    flash(
+        f"Purged {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
+        f"{counts['todos']} todos from trash.",
         "success",
     )
     return redirect(url_for("settings.index"), code=303)
