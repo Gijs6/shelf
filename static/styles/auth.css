@@ -9,9 +9,6 @@
 }
 
 .auth-layout__brand {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
     font-size: var(--font-size-xl);
     font-weight: 700;
     color: var(--color-fg);

@@ -51,7 +51,7 @@
                                         {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
                                         {% if todo.recurring %}
                                             <span class="badge"
-                                                  title="Repeats every {{ todo.recur_interval }} {{ todo.recur_unit }}(s)">{{ icon("repeat") }}</span>
+                                                  title="Repeats every {{ todo.recur_interval }} {{ todo.recur_interval | pluralize(todo.recur_unit) }}">{{ icon("repeat") }}</span>
                                         {% endif %}
                                     </span>
                                 </a>

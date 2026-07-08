@@ -29,18 +29,18 @@
                                 </span>
                             </a>
                         </h3>
-                        <p class="entry-card__timestamp">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_unit }}(s)</p>
+                        <p class="entry-card__timestamp">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_interval | pluralize(todo.recur_unit) }}</p>
                         {% if todo.deadline %}
                             <p class="entry-card__due">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</p>
                         {% endif %}
                         {% if todo.notify_before_days is not none %}
                             <p class="entry-card__preview">
                                 {% if todo.visible %}
-                                    Visible now - notifies {{ todo.notify_before_days }} day(s) before each deadline
+                                    Visible now - notifies {{ todo.notify_before_days }} {{ todo.notify_before_days | pluralize("day") }} before each deadline
                                 {% else %}
                                     Hidden from lists until
                                     <time datetime="{{ todo.visible_from | isoformat }}">{{ todo.visible_from | strftime("%d %b %Y") }}</time>
-                                    ({{ todo.notify_before_days }} day(s) before deadline)
+                                    ({{ todo.notify_before_days }} {{ todo.notify_before_days | pluralize("day") }} before deadline)
                                 {% endif %}
                             </p>
                         {% endif %}

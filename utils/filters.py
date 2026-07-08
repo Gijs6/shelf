@@ -60,6 +60,10 @@ def timeago_filter(value, local=True):
     return f"in {unit}" if future else f"{unit} ago"
 
 
+def pluralize_filter(n, unit):
+    return unit if n == 1 else unit + "s"
+
+
 def markdown_filter(text):
     if not text:
         return ""
@@ -70,6 +74,7 @@ FILTERS = {
     "strftime": strftime_filter,
     "timeago": timeago_filter,
     "isoformat": isoformat_filter,
+    "pluralize": pluralize_filter,
     "markdown": markdown_filter,
 }
 
