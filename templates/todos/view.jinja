@@ -74,7 +74,8 @@
 
         <div class="detail-meta">
             {% if todo.group_name %}
-                <a class="detail-meta__item" href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
+                <a class="detail-meta__item"
+                   href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
             {% endif %}
             <span class="detail-meta__item">
                 Made {{ todo.created_at | strftime(local=False) }} - edited

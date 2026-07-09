@@ -54,7 +54,8 @@
 
         <div class="detail-meta">
             {% if note.group_name %}
-                <a class="detail-meta__item" href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ icon("folder") }} {{ note.group_name }}</a>
+                <a class="detail-meta__item"
+                   href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ icon("folder") }} {{ note.group_name }}</a>
             {% endif %}
             <span class="detail-meta__item">
                 Made {{ note.created_at | strftime(local=False) }} - edited
