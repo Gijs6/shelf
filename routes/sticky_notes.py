@@ -73,14 +73,28 @@ def new_sticky_note():
 @sticky_notes_bp.post("/")
 def create_sticky_note():
     title = request.form.get("title", "").strip() or None
+    content = request.form.get("content", "")
 
     colour = request.form.get("colour", "yellow")
     if colour not in STICKY_COLOURS:
         colour = "yellow"
 
+    if not title and not content.strip():
+        flash("Add a title or some content.", "error")
+        sticky_note = StickyNote(
+            title=title,
+            content=content,
+            colour=colour,
+            expires_at=parse_expires_at(request.form.get("expires_at")),
+            pinned=bool(request.form.get("pinned")),
+        )
+        return render_template(
+            "sticky_notes/form.jinja", sticky_note=sticky_note, colours=STICKY_COLOURS
+        ), 400
+
     sticky_note = StickyNote(
         title=title,
-        content=request.form.get("content", ""),
+        content=content,
         colour=colour,
         expires_at=parse_expires_at(request.form.get("expires_at")),
         pinned=bool(request.form.get("pinned")),
@@ -115,12 +129,26 @@ def update_sticky_note(sticky_note_id):
         StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
     ).first_or_404()
 
+    title = request.form.get("title", "").strip() or None
+    content = request.form.get("content", "")
+
     colour = request.form.get("colour", "yellow")
     if colour not in STICKY_COLOURS:
         colour = "yellow"
 
-    sticky_note.title = request.form.get("title", "").strip() or None
-    sticky_note.content = request.form.get("content", "")
+    if not title and not content.strip():
+        flash("Add a title or some content.", "error")
+        sticky_note.title = title
+        sticky_note.content = content
+        sticky_note.colour = colour
+        sticky_note.expires_at = parse_expires_at(request.form.get("expires_at"))
+        sticky_note.pinned = bool(request.form.get("pinned"))
+        return render_template(
+            "sticky_notes/form.jinja", sticky_note=sticky_note, colours=STICKY_COLOURS
+        ), 400
+
+    sticky_note.title = title
+    sticky_note.content = content
     sticky_note.colour = colour
     sticky_note.expires_at = parse_expires_at(request.form.get("expires_at"))
     sticky_note.pinned = bool(request.form.get("pinned"))

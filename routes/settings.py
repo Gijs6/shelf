@@ -142,6 +142,13 @@ def apply_todo(data):
     return todo
 
 
+def is_blank(data):
+    return (
+        not (data.get("title") or "").strip()
+        and not (data.get("content") or "").strip()
+    )
+
+
 def expired_sticky_notes():
     return [
         sticky_note
@@ -228,14 +235,20 @@ def import_data():
         counts = {"notes": 0, "sticky_notes": 0, "todos": 0}
 
         for data in payload.get("notes") or []:
+            if is_blank(data):
+                continue
             db.session.add(apply_note(data))
             counts["notes"] += 1
 
         for data in payload.get("sticky_notes") or []:
+            if is_blank(data):
+                continue
             db.session.add(apply_sticky_note(data))
             counts["sticky_notes"] += 1
 
         for data in payload.get("todos") or []:
+            if is_blank(data):
+                continue
             db.session.add(apply_todo(data))
             counts["todos"] += 1
 
