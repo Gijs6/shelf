@@ -3,7 +3,7 @@
 {% from "partials/icons.jinja" import icon %}
 
 {% block title %}
-    {% if sticky_note %}
+    {% if sticky_note and sticky_note.id %}
         Edit sticky note
     {% else %}
         New sticky note
@@ -15,7 +15,7 @@
     <header class="page-header page-header--sticky">
         <div class="page-header__heading">
             <h1 class="page-header__title">
-                {% if sticky_note %}
+                {% if sticky_note and sticky_note.id %}
                     Edit sticky note
                 {% else %}
                     New sticky note
@@ -24,7 +24,7 @@
         </div>
     </header>
 
-    <form {% if sticky_note %} hx-put="{{ url_for('sticky_notes.update_sticky_note', sticky_note_id=sticky_note.id) }}" {% else %} hx-post="{{ url_for('sticky_notes.create_sticky_note') }}" {% endif %}
+    <form {% if sticky_note and sticky_note.id %} hx-put="{{ url_for('sticky_notes.update_sticky_note', sticky_note_id=sticky_note.id) }}" {% else %} hx-post="{{ url_for('sticky_notes.create_sticky_note') }}" {% endif %}
           hx-target="body"
           hx-push-url="true"
           class="editor"
