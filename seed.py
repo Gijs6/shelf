@@ -110,6 +110,8 @@ NOTE_SEEDS = [
     ),
 ]
 
+NOTE_GROUPS = ["Research", "Poetry", "History"]
+
 STICKY_SEEDS = [
     {"content": "Buy milk", "colour": "yellow"},
     {"content": "Call dentist", "colour": "pink", "pinned": True},
@@ -136,6 +138,13 @@ STICKY_SEEDS = [
         "colour": "purple",
         "expires_days": 5,
     },
+    {
+        "title": "Old warranty reminder",
+        "colour": "purple",
+        "pinned": True,
+        "expires_days": -10,
+    },
+    {"content": "Cancel old subscription", "colour": "orange", "deleted": True},
 ]
 
 
@@ -150,6 +159,7 @@ TODO_SEEDS = [
             "- [ ] sort clutter on desk\n"
             "- [ ] bathroom cleanup"
         ),
+        "group": "Home",
     },
     {
         "title": "Do groceries",
@@ -163,17 +173,20 @@ TODO_SEEDS = [
             "- [ ] coffee\n"
             "- [ ] fruit"
         ),
+        "group": "Home",
     },
     {
         "title": "Call dentist",
         "state": "open",
         "content": "Book routine check-up.\n\nPrefer morning slot if available.",
         "deadline_days": 3,
+        "group": "Health",
     },
     {
         "title": "Sort paperwork",
         "state": "active",
         "content": "Old letters and documents.\n\nMostly things that should probably be thrown away.",
+        "archived": True,
     },
     {
         "title": "Laundry",
@@ -191,6 +204,7 @@ TODO_SEEDS = [
         "state": "active",
         "content": "Internet and electricity pending.\n\nShould take less than 5 minutes once logged in.",
         "deadline_days": 1,
+        "group": "Finance",
     },
     {
         "title": "Plan weekend",
@@ -211,6 +225,7 @@ TODO_SEEDS = [
             "- [x] cleaning supplies\n"
             "- [x] checked what else is running low"
         ),
+        "group": "Home",
     },
     {
         "title": "Call family",
@@ -218,7 +233,7 @@ TODO_SEEDS = [
         "content": "Check in sometime this week.",
     },
     {"title": "Stamps", "state": "done", "content": ""},
-    {"title": "Wash car", "state": "cancelled", "content": ""},
+    {"title": "Wash car", "state": "cancelled", "content": "", "deleted": True},
     {
         "title": "Book flights",
         "state": "cancelled",
@@ -228,6 +243,43 @@ TODO_SEEDS = [
         "title": "Repot plants",
         "state": "done",
         "content": "Did all three. One had root rot but seemed otherwise fine.",
+    },
+    {
+        "title": "Submit expense report",
+        "state": "open",
+        "content": "Due today, receipts are already scanned.",
+        "deadline_days": 0,
+        "group": "Finance",
+    },
+    {
+        "title": "Water succulents",
+        "state": "open",
+        "content": "Only need this every couple of weeks.",
+        "deadline_days": 20,
+        "recur_interval": 1,
+        "recur_unit": "week",
+        "notify_before_days": 3,
+        "group": "Home",
+    },
+    {
+        "title": "Take out recycling",
+        "state": "open",
+        "content": "Bins go out every other week.",
+        "deadline_days": 2,
+        "recur_interval": 2,
+        "recur_unit": "week",
+        "notify_before_days": 5,
+        "group": "Home",
+    },
+    {
+        "title": "Review monthly budget",
+        "state": "open",
+        "content": "Go through spending and update the sheet.",
+        "deadline_days": 10,
+        "recur_interval": 1,
+        "recur_unit": "month",
+        "notify_before_days": 14,
+        "group": "Finance",
     },
     {
         "title": "Reorganize home office",
@@ -267,6 +319,7 @@ TODO_SEEDS = [
             "scramble to get everything in on time."
         ),
         "deadline_days": 6,
+        "group": "Finance",
     },
 ]
 
@@ -282,6 +335,9 @@ def days_from_now(n):
 def seed_notes(rng):
     for title, content in NOTE_SEEDS:
         created = days_ago(rng.randint(0, 30))
+        group_name = rng.choice(NOTE_GROUPS) if rng.random() < 0.35 else None
+        archived = rng.random() < 0.1
+        deleted = not archived and rng.random() < 0.08
 
         db.session.add(
             Note(
@@ -289,7 +345,9 @@ def seed_notes(rng):
                 content=content,
                 created_at=created,
                 updated_at=created,
-                group_name=None,
+                group_name=group_name,
+                archived_at=created if archived else None,
+                deleted_at=now() if deleted else None,
             )
         )
 
@@ -308,6 +366,7 @@ def seed_sticky_notes(rng):
                 if expires_days is not None
                 else None,
                 created_at=days_ago(rng.randint(0, 20)),
+                deleted_at=now() if seed.get("deleted") else None,
             )
         )
 
@@ -318,18 +377,26 @@ def seed_todos(rng):
         state = seed["state"]
         deadline_days = seed.get("deadline_days")
 
+        archived_at = created if state == "done" or seed.get("archived") else None
+
         db.session.add(
             Todo(
                 title=seed["title"],
                 content=seed["content"],
                 state=state,
-                group_name=None,
+                group_name=seed.get("group"),
                 deadline=days_from_now(deadline_days)
                 if deadline_days is not None
                 else None,
+                recur_interval=seed.get("recur_interval"),
+                recur_unit=seed.get("recur_unit"),
+                notify_before_days=seed.get("notify_before_days"),
                 created_at=created,
                 updated_at=created,
                 completed_at=created if state == "done" else None,
+                active_at=created if state == "active" else None,
+                archived_at=archived_at,
+                deleted_at=now() if seed.get("deleted") else None,
             )
         )
 
