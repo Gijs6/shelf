@@ -109,7 +109,7 @@ textarea {
     resize: vertical;
 }
 
-textarea:not([rows]) {
+textarea:where(:not([rows])) {
     min-height: 10em;
 }
 
