@@ -23,8 +23,10 @@
     document.addEventListener("keydown", function (e) {
         if (e.defaultPrevented) return;
 
+        var typing = e.target.matches("input, textarea, select") || e.target.isContentEditable;
+
         if (e.key === "Escape") {
-            if (document.querySelector("dialog[open]")) return;
+            if (typing || document.querySelector("dialog[open]")) return;
             clearChord();
             history.back();
             return;
@@ -39,7 +41,6 @@
             return;
         }
 
-        var typing = e.target.matches("input, textarea, select") || e.target.isContentEditable;
         if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
 
         if (pendingChord) {
