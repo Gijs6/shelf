@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
-from models import Note, Todo, db, now
+from models import Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
 from utils.groups import all_group_names, group_sections
 
@@ -116,8 +116,8 @@ def update_note(note_id):
     return redirect(url_for("notes.view_note", note_id=note.id), code=303)
 
 
-@notes_bp.post("/<note_id>/convert")
-def convert_note(note_id):
+@notes_bp.post("/<note_id>/convert/todo")
+def convert_note_to_todo(note_id):
     note = Note.query.filter(
         Note.id == note_id, Note.deleted_at.is_(None)
     ).first_or_404()
@@ -134,6 +134,38 @@ def convert_note(note_id):
     db.session.commit()
     flash("Note converted to todo.", "success")
     return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
+
+
+@notes_bp.post("/<note_id>/convert/sticky-note")
+def convert_note_to_sticky_note(note_id):
+    note = Note.query.filter(
+        Note.id == note_id, Note.deleted_at.is_(None)
+    ).first_or_404()
+
+    dropped = []
+    if note.group_name:
+        dropped.append(f"group: {note.group_name}")
+    if note.archived:
+        dropped.append("archived")
+
+    content = note.content
+    if dropped:
+        note_line = f"_Converted from note ({', '.join(dropped)})_"
+        content = f"{note_line}\n\n{content}" if content else note_line
+
+    sticky_note = StickyNote(
+        title=note.title,
+        content=content,
+        created_at=note.created_at,
+    )
+    db.session.add(sticky_note)
+    db.session.delete(note)
+    db.session.commit()
+    flash("Note converted to sticky note.", "success")
+    return redirect(
+        url_for("sticky_notes.edit_sticky_note", sticky_note_id=sticky_note.id),
+        code=303,
+    )
 
 
 @notes_bp.delete("/<note_id>/delete")

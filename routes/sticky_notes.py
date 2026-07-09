@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from datetime import datetime, timedelta
 
-from models import STICKY_COLOURS, StickyNote, db, now
+from models import STICKY_COLOURS, Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
 
 
@@ -156,6 +156,63 @@ def update_sticky_note(sticky_note_id):
     db.session.commit()
     flash("Sticky note saved.", "success")
     return redirect(url_for("sticky_notes.list_sticky_notes"), code=303)
+
+
+def dropped_sticky_note_fields(sticky_note):
+    dropped = []
+    if sticky_note.pinned:
+        dropped.append("pinned")
+    if sticky_note.expires_at:
+        dropped.append(f"expires: {sticky_note.expires_at.strftime('%d %b %Y, %H:%M')}")
+    return dropped
+
+
+@sticky_notes_bp.post("/<sticky_note_id>/convert/note")
+def convert_sticky_note_to_note(sticky_note_id):
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
+    ).first_or_404()
+
+    dropped = dropped_sticky_note_fields(sticky_note)
+    content = sticky_note.content
+    if dropped:
+        note_line = f"_Converted from sticky note ({', '.join(dropped)})_"
+        content = f"{note_line}\n\n{content}" if content else note_line
+
+    note = Note(
+        title=sticky_note.title,
+        content=content,
+        created_at=sticky_note.created_at,
+    )
+    db.session.add(note)
+    db.session.delete(sticky_note)
+    db.session.commit()
+    flash("Sticky note converted to note.", "success")
+    return redirect(url_for("notes.view_note", note_id=note.id), code=303)
+
+
+@sticky_notes_bp.post("/<sticky_note_id>/convert/todo")
+def convert_sticky_note_to_todo(sticky_note_id):
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
+    ).first_or_404()
+
+    dropped = dropped_sticky_note_fields(sticky_note)
+    content = sticky_note.content
+    if dropped:
+        note_line = f"_Converted from sticky note ({', '.join(dropped)})_"
+        content = f"{note_line}\n\n{content}" if content else note_line
+
+    todo = Todo(
+        title=sticky_note.title,
+        content=content,
+        created_at=sticky_note.created_at,
+    )
+    db.session.add(todo)
+    db.session.delete(sticky_note)
+    db.session.commit()
+    flash("Sticky note converted to todo.", "success")
+    return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
 
 
 @sticky_notes_bp.patch("/<sticky_note_id>/pin")

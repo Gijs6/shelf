@@ -193,6 +193,13 @@ body {
     justify-content: flex-end;
 }
 
+.editor__convert {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
 .card-list {
     list-style: none;
     margin: 0 0 var(--space-lg) 0;

@@ -112,11 +112,19 @@
     </form>
 
     {% if todo and todo.id %}
-        <form hx-post="{{ url_for('todos.convert_todo', todo_id=todo.id) }}"
-              hx-target="body"
-              hx-push-url="true"
-              hx-confirm="Convert this todo to a note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the note's content.">
-            <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to note</button>
-        </form>
+        <div class="editor__convert">
+            <form hx-post="{{ url_for('todos.convert_todo_to_note', todo_id=todo.id) }}"
+                  hx-target="body"
+                  hx-push-url="true"
+                  hx-confirm="Convert this todo to a note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the note's content.">
+                <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to note</button>
+            </form>
+            <form hx-post="{{ url_for('todos.convert_todo_to_sticky_note', todo_id=todo.id) }}"
+                  hx-target="body"
+                  hx-push-url="true"
+                  hx-confirm="Convert this todo to a sticky note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the sticky note's content.">
+                <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to sticky note</button>
+            </form>
+        </div>
     {% endif %}
 {% endblock %}
