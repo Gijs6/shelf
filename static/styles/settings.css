@@ -32,27 +32,17 @@
 
 .settings-list__item {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
+    align-items: center;
+    gap: var(--space-sm);
 }
 
-.settings-list__row {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-sm);
+.settings-list__name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .settings-list__meta {
     color: var(--color-fg-muted);
     white-space: nowrap;
-}
-
-.settings-list__rename-form {
-    display: flex;
-    gap: var(--space-xs);
-}
-
-.settings-list__rename-form .field__input {
-    flex: 1;
-    min-width: 0;
 }

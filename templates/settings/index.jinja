@@ -80,27 +80,15 @@
                 <ul class="settings-list">
                     {% for name, counts in group_counts.items() %}
                         <li class="settings-list__item">
-                            <div class="settings-list__row">
-                                <span>{{ name }}</span>
-                                <span class="settings-list__meta">
-                                    {{ counts.notes }} {{ counts.notes | pluralize("note") }},
-                                    {{ counts.todos }} {{ counts.todos | pluralize("todo") }}
-                                </span>
-                            </div>
-                            <form class="settings-list__rename-form"
-                                  hx-post="{{ url_for('settings.rename_group') }}"
-                                  hx-target="body"
-                                  hx-push-url="true">
-                                <input type="hidden" name="old_name" value="{{ name }}" />
-                                <label for="rename-{{ loop.index }}" class="visually-hidden">Rename {{ name }}</label>
-                                <input type="text"
-                                       id="rename-{{ loop.index }}"
-                                       name="new_name"
-                                       class="field__input"
-                                       placeholder="Rename to..."
-                                       required />
-                                <button type="submit" class="button button--ghost button--sm">{{ icon("edit") }} Rename</button>
-                            </form>
+                            <span class="settings-list__name">{{ name }}</span>
+                            <span class="settings-list__meta">
+                                {{ counts.notes }} {{ counts.notes | pluralize("note") }},
+                                {{ counts.todos }} {{ counts.todos | pluralize("todo") }}
+                            </span>
+                            <button type="button"
+                                    class="button button--ghost button--sm"
+                                    data-rename-group="{{ name }}"
+                                    aria-haspopup="dialog">{{ icon("edit") }} Rename</button>
                         </li>
                     {% endfor %}
                 </ul>
@@ -171,5 +159,29 @@
             </form>
         </section>
     </div>
+
+    <dialog id="rename-group-modal" class="modal modal--stacked">
+        <div class="modal__header">
+            <h2 class="modal__title">Rename group</h2>
+            <form method="dialog">
+                <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
+            </form>
+        </div>
+
+        <form hx-post="{{ url_for('settings.rename_group') }}"
+              hx-target="body"
+              hx-push-url="true">
+            <input type="hidden" name="old_name" value="" />
+            <div class="field">
+                <label for="rename-group-name" class="field__label">New name</label>
+                <input type="text"
+                       id="rename-group-name"
+                       name="new_name"
+                       class="field__input"
+                       required />
+            </div>
+            <button type="submit" class="button">{{ icon("edit") }} Rename</button>
+        </form>
+    </dialog>
 
 {% endblock %}
