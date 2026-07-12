@@ -211,6 +211,7 @@ def export():
             sticky_note_to_dict(sticky_note) for sticky_note in StickyNote.query.all()
         ],
         "todos": [todo_to_dict(todo) for todo in Todo.query.all()],
+        "settings": {"calendar_token": get_setting(CALENDAR_TOKEN_KEY)},
     }
     filename = f"shelf-export-{now().strftime('%Y%m%d-%H%M%S')}.json"
     return Response(
@@ -257,6 +258,10 @@ def import_data():
         db.session.rollback()
         flash("That file isn't a valid Shelf export.", "error")
         return redirect(url_for("settings.index"), code=303)
+
+    calendar_token = (payload.get("settings") or {}).get("calendar_token")
+    if calendar_token:
+        set_setting(CALENDAR_TOKEN_KEY, calendar_token)
 
     flash(
         f"Imported {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
