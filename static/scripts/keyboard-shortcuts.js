@@ -1,6 +1,5 @@
 (function () {
     var routes = JSON.parse(document.getElementById("nav-routes").textContent);
-    var shortcutsModal = document.getElementById("shortcuts-modal");
 
     var CHORD_DESTINATIONS = {
         g: { d: routes.dashboard, n: routes.notes, t: routes.todos, s: routes.stickyNotes },
@@ -61,7 +60,7 @@
 
         if (e.key === "?") {
             e.preventDefault();
-            shortcutsModal.showModal();
+            document.getElementById("shortcuts-modal").showModal();
         } else if (e.key === "/") {
             e.preventDefault();
             var searchInput = document.getElementById("q");

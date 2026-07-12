@@ -18,7 +18,7 @@
         </div>
     </header>
 
-    <dialog id="search-help-modal" class="modal">
+    <dialog id="search-help-modal" class="modal modal--stacked">
         <div class="modal__header">
             <h2 class="modal__title">Search syntax</h2>
             <form method="dialog">
@@ -31,7 +31,7 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>is:note</code> <code>is:todo</code> <code>is:sticky</code>
+                        <code class="modal__chip">is:note</code> <code class="modal__chip">is:todo</code> <code class="modal__chip">is:sticky</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Only that type (repeat to combine)
@@ -45,7 +45,7 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>state:open|active|done|cancelled</code>
+                        <code class="modal__chip">state:open|active|done|cancelled</code>
                     </dt>
                     <dd class="modal__row-desc">
                         By todo state
@@ -53,7 +53,7 @@
                 </div>
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>overdue:yes</code> / <code>no</code>
+                        <code class="modal__chip">overdue:yes</code> / <code class="modal__chip">no</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Overdue todos
@@ -61,7 +61,7 @@
                 </div>
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>due:today</code> / <code>due:week</code>
+                        <code class="modal__chip">due:today</code> / <code class="modal__chip">due:week</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Due today / within 7 days
@@ -75,7 +75,7 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>pinned:yes</code> / <code>no</code>
+                        <code class="modal__chip">pinned:yes</code> / <code class="modal__chip">no</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Pinned sticky notes
@@ -83,7 +83,7 @@
                 </div>
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>colour:pink</code>
+                        <code class="modal__chip">colour:pink</code>
                     </dt>
                     <dd class="modal__row-desc">
                         yellow, pink, blue, green, purple, orange
@@ -97,7 +97,7 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>group:home</code>
+                        <code class="modal__chip">group:home</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Exact group name
@@ -105,7 +105,7 @@
                 </div>
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>archived:yes</code> / <code>no</code>
+                        <code class="modal__chip">archived:yes</code> / <code class="modal__chip">no</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Archived items
@@ -119,7 +119,7 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>before:2026-01-01</code>
+                        <code class="modal__chip">before:2026-01-01</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Created before a date (YYYY-MM-DD, all types)
@@ -127,7 +127,7 @@
                 </div>
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>after:2026-01-01</code>
+                        <code class="modal__chip">after:2026-01-01</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Created on/after a date (YYYY-MM-DD, all types) - for todo deadlines use <code>due:today</code> / <code>due:week</code> instead
@@ -141,7 +141,7 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code>sort:title</code> / <code>sort:created</code> / <code>sort:updated</code>
+                        <code class="modal__chip">sort:title</code> / <code class="modal__chip">sort:created</code> / <code class="modal__chip">sort:updated</code>
                     </dt>
                     <dd class="modal__row-desc">
                         Default: last updated
