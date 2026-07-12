@@ -128,6 +128,7 @@ def ical_feed():
     todos = (
         Todo.query.filter(
             Todo.deleted_at.is_(None),
+            Todo.archived_at.is_(None),
             Todo.deadline.isnot(None),
             Todo.state.notin_(["done", "cancelled"]),
         )

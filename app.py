@@ -88,6 +88,7 @@ def index():
         ).count(),
         "overdue_todos": Todo.query.filter(
             Todo.deleted_at.is_(None),
+            Todo.archived_at.is_(None),
             Todo.state.notin_(["done", "cancelled"]),
             Todo.deadline.isnot(None),
             Todo.deadline < current_time,
