@@ -163,10 +163,10 @@ def recurring():
     return render_template("todos/recurring.jinja", todos=todos)
 
 
-@todos_bp.get("/calendar.ics")
-def ical_feed():
-    token = get_setting(CALENDAR_TOKEN_KEY)
-    if not token or request.args.get("token") != token:
+@todos_bp.get("/calendar/<token>.ics")
+def ical_feed(token):
+    expected_token = get_setting(CALENDAR_TOKEN_KEY)
+    if not expected_token or token != expected_token:
         abort(403)
 
     todos = (
