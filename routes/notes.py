@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from models import Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
-from utils.groups import all_group_names, group_sections
+from utils.groups import all_group_names, group_sections, normalize_group_name
 
 
 notes_bp = Blueprint("notes", __name__, url_prefix="/notes")
@@ -48,7 +48,7 @@ def new_note():
 def create_note():
     title = request.form.get("title", "").strip() or None
     content = request.form.get("content", "")
-    group_name = request.form.get("group", "").strip() or None
+    group_name = normalize_group_name(request.form.get("group", ""))
 
     if not title and not content.strip():
         flash("Add a title or some content.", "error")
@@ -96,7 +96,7 @@ def update_note(note_id):
 
     title = request.form.get("title", "").strip() or None
     content = request.form.get("content", "")
-    group_name = request.form.get("group", "").strip() or None
+    group_name = normalize_group_name(request.form.get("group", ""))
 
     if not title and not content.strip():
         flash("Add a title or some content.", "error")

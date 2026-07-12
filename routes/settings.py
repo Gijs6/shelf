@@ -24,7 +24,7 @@ from models import (
     generate_id,
     now,
 )
-from utils.groups import group_name_counts
+from utils.groups import find_existing_group_name, group_name_counts
 from utils.session import SESSION_LIFETIME
 from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
 
@@ -261,6 +261,34 @@ def import_data():
     flash(
         f"Imported {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
         f"{counts['todos']} todos.",
+        "success",
+    )
+    return redirect(url_for("settings.index"), code=303)
+
+
+@settings_bp.post("/groups/rename")
+def rename_group():
+    old_name = (request.form.get("old_name") or "").strip()
+    new_name = (request.form.get("new_name") or "").strip()
+
+    if not old_name or not new_name:
+        flash("Enter a new group name.", "error")
+        return redirect(url_for("settings.index"), code=303)
+
+    existing = find_existing_group_name(new_name)
+    if existing and existing != old_name:
+        new_name = existing
+
+    note_count = Note.query.filter(Note.group_name == old_name).update(
+        {"group_name": new_name}, synchronize_session=False
+    )
+    todo_count = Todo.query.filter(Todo.group_name == old_name).update(
+        {"group_name": new_name}, synchronize_session=False
+    )
+    db.session.commit()
+
+    flash(
+        f'Renamed "{old_name}" to "{new_name}" ({note_count + todo_count} items).',
         "success",
     )
     return redirect(url_for("settings.index"), code=303)

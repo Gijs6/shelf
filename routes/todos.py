@@ -13,7 +13,7 @@ from datetime import datetime
 
 from models import RECUR_UNITS, TODO_STATES, Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
-from utils.groups import all_group_names, group_sections
+from utils.groups import all_group_names, group_sections, normalize_group_name
 from utils.ical import build_todo_calendar
 from utils.settings import CALENDAR_TOKEN_KEY, get_setting
 
@@ -152,7 +152,7 @@ def new_todo():
 def create_todo():
     title = request.form.get("title", "").strip() or None
     content = request.form.get("content", "")
-    group_name = request.form.get("group", "").strip() or None
+    group_name = normalize_group_name(request.form.get("group", ""))
     deadline = parse_deadline(request.form.get("deadline"))
     recur_interval, recur_unit = parse_recurrence(
         request.form.get("recur_interval"), request.form.get("recur_unit")
@@ -241,7 +241,7 @@ def update_todo(todo_id):
 
     title = request.form.get("title", "").strip() or None
     content = request.form.get("content", "")
-    group_name = request.form.get("group", "").strip() or None
+    group_name = normalize_group_name(request.form.get("group", ""))
     deadline = parse_deadline(request.form.get("deadline"))
     recur_interval, recur_unit = parse_recurrence(
         request.form.get("recur_interval"), request.form.get("recur_unit")

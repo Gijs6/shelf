@@ -80,11 +80,27 @@
                 <ul class="settings-list">
                     {% for name, counts in group_counts.items() %}
                         <li class="settings-list__item">
-                            <span>{{ name }}</span>
-                            <span class="settings-list__meta">
-                                {{ counts.notes }} {{ counts.notes | pluralize("note") }},
-                                {{ counts.todos }} {{ counts.todos | pluralize("todo") }}
-                            </span>
+                            <div class="settings-list__row">
+                                <span>{{ name }}</span>
+                                <span class="settings-list__meta">
+                                    {{ counts.notes }} {{ counts.notes | pluralize("note") }},
+                                    {{ counts.todos }} {{ counts.todos | pluralize("todo") }}
+                                </span>
+                            </div>
+                            <form class="settings-list__rename-form"
+                                  hx-post="{{ url_for('settings.rename_group') }}"
+                                  hx-target="body"
+                                  hx-push-url="true">
+                                <input type="hidden" name="old_name" value="{{ name }}" />
+                                <label for="rename-{{ loop.index }}" class="visually-hidden">Rename {{ name }}</label>
+                                <input type="text"
+                                       id="rename-{{ loop.index }}"
+                                       name="new_name"
+                                       class="field__input"
+                                       placeholder="Rename to..."
+                                       required />
+                                <button type="submit" class="button button--ghost button--sm">{{ icon("edit") }} Rename</button>
+                            </form>
                         </li>
                     {% endfor %}
                 </ul>
