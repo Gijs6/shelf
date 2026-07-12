@@ -14,6 +14,9 @@
         <meta name="htmx-config"
               content='{"historyCacheSize": 0, "responseHandling": [{"code": "204", "swap": false}, {"code": "[23]..", "swap": true}, {"code": "[45]..", "swap": true, "error": true}]}' />
 
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='vendor/easymde.min.css') }}" />
+
         {% if config.DEBUG %}
             <link rel="stylesheet"
                   href="{{ url_for('static', filename='styles/skeleton.css') }}" />
@@ -235,6 +238,8 @@
                 "search": "{{ url_for('search.search_view') }}"
             }
         </script>
+
+        <script src="{{ url_for('static', filename='vendor/easymde.min.js') }}"></script>
 
         <script src="{{ url_for('static', filename='scripts/live-timestamps.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/required-fields.js') }}"></script>

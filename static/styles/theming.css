@@ -172,6 +172,89 @@ body {
     border-color: var(--color-accent);
 }
 
+.EasyMDEContainer .CodeMirror {
+    min-height: 60vh;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+    font-family: inherit;
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-base);
+}
+
+.EasyMDEContainer .CodeMirror-focused {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -1px;
+    border-color: var(--color-accent);
+}
+
+.EasyMDEContainer .CodeMirror-cursor {
+    border-left-color: var(--color-fg);
+}
+
+.EasyMDEContainer .CodeMirror-selected,
+.EasyMDEContainer .CodeMirror-focused .CodeMirror-selected {
+    background: var(--color-accent-subtle);
+}
+
+/* Match how the same markdown renders on the view page (theming.css .markdown / code.css) */
+
+.EasyMDEContainer .cm-header,
+.EasyMDEContainer .cm-strong,
+.EasyMDEContainer .cm-variable-2,
+.EasyMDEContainer .cm-variable-3,
+.EasyMDEContainer .cm-keyword {
+    color: var(--color-fg);
+}
+
+.EasyMDEContainer .cm-header-1 {
+    font-size: 2em;
+}
+
+.EasyMDEContainer .cm-header-2 {
+    font-size: 1.5em;
+}
+
+.EasyMDEContainer .cm-header-3 {
+    font-size: 1.17em;
+}
+
+.EasyMDEContainer .cm-header-4 {
+    font-size: 1em;
+}
+
+.EasyMDEContainer .cm-header-5 {
+    font-size: 0.83em;
+}
+
+.EasyMDEContainer .cm-header-6 {
+    font-size: 0.67em;
+}
+
+.EasyMDEContainer .cm-link,
+.EasyMDEContainer .cm-url {
+    color: LinkText;
+}
+
+.EasyMDEContainer .cm-quote {
+    color: inherit;
+    font-style: normal;
+}
+
+.EasyMDEContainer .cm-hr {
+    color: var(--color-fg-muted);
+}
+
+.EasyMDEContainer .cm-comment {
+    padding: var(--space-3xs) var(--space-2xs);
+    background-color: var(--color-surface);
+    color: inherit;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+}
+
 .editor__meta {
     display: flex;
     flex-wrap: wrap;
