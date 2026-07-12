@@ -5,10 +5,10 @@
         <article class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}">
             <div class="sticky-note__content">
                 {% if sticky_note.title %}
-                    <h{{ heading_level }} class="sticky-note__title">
-                        <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}"
-                           class="sticky-note__title-link">{{ sticky_note.title }}</a>
-                    </h{{ heading_level }}>
+                    <h {{ heading_level }} class="sticky-note__title">
+                    <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}"
+                       class="sticky-note__title-link">{{ sticky_note.title }}</a>
+                    </h {{ heading_level }}>
                 {% endif %}
                 <div class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
             </div>

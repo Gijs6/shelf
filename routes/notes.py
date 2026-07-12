@@ -122,9 +122,7 @@ def duplicate_note(note_id):
         Note.id == note_id, Note.deleted_at.is_(None)
     ).first_or_404()
 
-    duplicate = Note(
-        title=note.title, content=note.content, group_name=note.group_name
-    )
+    duplicate = Note(title=note.title, content=note.content, group_name=note.group_name)
     db.session.add(duplicate)
     db.session.commit()
     flash("Note duplicated.", "success")

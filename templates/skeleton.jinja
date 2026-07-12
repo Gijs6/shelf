@@ -8,7 +8,8 @@
         <title>{%- block title -%}{%- endblock %} - Shelf</title>
 
         <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" />
-        <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}" />
+        <link rel="manifest"
+              href="{{ url_for('static', filename='manifest.json') }}" />
         <meta name="theme-color" content="#0a0a0d" />
 
         <meta name="htmx-config"
@@ -70,19 +71,25 @@
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">?</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Show this help</dd>
+                        <dd class="modal__row-desc">
+                            Show this help
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">Esc</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Go back / close</dd>
+                        <dd class="modal__row-desc">
+                            Go back / close
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">Ctrl</kbd><kbd class="modal__chip">Enter</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Submit the current form</dd>
+                        <dd class="modal__row-desc">
+                            Submit the current form
+                        </dd>
                     </div>
                 </dl>
             </section>
@@ -94,31 +101,41 @@
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">/</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Search</dd>
+                        <dd class="modal__row-desc">
+                            Search
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">g</kbd><kbd class="modal__chip">d</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Dashboard</dd>
+                        <dd class="modal__row-desc">
+                            Dashboard
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">g</kbd><kbd class="modal__chip">n</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Notes</dd>
+                        <dd class="modal__row-desc">
+                            Notes
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">g</kbd><kbd class="modal__chip">t</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Todos</dd>
+                        <dd class="modal__row-desc">
+                            Todos
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">g</kbd><kbd class="modal__chip">s</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Sticky notes</dd>
+                        <dd class="modal__row-desc">
+                            Sticky notes
+                        </dd>
                     </div>
                 </dl>
             </section>
@@ -130,19 +147,25 @@
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">c</kbd><kbd class="modal__chip">n</kbd>
                         </dt>
-                        <dd class="modal__row-desc">New note</dd>
+                        <dd class="modal__row-desc">
+                            New note
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">c</kbd><kbd class="modal__chip">t</kbd>
                         </dt>
-                        <dd class="modal__row-desc">New todo</dd>
+                        <dd class="modal__row-desc">
+                            New todo
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">c</kbd><kbd class="modal__chip">s</kbd>
                         </dt>
-                        <dd class="modal__row-desc">New sticky note</dd>
+                        <dd class="modal__row-desc">
+                            New sticky note
+                        </dd>
                     </div>
                 </dl>
             </section>
@@ -154,25 +177,33 @@
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">n</kbd>
                         </dt>
-                        <dd class="modal__row-desc">New</dd>
+                        <dd class="modal__row-desc">
+                            New
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">a</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Archived (Expired for sticky notes)</dd>
+                        <dd class="modal__row-desc">
+                            Archived (Expired for sticky notes)
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">t</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Trash</dd>
+                        <dd class="modal__row-desc">
+                            Trash
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">r</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Recurring (todos only)</dd>
+                        <dd class="modal__row-desc">
+                            Recurring (todos only)
+                        </dd>
                     </div>
                 </dl>
             </section>
@@ -184,25 +215,33 @@
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">e</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Edit</dd>
+                        <dd class="modal__row-desc">
+                            Edit
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">a</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Toggle archive</dd>
+                        <dd class="modal__row-desc">
+                            Toggle archive
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">d</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Trash</dd>
+                        <dd class="modal__row-desc">
+                            Trash
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">1</kbd><kbd class="modal__chip">2</kbd><kbd class="modal__chip">3</kbd><kbd class="modal__chip">4</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Set state to open / active / done / cancelled</dd>
+                        <dd class="modal__row-desc">
+                            Set state to open / active / done / cancelled
+                        </dd>
                     </div>
                 </dl>
             </section>
@@ -214,13 +253,17 @@
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">p</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Toggle pin</dd>
+                        <dd class="modal__row-desc">
+                            Toggle pin
+                        </dd>
                     </div>
                     <div class="modal__row">
                         <dt class="modal__row-term">
                             <kbd class="modal__chip">d</kbd>
                         </dt>
-                        <dd class="modal__row-desc">Trash</dd>
+                        <dd class="modal__row-desc">
+                            Trash
+                        </dd>
                     </div>
                 </dl>
             </section>

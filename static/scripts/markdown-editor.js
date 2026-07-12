@@ -6,7 +6,7 @@
             status: false,
             spellChecker: false,
             autoDownloadFontAwesome: false,
-            placeholder: textarea.getAttribute("placeholder") || "",
+            placeholder: textarea.getAttribute("placeholder") || ""
         });
 
         mde.codemirror.on("change", function () {

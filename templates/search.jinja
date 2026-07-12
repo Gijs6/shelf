@@ -160,25 +160,25 @@
     </dialog>
 
     <search>
-        <form method="get"
-              class="filters"
-              hx-get="{{ url_for('search.search_view') }}"
-              hx-trigger="input changed from:find input, submit"
-              hx-select="#search-results"
-              hx-target="#search-results"
-              hx-swap="outerHTML"
-              hx-replace-url="true">
-            <label for="q" class="visually-hidden">Search</label>
-            <input type="search"
-                   id="q"
-                   name="q"
-                   class="field__input filters__input"
-                   placeholder="is:todo state:open group:home overdue:yes due:week sort:title ..."
-                   value="{{ query }}"
-                   autocomplete="off"
-                   autofocus />
-            <button type="submit" class="button">{{ icon("search") }} Search</button>
-        </form>
+    <form method="get"
+          class="filters"
+          hx-get="{{ url_for('search.search_view') }}"
+          hx-trigger="input changed from:find input, submit"
+          hx-select="#search-results"
+          hx-target="#search-results"
+          hx-swap="outerHTML"
+          hx-replace-url="true">
+        <label for="q" class="visually-hidden">Search</label>
+        <input type="search"
+               id="q"
+               name="q"
+               class="field__input filters__input"
+               placeholder="is:todo state:open group:home overdue:yes due:week sort:title ..."
+               value="{{ query }}"
+               autocomplete="off"
+               autofocus />
+        <button type="submit" class="button">{{ icon("search") }} Search</button>
+    </form>
     </search>
 
     <section id="search-results" aria-label="Search results">
