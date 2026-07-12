@@ -220,7 +220,7 @@ def archive_note(note_id):
     note.archived_at = now()
     db.session.commit()
     flash("Note archived.", "success")
-    return redirect(url_for("notes.list_notes"), code=303)
+    return redirect(request.referrer or url_for("notes.list_notes"), code=303)
 
 
 @notes_bp.patch("/<note_id>/unarchive")
@@ -231,4 +231,4 @@ def unarchive_note(note_id):
     note.archived_at = None
     db.session.commit()
     flash("Note unarchived.", "success")
-    return redirect(url_for("notes.archived"), code=303)
+    return redirect(request.referrer or url_for("notes.archived"), code=303)

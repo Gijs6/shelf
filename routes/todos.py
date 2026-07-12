@@ -438,7 +438,7 @@ def archive_todo(todo_id):
     todo.archived_at = now()
     db.session.commit()
     flash("Todo archived.", "success")
-    return redirect(url_for("todos.list_todos"), code=303)
+    return redirect(request.referrer or url_for("todos.list_todos"), code=303)
 
 
 @todos_bp.patch("/<todo_id>/unarchive")
@@ -449,4 +449,4 @@ def unarchive_todo(todo_id):
     todo.archived_at = None
     db.session.commit()
     flash("Todo unarchived.", "success")
-    return redirect(url_for("todos.archived"), code=303)
+    return redirect(request.referrer or url_for("todos.archived"), code=303)
