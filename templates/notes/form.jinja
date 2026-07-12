@@ -29,7 +29,7 @@
           hx-push-url="true"
           class="editor"
           data-require-either="title,content">
-        <div class="editor__main">
+        <div class="editor__body">
             <label for="title" class="visually-hidden">Title</label>
             <input type="text"
                    id="title"
@@ -44,45 +44,57 @@
                       name="content"
                       class="editor__content"
                       placeholder="Write in markdown...">{{ note.content if note else '' }}</textarea>
-        </div>
 
-        <fieldset class="editor__meta">
-            <legend class="visually-hidden">Details</legend>
-            <div class="field editor__field">
-                <label for="group" class="field__label">Group</label>
-                <input type="text"
-                       id="group"
-                       name="group"
-                       class="field__input"
-                       list="note-groups"
-                       autocomplete="off"
-                       placeholder="Search or create a group"
-                       value="{{ note.group_name or '' }}" />
-                <datalist id="note-groups">
-                    {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
-                </datalist>
+            <div class="editor__sidebar">
+                <fieldset class="editor__meta">
+                    <legend class="visually-hidden">Details</legend>
+                    <div class="editor__meta-group">
+                        <p class="editor__meta-title">Details</p>
+                        <div class="field editor__field">
+                            <label for="group" class="field__label">Group</label>
+                            <input type="text"
+                                   id="group"
+                                   name="group"
+                                   class="field__input"
+                                   list="note-groups"
+                                   autocomplete="off"
+                                   placeholder="Search or create a group"
+                                   value="{{ note.group_name or '' }}" />
+                            <datalist id="note-groups">
+                                {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="editor__actions">
+                    <button type="submit" class="button">{{ icon("edit") }} Save note</button>
+                </div>
+
+                {% if note and note.id %}
+                    <div class="editor__convert">
+                        <button type="submit" form="convert-to-todo" class="button button--ghost">
+                            {{ icon("repeat") }} Convert to todo
+                        </button>
+                        <button type="submit" form="convert-to-sticky-note" class="button button--ghost">
+                            {{ icon("repeat") }} Convert to sticky note
+                        </button>
+                    </div>
+                {% endif %}
             </div>
-        </fieldset>
-
-        <div class="editor__actions">
-            <button type="submit" class="button">{{ icon("edit") }} Save note</button>
         </div>
     </form>
 
     {% if note and note.id %}
-        <div class="editor__convert">
-            <form hx-post="{{ url_for('notes.convert_note_to_todo', note_id=note.id) }}"
-                  hx-target="body"
-                  hx-push-url="true"
-                  hx-confirm="Convert this note to a todo? It will get a new URL, and you'll lose any unsaved changes made here.">
-                <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to todo</button>
-            </form>
-            <form hx-post="{{ url_for('notes.convert_note_to_sticky_note', note_id=note.id) }}"
-                  hx-target="body"
-                  hx-push-url="true"
-                  hx-confirm="Convert this note to a sticky note? It will get a new URL, and you'll lose any unsaved changes made here.">
-                <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to sticky note</button>
-            </form>
-        </div>
+        <form id="convert-to-todo"
+              hx-post="{{ url_for('notes.convert_note_to_todo', note_id=note.id) }}"
+              hx-target="body"
+              hx-push-url="true"
+              hx-confirm="Convert this note to a todo? It will get a new URL, and you'll lose any unsaved changes made here."></form>
+        <form id="convert-to-sticky-note"
+              hx-post="{{ url_for('notes.convert_note_to_sticky_note', note_id=note.id) }}"
+              hx-target="body"
+              hx-push-url="true"
+              hx-confirm="Convert this note to a sticky note? It will get a new URL, and you'll lose any unsaved changes made here."></form>
     {% endif %}
 {% endblock %}

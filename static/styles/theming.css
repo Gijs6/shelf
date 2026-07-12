@@ -122,6 +122,22 @@ body {
     gap: var(--space-xs);
 }
 
+.field__row {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.field__input--number {
+    flex: 0 0 4rem;
+    width: 4rem;
+    text-align: center;
+}
+
+.field__row .field__input:not(.field__input--number) {
+    flex: 1;
+    min-width: 0;
+}
+
 .form {
     max-width: 32rem;
 }
@@ -129,17 +145,22 @@ body {
 .editor {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
-    max-width: 48rem;
+    gap: var(--space-lg);
+    max-width: 64rem;
 }
 
-.editor__main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
+.editor__body {
+    display: grid;
+    grid-template-columns: 1fr 16rem;
+    grid-template-areas:
+        "title title"
+        "content sidebar";
+    gap: var(--space-md) var(--space-lg);
+    align-items: stretch;
 }
 
 .editor__title {
+    grid-area: title;
     padding: var(--space-xs) 0;
     border: none;
     border-bottom: 1px solid var(--color-border);
@@ -156,6 +177,7 @@ body {
 }
 
 .editor__content {
+    grid-area: content;
     width: 100%;
     min-height: 60vh;
     padding: var(--space-xs) var(--space-sm);
@@ -170,6 +192,10 @@ body {
     outline: 2px solid var(--color-accent);
     outline-offset: -1px;
     border-color: var(--color-accent);
+}
+
+.EasyMDEContainer {
+    grid-area: content;
 }
 
 .EasyMDEContainer .CodeMirror {
@@ -255,32 +281,68 @@ body {
     font-size: var(--font-size-sm);
 }
 
+.editor__sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
 .editor__meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
+    flex-direction: column;
+    gap: var(--space-lg);
     margin: 0;
-    padding: var(--space-md) 0 0 0;
-    border: none;
-    border-top: 1px solid var(--color-border);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+}
+
+.editor__meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.editor__meta-group:not(:last-child) {
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.editor__meta-title {
+    margin: 0;
+    color: var(--color-fg);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
 }
 
 .editor__field {
-    flex: 1;
-    min-width: 12rem;
     margin-bottom: 0;
 }
 
 .editor__actions {
     display: flex;
-    justify-content: flex-end;
+}
+
+.editor__actions .button {
+    width: 100%;
+    text-align: center;
 }
 
 .editor__convert {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: var(--space-sm);
-    margin-top: var(--space-md);
+}
+
+@media (max-width: 800px) {
+    .editor__body {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "title"
+            "content"
+            "sidebar";
+    }
 }
 
 .card-list {

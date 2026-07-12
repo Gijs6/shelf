@@ -29,7 +29,7 @@
           hx-push-url="true"
           class="editor"
           data-require-either="title,content">
-        <div class="editor__main">
+        <div class="editor__body">
             <label for="title" class="visually-hidden">Title</label>
             <input type="text"
                    id="title"
@@ -44,87 +44,104 @@
                       name="content"
                       class="editor__content"
                       placeholder="Write in markdown...">{{ todo.content if todo else '' }}</textarea>
-        </div>
 
-        <fieldset class="editor__meta">
-            <legend class="visually-hidden">Details</legend>
-            <div class="field editor__field">
-                <label for="group" class="field__label">Group</label>
-                <input type="text"
-                       id="group"
-                       name="group"
-                       class="field__input"
-                       list="todo-groups"
-                       autocomplete="off"
-                       placeholder="Search or create a group"
-                       value="{{ todo.group_name or '' }}" />
-                <datalist id="todo-groups">
-                    {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
-                </datalist>
+            <div class="editor__sidebar">
+                <fieldset class="editor__meta">
+                    <legend class="visually-hidden">Details</legend>
+                    <div class="editor__meta-group">
+                        <p class="editor__meta-title">Details</p>
+                        <div class="field editor__field">
+                            <label for="group" class="field__label">Group</label>
+                            <input type="text"
+                                   id="group"
+                                   name="group"
+                                   class="field__input"
+                                   list="todo-groups"
+                                   autocomplete="off"
+                                   placeholder="Search or create a group"
+                                   value="{{ todo.group_name or '' }}" />
+                            <datalist id="todo-groups">
+                                {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <div class="editor__meta-group">
+                        <p class="editor__meta-title">Deadline</p>
+                        <div class="field editor__field">
+                            <label for="deadline" class="field__label">Due at</label>
+                            <input type="datetime-local"
+                                   id="deadline"
+                                   name="deadline"
+                                   class="field__input"
+                                   value="{{ todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
+                        </div>
+                    </div>
+
+                    <div class="editor__meta-group">
+                        <p class="editor__meta-title">Repeat</p>
+                        <div class="field editor__field">
+                            <label for="recur_interval" class="field__label">Repeat every</label>
+                            <div class="field__row">
+                                <input type="number"
+                                       id="recur_interval"
+                                       name="recur_interval"
+                                       class="field__input field__input--number"
+                                       min="1"
+                                       placeholder="2"
+                                       value="{{ todo.recur_interval if todo and todo.recur_interval else '' }}" />
+                                <label for="recur_unit" class="visually-hidden">Repeat unit</label>
+                                <select id="recur_unit" name="recur_unit" class="field__input">
+                                    <option value="">No repeat</option>
+                                    {% for unit in recur_units %}
+                                        <option value="{{ unit }}"
+                                                {% if todo and todo.recur_unit == unit %}selected{% endif %}>{{ unit | title }}s</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field editor__field">
+                            <label for="notify_before_days" class="field__label">Notify before deadline</label>
+                            <input type="number"
+                                   id="notify_before_days"
+                                   name="notify_before_days"
+                                   class="field__input"
+                                   min="0"
+                                   placeholder="Days (repeating only)"
+                                   value="{{ '' if not todo or todo.notify_before_days is none else todo.notify_before_days }}" />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="editor__actions">
+                    <button type="submit" class="button">{{ icon("edit") }} Save todo</button>
+                </div>
+
+                {% if todo and todo.id %}
+                    <div class="editor__convert">
+                        <button type="submit" form="convert-to-note" class="button button--ghost">
+                            {{ icon("repeat") }} Convert to note
+                        </button>
+                        <button type="submit" form="convert-to-sticky-note" class="button button--ghost">
+                            {{ icon("repeat") }} Convert to sticky note
+                        </button>
+                    </div>
+                {% endif %}
             </div>
-
-            <div class="field editor__field">
-                <label for="deadline" class="field__label">Deadline</label>
-                <input type="datetime-local"
-                       id="deadline"
-                       name="deadline"
-                       class="field__input"
-                       value="{{ todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
-            </div>
-
-            <div class="field editor__field">
-                <label for="recur_interval" class="field__label">Repeat every</label>
-                <input type="number"
-                       id="recur_interval"
-                       name="recur_interval"
-                       class="field__input"
-                       min="1"
-                       placeholder="e.g. 2"
-                       value="{{ todo.recur_interval if todo and todo.recur_interval else '' }}" />
-            </div>
-
-            <div class="field editor__field">
-                <label for="recur_unit" class="field__label">Repeat unit</label>
-                <select id="recur_unit" name="recur_unit" class="field__input">
-                    <option value="">No repeat</option>
-                    {% for unit in recur_units %}
-                        <option value="{{ unit }}"
-                                {% if todo and todo.recur_unit == unit %}selected{% endif %}>{{ unit | title }}(s)</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="field editor__field">
-                <label for="notify_before_days" class="field__label">Notify before deadline</label>
-                <input type="number"
-                       id="notify_before_days"
-                       name="notify_before_days"
-                       class="field__input"
-                       min="0"
-                       placeholder="Days (repeating todos only)"
-                       value="{{ '' if not todo or todo.notify_before_days is none else todo.notify_before_days }}" />
-            </div>
-        </fieldset>
-
-        <div class="editor__actions">
-            <button type="submit" class="button">{{ icon("edit") }} Save todo</button>
         </div>
     </form>
 
     {% if todo and todo.id %}
-        <div class="editor__convert">
-            <form hx-post="{{ url_for('todos.convert_todo_to_note', todo_id=todo.id) }}"
-                  hx-target="body"
-                  hx-push-url="true"
-                  hx-confirm="Convert this todo to a note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the note's content.">
-                <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to note</button>
-            </form>
-            <form hx-post="{{ url_for('todos.convert_todo_to_sticky_note', todo_id=todo.id) }}"
-                  hx-target="body"
-                  hx-push-url="true"
-                  hx-confirm="Convert this todo to a sticky note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the sticky note's content.">
-                <button type="submit" class="button button--ghost">{{ icon("repeat") }} Convert to sticky note</button>
-            </form>
-        </div>
+        <form id="convert-to-note"
+              hx-post="{{ url_for('todos.convert_todo_to_note', todo_id=todo.id) }}"
+              hx-target="body"
+              hx-push-url="true"
+              hx-confirm="Convert this todo to a note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the note's content."></form>
+        <form id="convert-to-sticky-note"
+              hx-post="{{ url_for('todos.convert_todo_to_sticky_note', todo_id=todo.id) }}"
+              hx-target="body"
+              hx-push-url="true"
+              hx-confirm="Convert this todo to a sticky note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the sticky note's content."></form>
     {% endif %}
 {% endblock %}

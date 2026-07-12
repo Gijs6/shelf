@@ -122,14 +122,14 @@
 .colour-picker {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-md);
+    gap: var(--space-sm) var(--space-md);
     padding: 0;
-    margin: 0 0 var(--space-md) 0;
+    margin: 0;
     border: none;
 }
 
 .colour-picker__label {
-    margin-bottom: var(--space-xs);
+    margin-bottom: 0;
 }
 
 .colour-picker__option {
