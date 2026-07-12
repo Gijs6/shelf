@@ -25,6 +25,14 @@
                             {{ icon("pin") }}
                         </button>
                     </form>
+                    <form hx-post="{{ url_for('sticky_notes.duplicate_sticky_note', sticky_note_id=sticky_note.id) }}"
+                          hx-target="body"
+                          hx-push-url="true">
+                        <button type="submit" class="sticky-note__icon-button">
+                            <span class="visually-hidden">Duplicate</span>
+                            {{ icon("copy") }}
+                        </button>
+                    </form>
                     <form hx-delete="{{ url_for('sticky_notes.delete_sticky_note', sticky_note_id=sticky_note.id) }}"
                           hx-target="body"
                           hx-push-url="true"

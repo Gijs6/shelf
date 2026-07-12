@@ -29,6 +29,12 @@
                 <a href="{{ url_for('todos.edit_todo', todo_id=todo.id) }}"
                    class="button button--ghost"
                    data-shortcut="edit">{{ icon("edit") }} Edit</a>
+                <form class="page-header__actions-form"
+                      hx-post="{{ url_for('todos.duplicate_todo', todo_id=todo.id) }}"
+                      hx-target="body"
+                      hx-push-url="true">
+                    <button type="submit" class="button button--ghost">{{ icon("copy") }} Duplicate</button>
+                </form>
                 {% if todo.archived %}
                     <form class="page-header__actions-form"
                           hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"

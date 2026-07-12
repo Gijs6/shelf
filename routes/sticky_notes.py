@@ -167,6 +167,27 @@ def dropped_sticky_note_fields(sticky_note):
     return dropped
 
 
+@sticky_notes_bp.post("/<sticky_note_id>/duplicate")
+def duplicate_sticky_note(sticky_note_id):
+    sticky_note = StickyNote.query.filter(
+        StickyNote.id == sticky_note_id, StickyNote.deleted_at.is_(None)
+    ).first_or_404()
+
+    duplicate = StickyNote(
+        title=sticky_note.title,
+        content=sticky_note.content,
+        colour=sticky_note.colour,
+        expires_at=sticky_note.expires_at,
+    )
+    db.session.add(duplicate)
+    db.session.commit()
+    flash("Sticky note duplicated.", "success")
+    return redirect(
+        url_for("sticky_notes.edit_sticky_note", sticky_note_id=duplicate.id),
+        code=303,
+    )
+
+
 @sticky_notes_bp.post("/<sticky_note_id>/convert/note")
 def convert_sticky_note_to_note(sticky_note_id):
     sticky_note = StickyNote.query.filter(

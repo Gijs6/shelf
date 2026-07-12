@@ -288,6 +288,27 @@ def update_todo(todo_id):
     return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
 
 
+@todos_bp.post("/<todo_id>/duplicate")
+def duplicate_todo(todo_id):
+    todo = Todo.query.filter(
+        Todo.id == todo_id, Todo.deleted_at.is_(None)
+    ).first_or_404()
+
+    duplicate = Todo(
+        title=todo.title,
+        content=todo.content,
+        group_name=todo.group_name,
+        deadline=todo.deadline,
+        recur_interval=todo.recur_interval,
+        recur_unit=todo.recur_unit,
+        notify_before_days=todo.notify_before_days,
+    )
+    db.session.add(duplicate)
+    db.session.commit()
+    flash("Todo duplicated.", "success")
+    return redirect(url_for("todos.view_todo", todo_id=duplicate.id), code=303)
+
+
 @todos_bp.patch("/<todo_id>/state")
 def set_state(todo_id):
     todo = Todo.query.filter(

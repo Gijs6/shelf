@@ -25,6 +25,12 @@
                 <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
                    class="button button--ghost"
                    data-shortcut="edit">{{ icon("edit") }} Edit</a>
+                <form class="page-header__actions-form"
+                      hx-post="{{ url_for('notes.duplicate_note', note_id=note.id) }}"
+                      hx-target="body"
+                      hx-push-url="true">
+                    <button type="submit" class="button button--ghost">{{ icon("copy") }} Duplicate</button>
+                </form>
                 {% if note.archived %}
                     <form class="page-header__actions-form"
                           hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"

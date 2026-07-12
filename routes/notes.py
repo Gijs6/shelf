@@ -116,6 +116,21 @@ def update_note(note_id):
     return redirect(url_for("notes.view_note", note_id=note.id), code=303)
 
 
+@notes_bp.post("/<note_id>/duplicate")
+def duplicate_note(note_id):
+    note = Note.query.filter(
+        Note.id == note_id, Note.deleted_at.is_(None)
+    ).first_or_404()
+
+    duplicate = Note(
+        title=note.title, content=note.content, group_name=note.group_name
+    )
+    db.session.add(duplicate)
+    db.session.commit()
+    flash("Note duplicated.", "success")
+    return redirect(url_for("notes.view_note", note_id=duplicate.id), code=303)
+
+
 @notes_bp.post("/<note_id>/convert/todo")
 def convert_note_to_todo(note_id):
     note = Note.query.filter(
