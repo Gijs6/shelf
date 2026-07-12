@@ -201,6 +201,8 @@ def search(raw_query, limit=50):
             like = f"%{parsed['text']}%"
             query = query.filter(or_(Todo.title.ilike(like), Todo.content.ilike(like)))
         for todo in query.all():
+            if not todo.visible:
+                continue
             results.append(
                 {
                     "kind": "todo",
