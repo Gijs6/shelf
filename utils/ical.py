@@ -16,13 +16,17 @@ def build_todo_calendar(todos):
     calendar.add("version", "2.0")
     calendar.add("prodid", "-//Shelf//Todos//EN")
     calendar.add("calscale", "GREGORIAN")
+    calendar.add("method", "PUBLISH")
+    calendar.add("x-wr-calname", "Shelf todos")
 
     stamp = to_utc(now())
     for todo in todos:
         event = Event()
         event.add("uid", f"{todo.id}@shelf")
         event.add("dtstamp", stamp)
-        event.add("dtstart", to_utc(todo.deadline))
+        deadline = to_utc(todo.deadline)
+        event.add("dtstart", deadline)
+        event.add("dtend", deadline)
         event.add("summary", todo.display_title)
         if todo.group_name:
             event.add("categories", todo.group_name)
