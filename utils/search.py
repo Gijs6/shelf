@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import and_, func, or_
 
@@ -35,9 +35,10 @@ def parse_bool(value):
 
 def parse_date(value):
     try:
-        return datetime.strptime(value, "%Y-%m-%d")
+        local_midnight = datetime.strptime(value, "%Y-%m-%d")
     except ValueError:
         return None
+    return local_midnight.astimezone().astimezone(timezone.utc)
 
 
 def parse_query(raw_query):
