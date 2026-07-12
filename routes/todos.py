@@ -33,26 +33,70 @@ def parse_deadline(raw):
 def parse_recurrence(raw_interval, raw_unit):
     raw_interval = (raw_interval or "").strip()
     raw_unit = (raw_unit or "").strip()
-    if not raw_interval or not raw_unit:
-        return None, None
+    if not raw_interval and not raw_unit:
+        return None, None, None
+    if not raw_interval:
+        return None, None, "Set a repeat interval."
+    if not raw_unit:
+        return None, None, "Pick a repeat unit."
     try:
         interval = int(raw_interval)
     except ValueError:
-        return None, None
-    if interval < 1 or raw_unit not in RECUR_UNITS:
-        return None, None
-    return interval, raw_unit
+        return None, None, "Repeat interval must be a whole number."
+    if interval < 1:
+        return None, None, "Repeat interval must be at least 1."
+    if raw_unit not in RECUR_UNITS:
+        return None, None, "Pick a valid repeat unit."
+    return interval, raw_unit, None
 
 
-def parse_notify_before_days(raw):
+def parse_notify_before_days(raw, recurring):
     raw = (raw or "").strip()
     if not raw:
-        return None
+        return None, None
+    if not recurring:
+        return None, "Notify before deadline only applies to repeating todos."
     try:
         days = int(raw)
     except ValueError:
-        return None
-    return days if days >= 0 else None
+        return None, "Notify before deadline must be a whole number."
+    if days < 0:
+        return None, "Notify before deadline can't be negative."
+    return days, None
+
+
+def parse_todo_form(form):
+    title = form.get("title", "").strip() or None
+    content = form.get("content", "")
+    group_name = normalize_group_name(form.get("group", ""))
+    deadline = parse_deadline(form.get("deadline"))
+    recur_interval, recur_unit, recur_error = parse_recurrence(
+        form.get("recur_interval"), form.get("recur_unit")
+    )
+    notify_before_days, notify_error = parse_notify_before_days(
+        form.get("notify_before_days"), bool(recur_interval and recur_unit)
+    )
+
+    error = None
+    if not title and not content.strip():
+        error = "Add a title or some content."
+    elif recur_error:
+        error = recur_error
+    elif notify_error:
+        error = notify_error
+    elif recur_interval and not deadline:
+        error = "Recurring todos need a deadline."
+
+    fields = {
+        "title": title,
+        "content": content,
+        "group_name": group_name,
+        "deadline": deadline,
+        "recur_interval": recur_interval,
+        "recur_unit": recur_unit,
+        "notify_before_days": notify_before_days,
+    }
+    return fields, error
 
 
 @todos_bp.get("/")
@@ -151,36 +195,11 @@ def new_todo():
 
 @todos_bp.post("/")
 def create_todo():
-    title = request.form.get("title", "").strip() or None
-    content = request.form.get("content", "")
-    group_name = normalize_group_name(request.form.get("group", ""))
-    deadline = parse_deadline(request.form.get("deadline"))
-    recur_interval, recur_unit = parse_recurrence(
-        request.form.get("recur_interval"), request.form.get("recur_unit")
-    )
-    notify_before_days = parse_notify_before_days(
-        request.form.get("notify_before_days")
-    )
-    if not (recur_interval and recur_unit):
-        notify_before_days = None
-
-    error = None
-    if not title and not content.strip():
-        error = "Add a title or some content."
-    elif recur_interval and not deadline:
-        error = "Recurring todos need a deadline."
+    fields, error = parse_todo_form(request.form)
 
     if error:
         flash(error, "error")
-        todo = Todo(
-            title=title,
-            content=content,
-            group_name=group_name,
-            deadline=deadline,
-            recur_interval=recur_interval,
-            recur_unit=recur_unit,
-            notify_before_days=notify_before_days,
-        )
+        todo = Todo(**fields)
         return render_template(
             "todos/form.jinja",
             todo=todo,
@@ -189,15 +208,7 @@ def create_todo():
             recur_units=RECUR_UNITS,
         ), 400
 
-    todo = Todo(
-        title=title,
-        content=content,
-        group_name=group_name,
-        deadline=deadline,
-        recur_interval=recur_interval,
-        recur_unit=recur_unit,
-        notify_before_days=notify_before_days,
-    )
+    todo = Todo(**fields)
     db.session.add(todo)
     db.session.commit()
     flash("Todo created.", "success")
@@ -240,34 +251,12 @@ def update_todo(todo_id):
         Todo.id == todo_id, Todo.deleted_at.is_(None)
     ).first_or_404()
 
-    title = request.form.get("title", "").strip() or None
-    content = request.form.get("content", "")
-    group_name = normalize_group_name(request.form.get("group", ""))
-    deadline = parse_deadline(request.form.get("deadline"))
-    recur_interval, recur_unit = parse_recurrence(
-        request.form.get("recur_interval"), request.form.get("recur_unit")
-    )
-    notify_before_days = parse_notify_before_days(
-        request.form.get("notify_before_days")
-    )
-    if not (recur_interval and recur_unit):
-        notify_before_days = None
-
-    error = None
-    if not title and not content.strip():
-        error = "Add a title or some content."
-    elif recur_interval and not deadline:
-        error = "Recurring todos need a deadline."
+    fields, error = parse_todo_form(request.form)
 
     if error:
         flash(error, "error")
-        todo.title = title
-        todo.content = content
-        todo.group_name = group_name
-        todo.deadline = deadline
-        todo.recur_interval = recur_interval
-        todo.recur_unit = recur_unit
-        todo.notify_before_days = notify_before_days
+        for key, value in fields.items():
+            setattr(todo, key, value)
         return render_template(
             "todos/form.jinja",
             todo=todo,
@@ -276,13 +265,8 @@ def update_todo(todo_id):
             recur_units=RECUR_UNITS,
         ), 400
 
-    todo.title = title
-    todo.content = content
-    todo.group_name = group_name
-    todo.deadline = deadline
-    todo.recur_interval = recur_interval
-    todo.recur_unit = recur_unit
-    todo.notify_before_days = notify_before_days
+    for key, value in fields.items():
+        setattr(todo, key, value)
     todo.updated_at = now()
     db.session.commit()
     flash("Todo saved.", "success")
