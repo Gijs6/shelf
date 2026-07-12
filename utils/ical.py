@@ -1,53 +1,33 @@
 from datetime import timezone
 
+from icalendar import Calendar, Event
+
 from models import now
 
 
-def escape_ics_text(text):
-    text = text or ""
-    text = text.replace("\\", "\\\\")
-    text = text.replace(";", "\\;")
-    text = text.replace(",", "\\,")
-    text = text.replace("\r\n", "\n").replace("\r", "\n")
-    return text.replace("\n", "\\n")
-
-
-def fold_line(line):
-    if len(line) <= 75:
-        return line
-    parts = [line[:75]]
-    rest = line[75:]
-    while rest:
-        parts.append(" " + rest[:74])
-        rest = rest[74:]
-    return "\r\n".join(parts)
-
-
-def format_ics_datetime(dt, utc=False):
-    if utc:
-        return dt.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    return dt.strftime("%Y%m%dT%H%M%S")
+def to_utc(dt):
+    if dt.tzinfo is None:
+        dt = dt.astimezone()
+    return dt.astimezone(timezone.utc)
 
 
 def build_todo_calendar(todos):
-    lines = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//Shelf//Todos//EN",
-        "CALSCALE:GREGORIAN",
-    ]
-    stamp = format_ics_datetime(now(), utc=True)
-    for todo in todos:
-        lines.append("BEGIN:VEVENT")
-        lines.append(f"UID:{todo.id}@shelf")
-        lines.append(f"DTSTAMP:{stamp}")
-        lines.append(f"DTSTART:{format_ics_datetime(todo.deadline)}")
-        lines.append(f"SUMMARY:{escape_ics_text(todo.display_title)}")
-        if todo.group_name:
-            lines.append(f"CATEGORIES:{escape_ics_text(todo.group_name)}")
-        if todo.content.strip():
-            lines.append(f"DESCRIPTION:{escape_ics_text(todo.content)}")
-        lines.append("END:VEVENT")
-    lines.append("END:VCALENDAR")
+    calendar = Calendar()
+    calendar.add("version", "2.0")
+    calendar.add("prodid", "-//Shelf//Todos//EN")
+    calendar.add("calscale", "GREGORIAN")
 
-    return "\r\n".join(fold_line(line) for line in lines) + "\r\n"
+    stamp = to_utc(now())
+    for todo in todos:
+        event = Event()
+        event.add("uid", f"{todo.id}@shelf")
+        event.add("dtstamp", stamp)
+        event.add("dtstart", to_utc(todo.deadline))
+        event.add("summary", todo.display_title)
+        if todo.group_name:
+            event.add("categories", todo.group_name)
+        if todo.content.strip():
+            event.add("description", todo.content)
+        calendar.add_component(event)
+
+    return calendar.to_ical().decode("utf-8")
