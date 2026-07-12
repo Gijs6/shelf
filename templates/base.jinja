@@ -28,11 +28,15 @@
         {% block content %}{% endblock %}
     </main>
 
-    {% if APP_VERSION %}
-        <footer class="footer">
+    <footer class="footer">
+        {% if APP_VERSION %}
             <p class="footer__text">
                 Shelf v<code class="footer__version">{{ APP_VERSION }}</code>
             </p>
-        </footer>
-    {% endif %}
+        {% endif %}
+
+        <noscript>
+            <p class="footer__text footer__notice">You're running Shelf without JavaScript. Enable JavaScript to use all features.</p>
+        </noscript>
+    </footer>
 {% endblock %}
