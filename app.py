@@ -75,7 +75,7 @@ def index():
     dashboard_sticky_notes = [s for s in sticky_notes if s.pinned or not s.expired][:6]
 
     current_time = datetime.now()
-    week_ago = current_time - timedelta(days=7)
+    week_ago = now() - timedelta(days=7)
 
     stats = {
         "notes": Note.query.filter(
