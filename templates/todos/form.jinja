@@ -76,41 +76,6 @@
                                    value="{{ todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
                         </div>
                     </fieldset>
-
-                    <fieldset class="editor__meta-group">
-                        <legend class="editor__meta-title">Repeat</legend>
-                        <div class="field editor__field">
-                            <label for="recur_interval" class="field__label">Repeat every</label>
-                            <div class="field__row">
-                                <input type="number"
-                                       id="recur_interval"
-                                       name="recur_interval"
-                                       class="field__input field__input--number"
-                                       min="1"
-                                       placeholder="2"
-                                       value="{{ todo.recur_interval if todo and todo.recur_interval else '' }}" />
-                                <label for="recur_unit" class="visually-hidden">Repeat unit</label>
-                                <select id="recur_unit" name="recur_unit" class="field__input">
-                                    <option value="">No repeat</option>
-                                    {% for unit in recur_units %}
-                                        <option value="{{ unit }}"
-                                                {% if todo and todo.recur_unit == unit %}selected{% endif %}>{{ unit | title }}s</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="field editor__field">
-                            <label for="notify_before_days" class="field__label">Notify before deadline</label>
-                            <input type="number"
-                                   id="notify_before_days"
-                                   name="notify_before_days"
-                                   class="field__input"
-                                   min="0"
-                                   placeholder="Days (repeating only)"
-                                   value="{{ '' if not todo or todo.notify_before_days is none else todo.notify_before_days }}" />
-                        </div>
-                    </fieldset>
                 </div>
 
                 <div class="editor__actions">

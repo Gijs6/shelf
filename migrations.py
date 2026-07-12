@@ -1,22 +1,21 @@
-from sqlalchemy import inspect, text
+from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
 
-from models import StickyNote, Todo, db
+from models import db
 
 
-PENDING_COLUMNS = [
-    (Todo, "notify_before_days", "INTEGER"),
-    (StickyNote, "deleted_at", "DATETIME"),
+MIGRATIONS = [
+    "ALTER TABLE sticky_note ADD COLUMN deleted_at DATETIME",
+    "ALTER TABLE todo DROP COLUMN recur_interval",
+    "ALTER TABLE todo DROP COLUMN recur_unit",
+    "ALTER TABLE todo DROP COLUMN notify_before_days",
 ]
 
 
 def run_migrations():
-    inspector = inspect(db.engine)
-    for model, column_name, column_type in PENDING_COLUMNS:
-        existing = {col["name"] for col in inspector.get_columns(model.__tablename__)}
-        if column_name not in existing:
-            db.session.execute(
-                text(
-                    f"ALTER TABLE {model.__tablename__} ADD COLUMN {column_name} {column_type}"
-                )
-            )
-    db.session.commit()
+    for statement in MIGRATIONS:
+        try:
+            db.session.execute(text(statement))
+            db.session.commit()
+        except OperationalError:
+            db.session.rollback()

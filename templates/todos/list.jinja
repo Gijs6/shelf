@@ -12,10 +12,6 @@
             <h1 class="page-header__title">Todos</h1>
         </div>
         <nav class="page-header__actions" aria-label="Todo actions">
-            <a href="{{ url_for('todos.recurring') }}"
-               class="button button--ghost button--sm button--icon-only"
-               aria-label="Recurring todos"
-               data-shortcut="recurring">{{ icon("repeat") }}</a>
             <a href="{{ url_for('todos.archived') }}"
                class="button button--ghost button--sm button--icon-only"
                aria-label="Archived todos"
@@ -53,10 +49,6 @@
                                         <span class="entry-card__badges">
                                             <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
                                             {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
-                                            {% if todo.recurring %}
-                                                <span class="badge"
-                                                      title="Repeats every {{ todo.recur_interval }} {{ todo.recur_interval | pluralize(todo.recur_unit) }}">{{ icon("repeat") }}</span>
-                                            {% endif %}
                                         </span>
                                     </a>
                                 </h3>

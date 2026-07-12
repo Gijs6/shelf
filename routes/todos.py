@@ -11,7 +11,7 @@ from flask import (
 
 from datetime import datetime
 
-from models import RECUR_UNITS, TODO_STATES, Note, StickyNote, Todo, db, now
+from models import TODO_STATES, Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
 from utils.groups import all_group_names, group_sections, normalize_group_name
 from utils.ical import build_todo_calendar
@@ -30,71 +30,21 @@ def parse_deadline(raw):
         return None
 
 
-def parse_recurrence(raw_interval, raw_unit):
-    raw_interval = (raw_interval or "").strip()
-    raw_unit = (raw_unit or "").strip()
-    if not raw_interval and not raw_unit:
-        return None, None, None
-    if not raw_interval:
-        return None, None, "Set a repeat interval."
-    if not raw_unit:
-        return None, None, "Pick a repeat unit."
-    try:
-        interval = int(raw_interval)
-    except ValueError:
-        return None, None, "Repeat interval must be a whole number."
-    if interval < 1:
-        return None, None, "Repeat interval must be at least 1."
-    if raw_unit not in RECUR_UNITS:
-        return None, None, "Pick a valid repeat unit."
-    return interval, raw_unit, None
-
-
-def parse_notify_before_days(raw, recurring):
-    raw = (raw or "").strip()
-    if not raw:
-        return None, None
-    if not recurring:
-        return None, "Notify before deadline only applies to repeating todos."
-    try:
-        days = int(raw)
-    except ValueError:
-        return None, "Notify before deadline must be a whole number."
-    if days < 0:
-        return None, "Notify before deadline can't be negative."
-    return days, None
-
-
 def parse_todo_form(form):
     title = form.get("title", "").strip() or None
     content = form.get("content", "")
     group_name = normalize_group_name(form.get("group", ""))
     deadline = parse_deadline(form.get("deadline"))
-    recur_interval, recur_unit, recur_error = parse_recurrence(
-        form.get("recur_interval"), form.get("recur_unit")
-    )
-    notify_before_days, notify_error = parse_notify_before_days(
-        form.get("notify_before_days"), bool(recur_interval and recur_unit)
-    )
 
     error = None
     if not title and not content.strip():
         error = "Add a title or some content."
-    elif recur_error:
-        error = recur_error
-    elif notify_error:
-        error = notify_error
-    elif recur_interval and not deadline:
-        error = "Recurring todos need a deadline."
 
     fields = {
         "title": title,
         "content": content,
         "group_name": group_name,
         "deadline": deadline,
-        "recur_interval": recur_interval,
-        "recur_unit": recur_unit,
-        "notify_before_days": notify_before_days,
     }
     return fields, error
 
@@ -110,7 +60,6 @@ def list_todos():
 
     query = query.filter(Todo.state.in_(selected_states))
     todos = query.order_by(Todo.created_at.desc()).all()
-    todos = [t for t in todos if t.visible]
 
     selected = set(selected_states)
     chip_links = {}
@@ -149,20 +98,6 @@ def archived():
     return render_template("todos/archived.jinja", todos=todos)
 
 
-@todos_bp.get("/recurring")
-def recurring():
-    todos = (
-        Todo.query.filter(
-            Todo.deleted_at.is_(None),
-            Todo.recur_interval.isnot(None),
-            Todo.recur_unit.isnot(None),
-        )
-        .order_by(Todo.deadline.asc())
-        .all()
-    )
-    return render_template("todos/recurring.jinja", todos=todos)
-
-
 @todos_bp.get("/calendar/<token>.ics")
 def ical_feed(token):
     expected_token = get_setting(CALENDAR_TOKEN_KEY)
@@ -189,7 +124,6 @@ def new_todo():
         todo=None,
         groups=all_group_names(),
         states=TODO_STATES,
-        recur_units=RECUR_UNITS,
     )
 
 
@@ -205,7 +139,6 @@ def create_todo():
             todo=todo,
             groups=all_group_names(),
             states=TODO_STATES,
-            recur_units=RECUR_UNITS,
         ), 400
 
     todo = Todo(**fields)
@@ -241,7 +174,6 @@ def edit_todo(todo_id):
         todo=todo,
         groups=all_group_names(),
         states=TODO_STATES,
-        recur_units=RECUR_UNITS,
     )
 
 
@@ -262,7 +194,6 @@ def update_todo(todo_id):
             todo=todo,
             groups=all_group_names(),
             states=TODO_STATES,
-            recur_units=RECUR_UNITS,
         ), 400
 
     for key, value in fields.items():
@@ -284,9 +215,6 @@ def duplicate_todo(todo_id):
         content=todo.content,
         group_name=todo.group_name,
         deadline=todo.deadline,
-        recur_interval=todo.recur_interval,
-        recur_unit=todo.recur_unit,
-        notify_before_days=todo.notify_before_days,
     )
     db.session.add(duplicate)
     db.session.commit()
@@ -328,8 +256,6 @@ def dropped_todo_fields(todo, include_group):
         dropped.append(f"state: {todo.state.replace('_', ' ')}")
     if todo.deadline:
         dropped.append(f"deadline: {todo.deadline.strftime('%d %b %Y, %H:%M')}")
-    if todo.recurring:
-        dropped.append(f"repeats every {todo.recur_interval} {todo.recur_unit}(s)")
     return dropped
 
 

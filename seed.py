@@ -256,9 +256,6 @@ TODO_SEEDS = [
         "state": "open",
         "content": "Only need this every couple of weeks.",
         "deadline_days": 20,
-        "recur_interval": 1,
-        "recur_unit": "week",
-        "notify_before_days": 3,
         "group": "Home",
     },
     {
@@ -266,9 +263,6 @@ TODO_SEEDS = [
         "state": "open",
         "content": "Bins go out every other week.",
         "deadline_days": 2,
-        "recur_interval": 2,
-        "recur_unit": "week",
-        "notify_before_days": 5,
         "group": "Home",
     },
     {
@@ -276,9 +270,6 @@ TODO_SEEDS = [
         "state": "open",
         "content": "Go through spending and update the sheet.",
         "deadline_days": 10,
-        "recur_interval": 1,
-        "recur_unit": "month",
-        "notify_before_days": 14,
         "group": "Finance",
     },
     {
@@ -388,9 +379,6 @@ def seed_todos(rng):
                 deadline=days_from_now(deadline_days)
                 if deadline_days is not None
                 else None,
-                recur_interval=seed.get("recur_interval"),
-                recur_unit=seed.get("recur_unit"),
-                notify_before_days=seed.get("notify_before_days"),
                 created_at=created,
                 updated_at=created,
                 completed_at=created if state == "done" else None,

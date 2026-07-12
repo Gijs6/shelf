@@ -99,12 +99,6 @@
                 e.preventDefault();
                 trashLink.click();
             }
-        } else if (e.key === "r") {
-            var recurringLink = document.querySelector('[data-shortcut="recurring"]');
-            if (recurringLink) {
-                e.preventDefault();
-                recurringLink.click();
-            }
         } else if (e.key === "p") {
             var pinCard = e.target.closest(".sticky-note");
             var pinForm = pinCard && pinCard.querySelector('[data-shortcut="sticky-pin"]');

@@ -139,22 +139,6 @@ body {
     gap: var(--space-xs);
 }
 
-.field__row {
-    display: flex;
-    gap: var(--space-xs);
-}
-
-.field__input--number {
-    flex: 0 0 4rem;
-    width: 4rem;
-    text-align: center;
-}
-
-.field__row .field__input:not(.field__input--number) {
-    flex: 1;
-    min-width: 0;
-}
-
 .form {
     max-width: 32rem;
 }
