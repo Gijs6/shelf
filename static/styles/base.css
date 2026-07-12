@@ -32,6 +32,7 @@
 @media (max-width: 800px) {
     .navbar {
         gap: var(--space-sm);
+        padding: var(--space-sm) var(--space-md);
     }
 
     .navbar__nav {
@@ -41,6 +42,11 @@
     .navbar__link-label,
     .navbar__brand-label {
         display: none;
+    }
+
+    .footer {
+        flex-wrap: wrap;
+        padding: var(--space-md);
     }
 }
 
@@ -91,6 +97,10 @@
 }
 
 @media (max-width: 800px) {
+    .page {
+        padding: var(--space-lg) var(--space-md);
+    }
+
     .page-header {
         flex-direction: column;
     }
@@ -129,21 +139,23 @@
 
 .page-header__title:has(.page-header__badges) {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-xs);
 }
 
 .page-header__badges {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2xs);
 }
 
 .page-header__actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: stretch;
     gap: var(--space-xs);
-    min-width: fit-content;
 }
 
 .page-header__actions-form {

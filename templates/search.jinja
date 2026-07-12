@@ -10,23 +10,25 @@
         <div class="page-header__heading">
             <h1 class="page-header__title">{{ icon("search") }} Search</h1>
         </div>
-        <div class="page-header__actions">
-            <button type="button"
-                    class="button button--ghost"
-                    data-search-help-toggle
-                    aria-haspopup="dialog">{{ icon("info") }} Search syntax</button>
-        </div>
+        <menu class="page-header__actions">
+            <li>
+                <button type="button"
+                        class="button button--ghost"
+                        data-search-help-toggle
+                        aria-haspopup="dialog">{{ icon("info") }} Search syntax</button>
+            </li>
+        </menu>
     </header>
 
     <dialog id="search-help-modal" class="modal modal--stacked">
-        <div class="modal__header">
+        <header class="modal__header">
             <h2 class="modal__title">Search syntax</h2>
             <form method="dialog">
                 <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
             </form>
-        </div>
+        </header>
 
-        <div class="modal__group">
+        <section class="modal__group">
             <h3 class="modal__group-title">Type</h3>
             <dl class="modal__list">
                 <div class="modal__row">
@@ -38,9 +40,9 @@
                     </dd>
                 </div>
             </dl>
-        </div>
+        </section>
 
-        <div class="modal__group">
+        <section class="modal__group">
             <h3 class="modal__group-title">Todo filters</h3>
             <dl class="modal__list">
                 <div class="modal__row">
@@ -68,9 +70,9 @@
                     </dd>
                 </div>
             </dl>
-        </div>
+        </section>
 
-        <div class="modal__group">
+        <section class="modal__group">
             <h3 class="modal__group-title">Sticky note filters</h3>
             <dl class="modal__list">
                 <div class="modal__row">
@@ -90,9 +92,9 @@
                     </dd>
                 </div>
             </dl>
-        </div>
+        </section>
 
-        <div class="modal__group">
+        <section class="modal__group">
             <h3 class="modal__group-title">Notes &amp; todos</h3>
             <dl class="modal__list">
                 <div class="modal__row">
@@ -112,9 +114,9 @@
                     </dd>
                 </div>
             </dl>
-        </div>
+        </section>
 
-        <div class="modal__group">
+        <section class="modal__group">
             <h3 class="modal__group-title">Dates</h3>
             <dl class="modal__list">
                 <div class="modal__row">
@@ -134,9 +136,9 @@
                     </dd>
                 </div>
             </dl>
-        </div>
+        </section>
 
-        <div class="modal__group">
+        <section class="modal__group">
             <h3 class="modal__group-title">Sorting &amp; text</h3>
             <dl class="modal__list">
                 <div class="modal__row">
@@ -154,31 +156,32 @@
                     </dd>
                 </div>
             </dl>
-        </div>
+        </section>
     </dialog>
 
-    <form method="get"
-          class="filters"
-          role="search"
-          hx-get="{{ url_for('search.search_view') }}"
-          hx-trigger="input changed from:find input, submit"
-          hx-select="#search-results"
-          hx-target="#search-results"
-          hx-swap="outerHTML"
-          hx-replace-url="true">
-        <label for="q" class="visually-hidden">Search</label>
-        <input type="search"
-               id="q"
-               name="q"
-               class="field__input filters__input"
-               placeholder="is:todo state:open group:home overdue:yes due:week sort:title ..."
-               value="{{ query }}"
-               autocomplete="off"
-               autofocus />
-        <button type="submit" class="button">{{ icon("search") }} Search</button>
-    </form>
+    <search>
+        <form method="get"
+              class="filters"
+              hx-get="{{ url_for('search.search_view') }}"
+              hx-trigger="input changed from:find input, submit"
+              hx-select="#search-results"
+              hx-target="#search-results"
+              hx-swap="outerHTML"
+              hx-replace-url="true">
+            <label for="q" class="visually-hidden">Search</label>
+            <input type="search"
+                   id="q"
+                   name="q"
+                   class="field__input filters__input"
+                   placeholder="is:todo state:open group:home overdue:yes due:week sort:title ..."
+                   value="{{ query }}"
+                   autocomplete="off"
+                   autofocus />
+            <button type="submit" class="button">{{ icon("search") }} Search</button>
+        </form>
+    </search>
 
-    <div id="search-results">
+    <section id="search-results" aria-label="Search results">
         {% if not query %}
             {{ empty_state('search', 'Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes, due:today, due:week, before:2026-01-01, after:2026-01-01, sort:title, sort:created, colour:pink') }}
         {% elif results %}
@@ -186,7 +189,7 @@
                 {% for result in results %}
                     <li>
                         <article class="entry-card">
-                            <h3 class="entry-card__title">
+                            <h2 class="entry-card__title">
                                 <a href="{{ url_for(result.endpoint, **result.url_kwargs) }}"
                                    class="entry-card__link">
                                     <span class="entry-card__title-text">{{ result.title }}</span>
@@ -201,10 +204,10 @@
                                         {% if result.get("group_name") %}<span class="badge">{{ icon("folder") }} {{ result.group_name }}</span>{% endif %}
                                     </span>
                                 </a>
-                            </h3>
+                            </h2>
                             <p class="entry-card__timestamp">
                                 <time datetime="{{ result.updated_at | isoformat(local=False) }}" data-live>{{ result.updated_at | timeago(local=False) }}</time>
-                                ({{ result.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
+                                (<time datetime="{{ result.updated_at | isoformat(local=False) }}">{{ result.updated_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
                             </p>
                             {% if result.snippet %}<p class="entry-card__preview">{{ result.snippet }}</p>{% endif %}
                         </article>
@@ -214,5 +217,5 @@
         {% else %}
             {{ empty_state("search", 'No results for "' + query + '".') }}
         {% endif %}
-    </div>
+    </section>
 {% endblock %}

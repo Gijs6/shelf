@@ -92,6 +92,23 @@ body {
     border-color: var(--color-accent);
 }
 
+.field__input::file-selector-button {
+    margin-right: var(--space-sm);
+    padding: var(--space-2xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-fg);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.field__input::file-selector-button:hover {
+    background-color: var(--color-surface-raised);
+    border-color: var(--color-border-strong);
+}
+
 .field__checkbox {
     width: var(--space-md);
     height: var(--space-md);
@@ -161,6 +178,7 @@ body {
 
 .editor__title {
     grid-area: title;
+    min-width: 0;
     padding: var(--space-xs) 0;
     border: none;
     border-bottom: 1px solid var(--color-border);
@@ -179,6 +197,7 @@ body {
 .editor__content {
     grid-area: content;
     width: 100%;
+    min-width: 0;
     min-height: 60vh;
     padding: var(--space-xs) var(--space-sm);
     border: 1px solid var(--color-border);
@@ -196,6 +215,7 @@ body {
 
 .EasyMDEContainer {
     grid-area: content;
+    min-width: 0;
 }
 
 .EasyMDEContainer .CodeMirror {
@@ -286,6 +306,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
+    min-width: 0;
 }
 
 .editor__meta {
@@ -299,9 +320,10 @@ body {
 }
 
 .editor__meta-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 .editor__meta-group:not(:last-child) {
@@ -310,7 +332,8 @@ body {
 }
 
 .editor__meta-title {
-    margin: 0;
+    margin: 0 0 var(--space-sm) 0;
+    padding: 0;
     color: var(--color-fg);
     font-size: var(--font-size-sm);
     font-weight: 700;
@@ -318,6 +341,10 @@ body {
 
 .editor__field {
     margin-bottom: 0;
+}
+
+.editor__field + .editor__field {
+    margin-top: var(--space-sm);
 }
 
 .editor__actions {
@@ -407,6 +434,7 @@ body {
 
 .entry-card__badges {
     display: flex;
+    flex-wrap: wrap;
     align-items: stretch;
     gap: var(--space-2xs);
 }
@@ -464,10 +492,19 @@ body {
         grid-row: auto;
     }
 
+    .entry-card__title {
+        flex-wrap: wrap;
+    }
+
+    .entry-card__link {
+        flex-wrap: wrap;
+    }
+
     .entry-card__timestamp,
     .entry-card__due {
         justify-self: start;
         text-align: left;
+        white-space: normal;
     }
 }
 
@@ -568,6 +605,12 @@ body {
     z-index: 200;
 }
 
+@media (max-width: 800px) {
+    .flash {
+        left: var(--space-md);
+    }
+}
+
 .flash__list {
     list-style: none;
     margin: 0;
@@ -651,8 +694,9 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-bottom: var(--space-md);
-    padding-bottom: var(--space-md);
+    list-style: none;
+    margin: 0 0 var(--space-md) 0;
+    padding: 0 0 var(--space-md) 0;
     border-bottom: 1px solid var(--color-border);
     font-size: var(--font-size-sm);
 }
@@ -661,11 +705,12 @@ body {
     color: var(--color-fg-muted);
 }
 
-a.detail-meta__item {
+.detail-meta__item a {
+    color: inherit;
     text-decoration: none;
 }
 
-a.detail-meta__item:hover {
+.detail-meta__item a:hover {
     color: var(--color-fg);
     text-decoration: underline;
 }
@@ -706,6 +751,13 @@ a.detail-meta__item:hover {
 .markdown th {
     background-color: var(--color-surface);
     font-weight: 700;
+}
+
+@media (max-width: 800px) {
+    .markdown table {
+        display: block;
+        overflow-x: auto;
+    }
 }
 
 .markdown .admonition {
@@ -772,7 +824,9 @@ a.detail-meta__item:hover {
 
 .modal {
     width: 100%;
-    max-width: 30rem;
+    max-width: min(30rem, calc(100% - 2 * var(--space-md)));
+    max-height: calc(100% - 2 * var(--space-md));
+    overflow-y: auto;
     padding: var(--space-lg);
     border: 1px solid var(--color-border);
     background-color: var(--color-surface);
@@ -889,4 +943,24 @@ a.detail-meta__item:hover {
     color: var(--color-fg);
     font-size: var(--font-size-sm);
     overflow-wrap: anywhere;
+}
+
+.tooltip-anchor {
+    position: relative;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: calc(100% + var(--space-2xs));
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--space-2xs) var(--space-sm);
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-surface-raised);
+    color: var(--color-fg);
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 200;
 }

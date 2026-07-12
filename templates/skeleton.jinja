@@ -56,14 +56,14 @@
         {% block body_content %}{% endblock %}
 
         <dialog id="shortcuts-modal" class="modal">
-            <div class="modal__header">
+            <header class="modal__header">
                 <h2 class="modal__title">Keyboard shortcuts</h2>
                 <form method="dialog">
                     <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
                 </form>
-            </div>
+            </header>
 
-            <div class="modal__group">
+            <section class="modal__group">
                 <h3 class="modal__group-title">Global</h3>
                 <dl class="modal__list">
                     <div class="modal__row">
@@ -85,9 +85,9 @@
                         <dd class="modal__row-desc">Submit the current form</dd>
                     </div>
                 </dl>
-            </div>
+            </section>
 
-            <div class="modal__group">
+            <section class="modal__group">
                 <h3 class="modal__group-title">Go to</h3>
                 <dl class="modal__list">
                     <div class="modal__row">
@@ -121,9 +121,9 @@
                         <dd class="modal__row-desc">Sticky notes</dd>
                     </div>
                 </dl>
-            </div>
+            </section>
 
-            <div class="modal__group">
+            <section class="modal__group">
                 <h3 class="modal__group-title">Create</h3>
                 <dl class="modal__list">
                     <div class="modal__row">
@@ -145,9 +145,9 @@
                         <dd class="modal__row-desc">New sticky note</dd>
                     </div>
                 </dl>
-            </div>
+            </section>
 
-            <div class="modal__group">
+            <section class="modal__group">
                 <h3 class="modal__group-title">On a notes/todos/sticky notes list</h3>
                 <dl class="modal__list">
                     <div class="modal__row">
@@ -175,9 +175,9 @@
                         <dd class="modal__row-desc">Recurring (todos only)</dd>
                     </div>
                 </dl>
-            </div>
+            </section>
 
-            <div class="modal__group">
+            <section class="modal__group">
                 <h3 class="modal__group-title">On a note or todo</h3>
                 <dl class="modal__list">
                     <div class="modal__row">
@@ -205,9 +205,9 @@
                         <dd class="modal__row-desc">Set state to open / active / done / cancelled</dd>
                     </div>
                 </dl>
-            </div>
+            </section>
 
-            <div class="modal__group">
+            <section class="modal__group">
                 <h3 class="modal__group-title">On a focused sticky note</h3>
                 <dl class="modal__list">
                     <div class="modal__row">
@@ -223,7 +223,7 @@
                         <dd class="modal__row-desc">Trash</dd>
                     </div>
                 </dl>
-            </div>
+            </section>
         </dialog>
 
         <script type="application/json" id="nav-routes">

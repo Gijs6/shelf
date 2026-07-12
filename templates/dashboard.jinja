@@ -64,10 +64,13 @@
                                 </h3>
                                 <p class="entry-card__timestamp">
                                     <time datetime="{{ todo.updated_at | isoformat(local=False) }}" data-live>{{ todo.updated_at | timeago(local=False) }}</time>
-                                    ({{ todo.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
+                                    (<time datetime="{{ todo.updated_at | isoformat(local=False) }}">{{ todo.updated_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
                                 </p>
                                 {% if todo.title %}<p class="entry-card__preview">{{ todo.snippet }}</p>{% endif %}
-                                <p class="entry-card__due{% if todo.deadline < current_time %} entry-card__due--overdue{% endif %}">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</p>
+                                <p class="entry-card__due{% if todo.deadline < current_time %} entry-card__due--overdue{% endif %}">
+                                    Due <time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | timeago }}</time>
+                                    (<time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | strftime("%d %b %Y, %H:%M") }}</time>)
+                                </p>
                             </article>
                         </li>
                     {% endfor %}
@@ -92,7 +95,7 @@
                                 </h3>
                                 <p class="entry-card__timestamp">
                                     <time datetime="{{ note.updated_at | isoformat(local=False) }}" data-live>{{ note.updated_at | timeago(local=False) }}</time>
-                                    ({{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }})
+                                    (<time datetime="{{ note.updated_at | isoformat(local=False) }}">{{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
                                 </p>
                                 {% if note.title %}<p class="entry-card__preview">{{ note.snippet }}</p>{% endif %}
                             </article>

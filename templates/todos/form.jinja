@@ -46,10 +46,9 @@
                       placeholder="Write in markdown...">{{ todo.content if todo else '' }}</textarea>
 
             <div class="editor__sidebar">
-                <fieldset class="editor__meta">
-                    <legend class="visually-hidden">Details</legend>
-                    <div class="editor__meta-group">
-                        <p class="editor__meta-title">Details</p>
+                <div class="editor__meta">
+                    <fieldset class="editor__meta-group">
+                        <legend class="editor__meta-title">Details</legend>
                         <div class="field editor__field">
                             <label for="group" class="field__label">Group</label>
                             <input type="text"
@@ -64,10 +63,10 @@
                                 {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
                             </datalist>
                         </div>
-                    </div>
+                    </fieldset>
 
-                    <div class="editor__meta-group">
-                        <p class="editor__meta-title">Deadline</p>
+                    <fieldset class="editor__meta-group">
+                        <legend class="editor__meta-title">Deadline</legend>
                         <div class="field editor__field">
                             <label for="deadline" class="field__label">Due at</label>
                             <input type="datetime-local"
@@ -76,10 +75,10 @@
                                    class="field__input"
                                    value="{{ todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
                         </div>
-                    </div>
+                    </fieldset>
 
-                    <div class="editor__meta-group">
-                        <p class="editor__meta-title">Repeat</p>
+                    <fieldset class="editor__meta-group">
+                        <legend class="editor__meta-title">Repeat</legend>
                         <div class="field editor__field">
                             <label for="recur_interval" class="field__label">Repeat every</label>
                             <div class="field__row">
@@ -111,22 +110,26 @@
                                    placeholder="Days (repeating only)"
                                    value="{{ '' if not todo or todo.notify_before_days is none else todo.notify_before_days }}" />
                         </div>
-                    </div>
-                </fieldset>
+                    </fieldset>
+                </div>
 
                 <div class="editor__actions">
                     <button type="submit" class="button">{{ icon("edit") }} Save todo</button>
                 </div>
 
                 {% if todo and todo.id %}
-                    <div class="editor__convert">
-                        <button type="submit" form="convert-to-note" class="button button--ghost">
-                            {{ icon("repeat") }} Convert to note
-                        </button>
-                        <button type="submit" form="convert-to-sticky-note" class="button button--ghost">
-                            {{ icon("repeat") }} Convert to sticky note
-                        </button>
-                    </div>
+                    <menu class="editor__convert">
+                        <li>
+                            <button type="submit" form="convert-to-note" class="button button--ghost">
+                                {{ icon("repeat") }} Convert to note
+                            </button>
+                        </li>
+                        <li>
+                            <button type="submit" form="convert-to-sticky-note" class="button button--ghost">
+                                {{ icon("repeat") }} Convert to sticky note
+                            </button>
+                        </li>
+                    </menu>
                 {% endif %}
             </div>
         </div>

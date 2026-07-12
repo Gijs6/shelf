@@ -7,10 +7,17 @@
         if (!target) return;
 
         navigator.clipboard.writeText(target.value || target.textContent).then(function () {
-            var original = button.textContent;
-            button.textContent = "Copied!";
+            var existing = button.querySelector(".tooltip");
+            if (existing) existing.remove();
+
+            var tooltip = document.createElement("span");
+            tooltip.className = "tooltip";
+            tooltip.textContent = "Copied!";
+            button.classList.add("tooltip-anchor");
+            button.appendChild(tooltip);
+
             setTimeout(function () {
-                button.textContent = original;
+                tooltip.remove();
             }, 1500);
         });
     });

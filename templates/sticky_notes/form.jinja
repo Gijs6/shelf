@@ -46,10 +46,9 @@
                       placeholder="Write in markdown...">{{ sticky_note.content if sticky_note else '' }}</textarea>
 
             <div class="editor__sidebar">
-                <fieldset class="editor__meta">
-                    <legend class="visually-hidden">Details</legend>
-                    <div class="editor__meta-group">
-                        <p class="editor__meta-title">Colour</p>
+                <div class="editor__meta">
+                    <fieldset class="editor__meta-group">
+                        <legend class="editor__meta-title">Colour</legend>
                         <div class="colour-picker">
                             {% for colour in colours %}
                                 <label class="colour-picker__option colour-picker__option--{{ colour }}">
@@ -62,10 +61,10 @@
                                 </label>
                             {% endfor %}
                         </div>
-                    </div>
+                    </fieldset>
 
-                    <div class="editor__meta-group">
-                        <p class="editor__meta-title">Details</p>
+                    <fieldset class="editor__meta-group">
+                        <legend class="editor__meta-title">Details</legend>
                         <div class="field editor__field">
                             <label for="expires_at" class="field__label">Expires at</label>
                             <input type="datetime-local"
@@ -85,22 +84,26 @@
                                 {{ icon("pin") }} Pinned
                             </label>
                         </div>
-                    </div>
-                </fieldset>
+                    </fieldset>
+                </div>
 
                 <div class="editor__actions">
                     <button type="submit" class="button">{{ icon("edit") }} Save sticky note</button>
                 </div>
 
                 {% if sticky_note and sticky_note.id %}
-                    <div class="editor__convert">
-                        <button type="submit" form="convert-to-note" class="button button--ghost">
-                            {{ icon("repeat") }} Convert to note
-                        </button>
-                        <button type="submit" form="convert-to-todo" class="button button--ghost">
-                            {{ icon("repeat") }} Convert to todo
-                        </button>
-                    </div>
+                    <menu class="editor__convert">
+                        <li>
+                            <button type="submit" form="convert-to-note" class="button button--ghost">
+                                {{ icon("repeat") }} Convert to note
+                            </button>
+                        </li>
+                        <li>
+                            <button type="submit" form="convert-to-todo" class="button button--ghost">
+                                {{ icon("repeat") }} Convert to todo
+                            </button>
+                        </li>
+                    </menu>
                 {% endif %}
             </div>
         </div>

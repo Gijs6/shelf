@@ -25,41 +25,49 @@
                     </span>
                 </h1>
             </hgroup>
-            <div class="page-header__actions">
-                <a href="{{ url_for('todos.edit_todo', todo_id=todo.id) }}"
-                   class="button button--ghost"
-                   data-shortcut="edit">{{ icon("edit") }} Edit</a>
-                <form class="page-header__actions-form"
-                      hx-post="{{ url_for('todos.duplicate_todo', todo_id=todo.id) }}"
-                      hx-target="body"
-                      hx-push-url="true">
-                    <button type="submit" class="button button--ghost">{{ icon("copy") }} Duplicate</button>
-                </form>
-                {% if todo.archived %}
+            <menu class="page-header__actions">
+                <li>
+                    <a href="{{ url_for('todos.edit_todo', todo_id=todo.id) }}"
+                       class="button button--ghost"
+                       data-shortcut="edit">{{ icon("edit") }} Edit</a>
+                </li>
+                <li>
                     <form class="page-header__actions-form"
-                          hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
+                          hx-post="{{ url_for('todos.duplicate_todo', todo_id=todo.id) }}"
+                          hx-target="body"
+                          hx-push-url="true">
+                        <button type="submit" class="button button--ghost">{{ icon("copy") }} Duplicate</button>
+                    </form>
+                </li>
+                <li>
+                    {% if todo.archived %}
+                        <form class="page-header__actions-form"
+                              hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
+                              hx-target="body"
+                              hx-push-url="true"
+                              data-shortcut="archive-toggle">
+                            <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
+                        </form>
+                    {% else %}
+                        <form class="page-header__actions-form"
+                              hx-patch="{{ url_for('todos.archive_todo', todo_id=todo.id) }}"
+                              hx-target="body"
+                              hx-push-url="true"
+                              data-shortcut="archive-toggle">
+                            <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
+                        </form>
+                    {% endif %}
+                </li>
+                <li>
+                    <form class="page-header__actions-form"
+                          hx-delete="{{ url_for('todos.delete_todo', todo_id=todo.id) }}"
                           hx-target="body"
                           hx-push-url="true"
-                          data-shortcut="archive-toggle">
-                        <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
+                          data-shortcut="delete">
+                        <button type="submit" class="button button--danger">{{ icon("trash") }} Delete</button>
                     </form>
-                {% else %}
-                    <form class="page-header__actions-form"
-                          hx-patch="{{ url_for('todos.archive_todo', todo_id=todo.id) }}"
-                          hx-target="body"
-                          hx-push-url="true"
-                          data-shortcut="archive-toggle">
-                        <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
-                    </form>
-                {% endif %}
-                <form class="page-header__actions-form"
-                      hx-delete="{{ url_for('todos.delete_todo', todo_id=todo.id) }}"
-                      hx-target="body"
-                      hx-push-url="true"
-                      data-shortcut="delete">
-                    <button type="submit" class="button button--danger">{{ icon("trash") }} Delete</button>
-                </form>
-            </div>
+                </li>
+            </menu>
         </header>
 
         <form hx-patch="{{ url_for('todos.set_state', todo_id=todo.id) }}"
@@ -78,31 +86,42 @@
             </fieldset>
         </form>
 
-        <div class="detail-meta">
+        <ul class="detail-meta">
             {% if todo.group_name %}
-                <a class="detail-meta__item"
-                   href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
+                <li class="detail-meta__item">
+                    <a href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
+                </li>
             {% endif %}
-            <span class="detail-meta__item">
-                Made {{ todo.created_at | strftime(local=False) }} - edited
+            <li class="detail-meta__item">
+                Made
+                <time datetime="{{ todo.created_at | isoformat(local=False) }}">{{ todo.created_at | strftime(local=False) }}</time>
+                - edited
                 {{ updated_at_span(todo) }}
-            </span>
+            </li>
             {% if todo.deadline %}
-                <span class="detail-meta__item">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</span>
+                <li class="detail-meta__item">
+                    Due <time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | timeago }}</time>
+                    (<time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | strftime("%d %b %Y, %H:%M") }}</time>)
+                </li>
             {% endif %}
             {% if todo.recurring %}
-                <span class="detail-meta__item">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_interval | pluralize(todo.recur_unit) }}</span>
-                {% if todo.notify_before_days is not none %}<span class="detail-meta__item">{{ icon("clock") }} Notifies {{ todo.notify_before_days }} {{ todo.notify_before_days | pluralize("day") }} before deadline</span>{% endif %}
+                <li class="detail-meta__item">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_interval | pluralize(todo.recur_unit) }}</li>
+                {% if todo.notify_before_days is not none %}<li class="detail-meta__item">{{ icon("clock") }} Notifies {{ todo.notify_before_days }} {{ todo.notify_before_days | pluralize("day") }} before deadline</li>{% endif %}
             {% endif %}
             {% if todo.state == "active" and todo.active_at %}
-                <span class="detail-meta__item">
+                <li class="detail-meta__item">
                     Active since
                     <time datetime="{{ todo.active_at | isoformat(local=False) }}" data-live>{{ todo.active_at | timeago(local=False) }}</time>
-                    ({{ todo.active_at | strftime("%d %b %Y, %H:%M", local=False) }})
-                </span>
+                    (<time datetime="{{ todo.active_at | isoformat(local=False) }}">{{ todo.active_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
+                </li>
             {% endif %}
-            {% if todo.completed_at %}<span class="detail-meta__item">Completed {{ todo.completed_at | strftime(local=False) }}</span>{% endif %}
-        </div>
+            {% if todo.completed_at %}
+                <li class="detail-meta__item">
+                    Completed
+                    <time datetime="{{ todo.completed_at | isoformat(local=False) }}">{{ todo.completed_at | strftime(local=False) }}</time>
+                </li>
+            {% endif %}
+        </ul>
 
         <div class="markdown">{{ todo.content | markdown(kind="todo", item_id=todo.id) }}</div>
     </article>

@@ -1,48 +1,54 @@
 {% from "partials/icons.jinja" import icon %}
 
-{% macro sticky_card(sticky_note, compact=False) %}
+{% macro sticky_card(sticky_note, compact=False, heading_level=3) %}
     <li>
         <article class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}">
             <div class="sticky-note__content">
                 {% if sticky_note.title %}
-                    <h3 class="sticky-note__title">
+                    <h{{ heading_level }} class="sticky-note__title">
                         <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}"
                            class="sticky-note__title-link">{{ sticky_note.title }}</a>
-                    </h3>
+                    </h{{ heading_level }}>
                 {% endif %}
                 <div class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
             </div>
 
             {% if not compact %}
-                <div class="sticky-note__actions">
-                    <form hx-patch="{{ url_for('sticky_notes.toggle_pin', sticky_note_id=sticky_note.id) }}"
-                          hx-target="body"
-                          hx-push-url="true"
-                          data-shortcut="sticky-pin">
-                        <button type="submit"
-                                class="sticky-note__icon-button sticky-note__icon-button--pin">
-                            <span class="visually-hidden">Toggle pin</span>
-                            {{ icon("pin") }}
-                        </button>
-                    </form>
-                    <form hx-post="{{ url_for('sticky_notes.duplicate_sticky_note', sticky_note_id=sticky_note.id) }}"
-                          hx-target="body"
-                          hx-push-url="true">
-                        <button type="submit" class="sticky-note__icon-button">
-                            <span class="visually-hidden">Duplicate</span>
-                            {{ icon("copy") }}
-                        </button>
-                    </form>
-                    <form hx-delete="{{ url_for('sticky_notes.delete_sticky_note', sticky_note_id=sticky_note.id) }}"
-                          hx-target="body"
-                          hx-push-url="true"
-                          data-shortcut="sticky-delete">
-                        <button type="submit" class="sticky-note__icon-button">
-                            <span class="visually-hidden">Delete</span>
-                            {{ icon("trash") }}
-                        </button>
-                    </form>
-                </div>
+                <menu class="sticky-note__actions">
+                    <li>
+                        <form hx-patch="{{ url_for('sticky_notes.toggle_pin', sticky_note_id=sticky_note.id) }}"
+                              hx-target="body"
+                              hx-push-url="true"
+                              data-shortcut="sticky-pin">
+                            <button type="submit"
+                                    class="sticky-note__icon-button sticky-note__icon-button--pin">
+                                <span class="visually-hidden">Toggle pin</span>
+                                {{ icon("pin") }}
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form hx-post="{{ url_for('sticky_notes.duplicate_sticky_note', sticky_note_id=sticky_note.id) }}"
+                              hx-target="body"
+                              hx-push-url="true">
+                            <button type="submit" class="sticky-note__icon-button">
+                                <span class="visually-hidden">Duplicate</span>
+                                {{ icon("copy") }}
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form hx-delete="{{ url_for('sticky_notes.delete_sticky_note', sticky_note_id=sticky_note.id) }}"
+                              hx-target="body"
+                              hx-push-url="true"
+                              data-shortcut="sticky-delete">
+                            <button type="submit" class="sticky-note__icon-button">
+                                <span class="visually-hidden">Delete</span>
+                                {{ icon("trash") }}
+                            </button>
+                        </form>
+                    </li>
+                </menu>
 
                 <footer class="sticky-note__footer">
                     {% if sticky_note.expires_at and not sticky_note.pinned %}

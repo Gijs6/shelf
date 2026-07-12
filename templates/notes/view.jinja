@@ -21,53 +21,64 @@
                     {% endif %}
                 </h1>
             </hgroup>
-            <div class="page-header__actions">
-                <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
-                   class="button button--ghost"
-                   data-shortcut="edit">{{ icon("edit") }} Edit</a>
-                <form class="page-header__actions-form"
-                      hx-post="{{ url_for('notes.duplicate_note', note_id=note.id) }}"
-                      hx-target="body"
-                      hx-push-url="true">
-                    <button type="submit" class="button button--ghost">{{ icon("copy") }} Duplicate</button>
-                </form>
-                {% if note.archived %}
+            <menu class="page-header__actions">
+                <li>
+                    <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
+                       class="button button--ghost"
+                       data-shortcut="edit">{{ icon("edit") }} Edit</a>
+                </li>
+                <li>
                     <form class="page-header__actions-form"
-                          hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
+                          hx-post="{{ url_for('notes.duplicate_note', note_id=note.id) }}"
+                          hx-target="body"
+                          hx-push-url="true">
+                        <button type="submit" class="button button--ghost">{{ icon("copy") }} Duplicate</button>
+                    </form>
+                </li>
+                <li>
+                    {% if note.archived %}
+                        <form class="page-header__actions-form"
+                              hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
+                              hx-target="body"
+                              hx-push-url="true"
+                              data-shortcut="archive-toggle">
+                            <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
+                        </form>
+                    {% else %}
+                        <form class="page-header__actions-form"
+                              hx-patch="{{ url_for('notes.archive_note', note_id=note.id) }}"
+                              hx-target="body"
+                              hx-push-url="true"
+                              data-shortcut="archive-toggle">
+                            <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
+                        </form>
+                    {% endif %}
+                </li>
+                <li>
+                    <form class="page-header__actions-form"
+                          hx-delete="{{ url_for('notes.delete_note', note_id=note.id) }}"
                           hx-target="body"
                           hx-push-url="true"
-                          data-shortcut="archive-toggle">
-                        <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
+                          data-shortcut="delete">
+                        <button type="submit" class="button button--danger">{{ icon("trash") }} Delete</button>
                     </form>
-                {% else %}
-                    <form class="page-header__actions-form"
-                          hx-patch="{{ url_for('notes.archive_note', note_id=note.id) }}"
-                          hx-target="body"
-                          hx-push-url="true"
-                          data-shortcut="archive-toggle">
-                        <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
-                    </form>
-                {% endif %}
-                <form class="page-header__actions-form"
-                      hx-delete="{{ url_for('notes.delete_note', note_id=note.id) }}"
-                      hx-target="body"
-                      hx-push-url="true"
-                      data-shortcut="delete">
-                    <button type="submit" class="button button--danger">{{ icon("trash") }} Delete</button>
-                </form>
-            </div>
+                </li>
+            </menu>
         </header>
 
-        <div class="detail-meta">
+        <ul class="detail-meta">
             {% if note.group_name %}
-                <a class="detail-meta__item"
-                   href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ icon("folder") }} {{ note.group_name }}</a>
+                <li class="detail-meta__item">
+                    <a href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ icon("folder") }} {{ note.group_name }}</a>
+                </li>
             {% endif %}
-            <span class="detail-meta__item">
-                Made {{ note.created_at | strftime(local=False) }} - edited
+            <li class="detail-meta__item">
+                Made
+                <time datetime="{{ note.created_at | isoformat(local=False) }}">{{ note.created_at | strftime(local=False) }}</time>
+                - edited
                 {{ updated_at_span(note) }}
-            </span>
-        </div>
+            </li>
+        </ul>
 
         <div class="markdown">{{ note.content | markdown(kind="note", item_id=note.id) }}</div>
     </article>

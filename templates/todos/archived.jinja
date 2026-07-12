@@ -18,24 +18,26 @@
             {% for todo in todos %}
                 <li>
                     <article class="entry-card">
-                        <h3 class="entry-card__title">
+                        <h2 class="entry-card__title">
                             <a href="{{ url_for('todos.view_todo', todo_id=todo.id) }}"
                                class="entry-card__link">
                                 <span class="entry-card__title-text">{{ todo.display_title }}</span>
                             </a>
-                        </h3>
+                        </h2>
                         <p class="entry-card__timestamp">
                             Archived
                             <time datetime="{{ todo.archived_at | isoformat(local=False) }}" data-live>{{ todo.archived_at | timeago(local=False) }}</time>
-                            ({{ todo.archived_at | strftime("%d %b %Y, %H:%M", local=False) }})
+                            (<time datetime="{{ todo.archived_at | isoformat(local=False) }}">{{ todo.archived_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
                         </p>
-                        <footer class="entry-card__meta">
-                            <form hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
-                                  hx-target="body"
-                                  hx-push-url="true">
-                                <button type="submit" class="button button--ghost button--sm">{{ icon("archive") }} Unarchive</button>
-                            </form>
-                        </footer>
+                        <menu class="entry-card__meta">
+                            <li>
+                                <form hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
+                                      hx-target="body"
+                                      hx-push-url="true">
+                                    <button type="submit" class="button button--ghost button--sm">{{ icon("archive") }} Unarchive</button>
+                                </form>
+                            </li>
+                        </menu>
                     </article>
                 </li>
             {% endfor %}

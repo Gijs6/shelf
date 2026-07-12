@@ -18,7 +18,7 @@
             {% for todo in todos %}
                 <li>
                     <article class="entry-card">
-                        <h3 class="entry-card__title">
+                        <h2 class="entry-card__title">
                             <a href="{{ url_for('todos.view_todo', todo_id=todo.id) }}"
                                class="entry-card__link">
                                 <span class="entry-card__title-text">{{ todo.display_title }}</span>
@@ -28,10 +28,13 @@
                                     {% if not todo.visible %}<span class="badge">Hidden</span>{% endif %}
                                 </span>
                             </a>
-                        </h3>
+                        </h2>
                         <p class="entry-card__timestamp">{{ icon("repeat") }} Repeats every {{ todo.recur_interval }} {{ todo.recur_interval | pluralize(todo.recur_unit) }}</p>
                         {% if todo.deadline %}
-                            <p class="entry-card__due">Due {{ todo.deadline | timeago }} ({{ todo.deadline | strftime("%d %b %Y, %H:%M") }})</p>
+                            <p class="entry-card__due">
+                                Due <time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | timeago }}</time>
+                                (<time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | strftime("%d %b %Y, %H:%M") }}</time>)
+                            </p>
                         {% endif %}
                         {% if todo.notify_before_days is not none %}
                             <p class="entry-card__preview">

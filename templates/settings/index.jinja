@@ -119,22 +119,28 @@
                            value="{{ calendar_url }}"
                            readonly />
                 </div>
-                <div class="settings-panel__actions">
-                    <button type="button"
-                            class="button button--ghost"
-                            data-copy-target="calendar-url">{{ icon("copy") }} Copy</button>
-                    <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
-                          hx-target="body"
-                          hx-push-url="true"
-                          hx-confirm="Regenerate the token? The old feed URL will stop working.">
-                        <button type="submit" class="button button--ghost">{{ icon("repeat") }} Regenerate</button>
-                    </form>
-                    <form hx-delete="{{ url_for('settings.revoke_calendar_token') }}"
-                          hx-target="body"
-                          hx-push-url="true">
-                        <button type="submit" class="button button--danger">{{ icon("trash") }} Revoke</button>
-                    </form>
-                </div>
+                <menu class="settings-panel__actions">
+                    <li>
+                        <button type="button"
+                                class="button button--ghost"
+                                data-copy-target="calendar-url">{{ icon("copy") }} Copy</button>
+                    </li>
+                    <li>
+                        <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
+                              hx-target="body"
+                              hx-push-url="true"
+                              hx-confirm="Regenerate the token? The old feed URL will stop working.">
+                            <button type="submit" class="button button--ghost">{{ icon("repeat") }} Regenerate</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form hx-delete="{{ url_for('settings.revoke_calendar_token') }}"
+                              hx-target="body"
+                              hx-push-url="true">
+                            <button type="submit" class="button button--danger">{{ icon("trash") }} Revoke</button>
+                        </form>
+                    </li>
+                </menu>
             {% else %}
                 <p>Generate a token to get a private URL you can subscribe to from a calendar app.</p>
                 <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
@@ -149,9 +155,13 @@
             <h2 class="settings-panel__title">{{ icon("logout") }} Session</h2>
             {% if last_login %}
                 <p>
-                    Logged in since {{ last_login | strftime("%d %b %Y, %H:%M") }} ({{ last_login | timeago }}).
+                    Logged in since
+                    <time datetime="{{ last_login | isoformat }}">{{ last_login | strftime("%d %b %Y, %H:%M") }}</time>
+                    ({{ last_login | timeago }}).
                     <br />
-                    Session expires {{ session_expires_at | strftime("%d %b %Y, %H:%M") }} ({{ session_expires_at | timeago }}).
+                    Session expires
+                    <time datetime="{{ session_expires_at | isoformat }}">{{ session_expires_at | strftime("%d %b %Y, %H:%M") }}</time>
+                    ({{ session_expires_at | timeago }}).
                 </p>
             {% endif %}
             <form method="post" action="{{ url_for('logout') }}">
@@ -161,12 +171,12 @@
     </div>
 
     <dialog id="rename-group-modal" class="modal modal--stacked">
-        <div class="modal__header">
+        <header class="modal__header">
             <h2 class="modal__title">Rename group</h2>
             <form method="dialog">
                 <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
             </form>
-        </div>
+        </header>
 
         <form hx-post="{{ url_for('settings.rename_group') }}"
               hx-target="body"

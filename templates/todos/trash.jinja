@@ -18,27 +18,31 @@
             {% for todo in todos %}
                 <li>
                     <article class="entry-card">
-                        <h3 class="entry-card__title">
+                        <h2 class="entry-card__title">
                             <span class="entry-card__title-text">{{ todo.display_title }}</span>
-                        </h3>
+                        </h2>
                         <p class="entry-card__timestamp">
                             Deleted
                             <time datetime="{{ todo.deleted_at | isoformat(local=False) }}" data-live>{{ todo.deleted_at | timeago(local=False) }}</time>
-                            ({{ todo.deleted_at | strftime("%d %b %Y, %H:%M", local=False) }})
+                            (<time datetime="{{ todo.deleted_at | isoformat(local=False) }}">{{ todo.deleted_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
                         </p>
-                        <footer class="entry-card__meta">
-                            <form hx-patch="{{ url_for('todos.restore_todo', todo_id=todo.id) }}"
-                                  hx-target="body"
-                                  hx-push-url="true">
-                                <button type="submit" class="button button--ghost button--sm">{{ icon("restore") }} Restore</button>
-                            </form>
-                            <form hx-delete="{{ url_for('todos.purge_todo', todo_id=todo.id) }}"
-                                  hx-target="body"
-                                  hx-push-url="true"
-                                  hx-confirm="Permanently delete this todo? This can't be undone.">
-                                <button type="submit" class="button button--danger button--sm">{{ icon("trash") }} Delete forever</button>
-                            </form>
-                        </footer>
+                        <menu class="entry-card__meta">
+                            <li>
+                                <form hx-patch="{{ url_for('todos.restore_todo', todo_id=todo.id) }}"
+                                      hx-target="body"
+                                      hx-push-url="true">
+                                    <button type="submit" class="button button--ghost button--sm">{{ icon("restore") }} Restore</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form hx-delete="{{ url_for('todos.purge_todo', todo_id=todo.id) }}"
+                                      hx-target="body"
+                                      hx-push-url="true"
+                                      hx-confirm="Permanently delete this todo? This can't be undone.">
+                                    <button type="submit" class="button button--danger button--sm">{{ icon("trash") }} Delete forever</button>
+                                </form>
+                            </li>
+                        </menu>
                     </article>
                 </li>
             {% endfor %}

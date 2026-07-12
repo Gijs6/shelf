@@ -15,7 +15,7 @@
 
     {% if notes %}
         <ul class="sticky-board">
-            {% for sticky_note in notes %}{{ sticky_card(sticky_note) }}{% endfor %}
+            {% for sticky_note in notes %}{{ sticky_card(sticky_note, heading_level=2) }}{% endfor %}
         </ul>
     {% else %}
         {{ empty_state('archive', 'No expired sticky notes.') }}
