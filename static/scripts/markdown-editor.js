@@ -6,6 +6,7 @@
             status: false,
             spellChecker: false,
             autoDownloadFontAwesome: false,
+            forceSync: true,
             placeholder: textarea.getAttribute("placeholder") || ""
         });
 
