@@ -28,6 +28,12 @@
                        data-shortcut="edit">{{ icon("edit") }} Edit</a>
                 </li>
                 <li>
+                    <button type="button"
+                            class="button button--ghost"
+                            data-copy-html-target="todo-content"
+                            data-copy-title="{{ todo.title or '' }}">{{ icon("copy") }} Copy</button>
+                </li>
+                <li>
                     <form class="page-header__actions-form"
                           hx-post="{{ url_for('todos.duplicate_todo', todo_id=todo.id) }}"
                           hx-target="body"
@@ -115,6 +121,6 @@
             {% endif %}
         </ul>
 
-        <div class="markdown">{{ todo.content | markdown(kind="todo", item_id=todo.id) }}</div>
+        <div id="todo-content" class="markdown">{{ todo.content | markdown(kind="todo", item_id=todo.id) }}</div>
     </article>
 {% endblock %}

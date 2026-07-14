@@ -10,7 +10,7 @@
                        class="sticky-note__title-link">{{ sticky_note.title }}</a>
                     </h {{ heading_level }}>
                 {% endif %}
-                <div class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
+                <div id="sticky-body-{{ sticky_note.id }}" class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
             </div>
 
             {% if not compact %}
@@ -26,6 +26,15 @@
                                 {{ icon("pin") }}
                             </button>
                         </form>
+                    </li>
+                    <li>
+                        <button type="button"
+                                class="sticky-note__icon-button"
+                                data-copy-html-target="sticky-body-{{ sticky_note.id }}"
+                                data-copy-title="{{ sticky_note.title or '' }}">
+                            <span class="visually-hidden">Copy</span>
+                            {{ icon("copy") }}
+                        </button>
                     </li>
                     <li>
                         <form hx-post="{{ url_for('sticky_notes.duplicate_sticky_note', sticky_note_id=sticky_note.id) }}"
