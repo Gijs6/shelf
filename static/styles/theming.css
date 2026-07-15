@@ -806,6 +806,10 @@ body {
     cursor: pointer;
 }
 
+.task-list__item-body {
+    min-width: 0;
+}
+
 .modal {
     width: 100%;
     max-width: min(30rem, calc(100% - 2 * var(--space-md)));

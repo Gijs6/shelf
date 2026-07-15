@@ -56,9 +56,17 @@ class TaskListTreeprocessor(Treeprocessor):
                     checkbox.set("disabled", "disabled")
 
                 li.set("class", f"{li.get('class', '')} task-list__item".strip())
+
+                body = etree.Element("span")
+                body.set("class", "task-list__item-body")
+                body.text = f" {rest}" if rest else " "
+                for child in list(li):
+                    li.remove(child)
+                    body.append(child)
+
                 li.text = None
-                checkbox.tail = f" {rest}" if rest else " "
-                li.insert(0, checkbox)
+                li.append(checkbox)
+                li.append(body)
                 index += 1
                 has_task = True
 
