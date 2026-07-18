@@ -10,11 +10,11 @@
             {% set title_inner %}
                 {% if url %}
                     <a href="{{ url }}" class="entry-card__link">
-                        <span class="entry-card__title-text">{{ item.display_title | default(item.title) }}</span>
+                        <span class="entry-card__title-text">{{ item.display_title | default(item.title) | markdown_inline(links=false) }}</span>
                         {% if badges %}<span class="entry-card__badges">{{ badges }}</span>{% endif %}
                     </a>
                 {% else %}
-                    <span class="entry-card__title-text">{{ item.display_title | default(item.title) }}</span>
+                    <span class="entry-card__title-text">{{ item.display_title | default(item.title) | markdown_inline }}</span>
                     {% if badges %}<span class="entry-card__badges">{{ badges }}</span>{% endif %}
                 {% endif %}
             {% endset %}
@@ -28,7 +28,7 @@
                 <time datetime="{{ shown_at | isoformat(local=False) }}" data-live>{{ shown_at | timeago(local=False) }}</time>
                 (<time datetime="{{ shown_at | isoformat(local=False) }}">{{ shown_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
             </p>
-            {% if item.title and item.snippet %}<p class="entry-card__preview">{{ item.snippet }}</p>{% endif %}
+            {% if item.title and item.snippet %}<p class="entry-card__preview">{{ item.snippet | markdown_inline }}</p>{% endif %}
             {% if item.deadline %}
                 <p class="entry-card__due{% if item.overdue %} entry-card__due--overdue{% endif %}">
                     Due <time datetime="{{ item.deadline | isoformat }}">{{ item.deadline | timeago }}</time>

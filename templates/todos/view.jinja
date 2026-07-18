@@ -4,7 +4,7 @@
 {% from "partials/eyebrow.jinja" import type_eyebrow %}
 {% from "partials/updated_at.jinja" import updated_at_span %}
 
-{% block title %}{{ todo.display_title }}{% endblock %}
+{% block title %}{{ todo.display_title | markdown_plain }}{% endblock %}
 {% block page_class %}page--todo{% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
             <hgroup class="page-header__heading">
                 {{ type_eyebrow("todo") }}
                 <h1 class="page-header__title">
-                    {{ todo.display_title }}
+                    {{ todo.display_title | markdown_inline }}
                     <span class="page-header__badges">
                         <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
                         {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}

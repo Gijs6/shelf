@@ -1,4 +1,5 @@
 import markdown
+import re
 from datetime import datetime, timezone
 from markupsafe import Markup
 
@@ -67,6 +68,35 @@ def pluralize_filter(n, unit):
     return unit if n == 1 else unit + "s"
 
 
+BLOCK_TAG_RE = re.compile(
+    r"</?(?:p|h[1-6]|ul|ol|li|blockquote|pre|hr|table|thead|tbody|tr|th|td|dl|dt|dd|div)(?:\s[^>]*)?/?>"
+)
+LINK_TAG_RE = re.compile(r"</?a(?:\s[^>]*)?>")
+ANY_TAG_RE = re.compile(r"<[^>]+>")
+
+INLINE_MD = markdown.Markdown(extensions=[AutoLinkExtension()])
+
+
+def render_inline(text, links=True):
+    html = INLINE_MD.reset().convert(text)
+    html = BLOCK_TAG_RE.sub(" ", html)
+    if not links:
+        html = LINK_TAG_RE.sub("", html)
+    return " ".join(html.split())
+
+
+def markdown_inline_filter(text, links=True):
+    if not text:
+        return ""
+    return Markup(render_inline(text, links=links))
+
+
+def markdown_plain_filter(text):
+    if not text:
+        return ""
+    return Markup(" ".join(ANY_TAG_RE.sub("", render_inline(text)).split()))
+
+
 def markdown_filter(text, kind=None, item_id=None):
     if not text:
         return ""
@@ -95,6 +125,8 @@ FILTERS = {
     "isoformat": isoformat_filter,
     "pluralize": pluralize_filter,
     "markdown": markdown_filter,
+    "markdown_inline": markdown_inline_filter,
+    "markdown_plain": markdown_plain_filter,
 }
 
 

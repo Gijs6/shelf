@@ -4,7 +4,7 @@
 {% from "partials/eyebrow.jinja" import type_eyebrow %}
 {% from "partials/updated_at.jinja" import updated_at_span %}
 
-{% block title %}{{ note.display_title }}{% endblock %}
+{% block title %}{{ note.display_title | markdown_plain }}{% endblock %}
 {% block page_class %}page--note{% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
             <hgroup class="page-header__heading">
                 {{ type_eyebrow("note") }}
                 <h1 class="page-header__title">
-                    {{ note.display_title }}
+                    {{ note.display_title | markdown_inline }}
                     {% if note.archived %}
                         <span class="page-header__badges">
                             <span class="badge">Archived</span>
