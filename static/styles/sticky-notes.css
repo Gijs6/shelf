@@ -63,7 +63,13 @@
 
 .sticky-note__actions {
     display: flex;
+    align-items: center;
     gap: var(--space-xs);
+    height: fit-content;
+}
+
+.sticky-note__actions form {
+    display: contents;
 }
 
 .sticky-note__icon-button {
