@@ -2,6 +2,7 @@
 
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/empty_state.jinja" import empty_state %}
+{% from "partials/entry_card.jinja" import entry_card, todo_badges %}
 
 {% block title %}Todos{% endblock %}
 {% block page_class %}page--todo{% endblock %}
@@ -39,33 +40,7 @@
             <section class="list-section">
                 <h2 class="list-section__title">{{ label }}</h2>
                 <ul class="card-list">
-                    {% for todo in items %}
-                        <li>
-                            <article class="entry-card">
-                                <h3 class="entry-card__title">
-                                    <a href="{{ url_for('todos.view_todo', todo_id=todo.id) }}"
-                                       class="entry-card__link">
-                                        <span class="entry-card__title-text">{{ todo.display_title }}</span>
-                                        <span class="entry-card__badges">
-                                            <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
-                                            {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
-                                        </span>
-                                    </a>
-                                </h3>
-                                <p class="entry-card__timestamp">
-                                    <time datetime="{{ todo.updated_at | isoformat(local=False) }}" data-live>{{ todo.updated_at | timeago(local=False) }}</time>
-                                    (<time datetime="{{ todo.updated_at | isoformat(local=False) }}">{{ todo.updated_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
-                                </p>
-                                {% if todo.title %}<p class="entry-card__preview">{{ todo.snippet }}</p>{% endif %}
-                                {% if todo.deadline %}
-                                    <p class="entry-card__due">
-                                        Due <time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | timeago }}</time>
-                                        (<time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | strftime("%d %b %Y, %H:%M") }}</time>)
-                                    </p>
-                                {% endif %}
-                            </article>
-                        </li>
-                    {% endfor %}
+                    {% for todo in items %}{{ entry_card(todo, url=url_for('todos.view_todo', todo_id=todo.id) , heading_level=3, badges=todo_badges(todo)) }}{% endfor %}
                 </ul>
             </section>
         {% endfor %}

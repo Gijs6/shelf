@@ -1,0 +1,41 @@
+{% macro todo_badges(todo) %}
+    <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
+    {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+{% endmacro %}
+
+{% macro entry_card(item, url=none, heading_level=2, timestamp=none, timestamp_label=none, badges=none) %}
+    {% set shown_at = timestamp | default(item.updated_at, true) %}
+    <li>
+        <article class="entry-card">
+            {% set title_inner %}
+                {% if url %}
+                    <a href="{{ url }}" class="entry-card__link">
+                        <span class="entry-card__title-text">{{ item.display_title | default(item.title) }}</span>
+                        {% if badges %}<span class="entry-card__badges">{{ badges }}</span>{% endif %}
+                    </a>
+                {% else %}
+                    <span class="entry-card__title-text">{{ item.display_title | default(item.title) }}</span>
+                    {% if badges %}<span class="entry-card__badges">{{ badges }}</span>{% endif %}
+                {% endif %}
+            {% endset %}
+            {% if heading_level == 3 %}
+                <h3 class="entry-card__title">{{ title_inner }}</h3>
+            {% else %}
+                <h2 class="entry-card__title">{{ title_inner }}</h2>
+            {% endif %}
+            <p class="entry-card__timestamp">
+                {% if timestamp_label %}{{ timestamp_label }}{% endif %}
+                <time datetime="{{ shown_at | isoformat(local=False) }}" data-live>{{ shown_at | timeago(local=False) }}</time>
+                (<time datetime="{{ shown_at | isoformat(local=False) }}">{{ shown_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
+            </p>
+            {% if item.title and item.snippet %}<p class="entry-card__preview">{{ item.snippet }}</p>{% endif %}
+            {% if item.deadline %}
+                <p class="entry-card__due{% if item.overdue %} entry-card__due--overdue{% endif %}">
+                    Due <time datetime="{{ item.deadline | isoformat }}">{{ item.deadline | timeago }}</time>
+                    (<time datetime="{{ item.deadline | isoformat }}">{{ item.deadline | strftime("%d %b %Y, %H:%M") }}</time>)
+                </p>
+            {% endif %}
+            {% if caller %}<menu class="entry-card__actions">{{ caller() }}</menu>{% endif %}
+        </article>
+    </li>
+{% endmacro %}

@@ -471,7 +471,7 @@ body {
     .entry-card__timestamp,
     .entry-card__preview,
     .entry-card__due,
-    .entry-card__meta {
+    .entry-card__actions {
         grid-column: 1;
         grid-row: auto;
     }
@@ -492,11 +492,10 @@ body {
     }
 }
 
-.entry-card__meta {
+.entry-card__actions {
     position: relative;
     z-index: 1;
     grid-column: 1 / -1;
-    grid-row: 2;
     display: flex;
     flex-wrap: wrap;
     align-items: center;

@@ -2,6 +2,7 @@
 
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/empty_state.jinja" import empty_state %}
+{% from "partials/entry_card.jinja" import entry_card %}
 
 {% block title %}Notes{% endblock %}
 {% block page_class %}page--note{% endblock %}
@@ -31,23 +32,7 @@
             <section class="list-section">
                 <h2 class="list-section__title">{{ label }}</h2>
                 <ul class="card-list">
-                    {% for note in items %}
-                        <li>
-                            <article class="entry-card">
-                                <h3 class="entry-card__title">
-                                    <a href="{{ url_for('notes.view_note', note_id=note.id) }}"
-                                       class="entry-card__link">
-                                        <span class="entry-card__title-text">{{ note.display_title }}</span>
-                                    </a>
-                                </h3>
-                                <p class="entry-card__timestamp">
-                                    <time datetime="{{ note.updated_at | isoformat(local=False) }}" data-live>{{ note.updated_at | timeago(local=False) }}</time>
-                                    (<time datetime="{{ note.updated_at | isoformat(local=False) }}">{{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
-                                </p>
-                                {% if note.title %}<p class="entry-card__preview">{{ note.snippet }}</p>{% endif %}
-                            </article>
-                        </li>
-                    {% endfor %}
+                    {% for note in items %}{{ entry_card(note, url=url_for('notes.view_note', note_id=note.id) , heading_level=3) }}{% endfor %}
                 </ul>
             </section>
         {% endfor %}

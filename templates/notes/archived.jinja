@@ -2,6 +2,7 @@
 
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/empty_state.jinja" import empty_state %}
+{% from "partials/entry_card.jinja" import entry_card %}
 
 {% block title %}Archived notes{% endblock %}
 {% block page_class %}page--note{% endblock %}
@@ -16,30 +17,15 @@
     {% if notes %}
         <ul class="card-list">
             {% for note in notes %}
-                <li>
-                    <article class="entry-card">
-                        <h2 class="entry-card__title">
-                            <a href="{{ url_for('notes.view_note', note_id=note.id) }}"
-                               class="entry-card__link">
-                                <span class="entry-card__title-text">{{ note.display_title }}</span>
-                            </a>
-                        </h2>
-                        <p class="entry-card__timestamp">
-                            Archived
-                            <time datetime="{{ note.archived_at | isoformat(local=False) }}" data-live>{{ note.archived_at | timeago(local=False) }}</time>
-                            (<time datetime="{{ note.archived_at | isoformat(local=False) }}">{{ note.archived_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
-                        </p>
-                        <menu class="entry-card__meta">
-                            <li>
-                                <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
-                                      hx-target="body"
-                                      hx-push-url="true">
-                                    <button type="submit" class="button button--ghost button--sm">{{ icon("archive") }} Unarchive</button>
-                                </form>
-                            </li>
-                        </menu>
-                    </article>
-                </li>
+                {% call entry_card(note, url=url_for('notes.view_note', note_id=note.id) , timestamp=note.archived_at, timestamp_label="Archived") %}
+                    <li>
+                        <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
+                              hx-target="body"
+                              hx-push-url="true">
+                            <button type="submit" class="button button--ghost button--sm">{{ icon("archive") }} Unarchive</button>
+                        </form>
+                    </li>
+                {% endcall %}
             {% endfor %}
         </ul>
     {% else %}

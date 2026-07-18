@@ -3,6 +3,7 @@
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/empty_state.jinja" import empty_state %}
 {% from "partials/sticky_card.jinja" import sticky_card %}
+{% from "partials/entry_card.jinja" import entry_card, todo_badges %}
 
 {% block title %}Dashboard{% endblock %}
 
@@ -49,31 +50,7 @@
             <h2 class="dashboard-widget__title">{{ icon("clock") }} Upcoming and overdue todos</h2>
             {% if upcoming_todos %}
                 <ul class="card-list">
-                    {% for todo in upcoming_todos %}
-                        <li>
-                            <article class="entry-card">
-                                <h3 class="entry-card__title">
-                                    <a href="{{ url_for('todos.view_todo', todo_id=todo.id) }}"
-                                       class="entry-card__link">
-                                        <span class="entry-card__title-text">{{ todo.display_title }}</span>
-                                        <span class="entry-card__badges">
-                                            <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
-                                            {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
-                                        </span>
-                                    </a>
-                                </h3>
-                                <p class="entry-card__timestamp">
-                                    <time datetime="{{ todo.updated_at | isoformat(local=False) }}" data-live>{{ todo.updated_at | timeago(local=False) }}</time>
-                                    (<time datetime="{{ todo.updated_at | isoformat(local=False) }}">{{ todo.updated_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
-                                </p>
-                                {% if todo.title %}<p class="entry-card__preview">{{ todo.snippet }}</p>{% endif %}
-                                <p class="entry-card__due{% if todo.deadline < current_time %} entry-card__due--overdue{% endif %}">
-                                    Due <time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | timeago }}</time>
-                                    (<time datetime="{{ todo.deadline | isoformat }}">{{ todo.deadline | strftime("%d %b %Y, %H:%M") }}</time>)
-                                </p>
-                            </article>
-                        </li>
-                    {% endfor %}
+                    {% for todo in upcoming_todos %}{{ entry_card(todo, url=url_for('todos.view_todo', todo_id=todo.id) , heading_level=3, badges=todo_badges(todo)) }}{% endfor %}
                 </ul>
             {% else %}
                 {{ empty_state('clock', 'Nothing due.') }}
@@ -84,23 +61,7 @@
             <h2 class="dashboard-widget__title">{{ icon("note") }} Recent notes</h2>
             {% if recent_notes %}
                 <ul class="card-list">
-                    {% for note in recent_notes %}
-                        <li>
-                            <article class="entry-card">
-                                <h3 class="entry-card__title">
-                                    <a href="{{ url_for('notes.view_note', note_id=note.id) }}"
-                                       class="entry-card__link">
-                                        <span class="entry-card__title-text">{{ note.display_title }}</span>
-                                    </a>
-                                </h3>
-                                <p class="entry-card__timestamp">
-                                    <time datetime="{{ note.updated_at | isoformat(local=False) }}" data-live>{{ note.updated_at | timeago(local=False) }}</time>
-                                    (<time datetime="{{ note.updated_at | isoformat(local=False) }}">{{ note.updated_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
-                                </p>
-                                {% if note.title %}<p class="entry-card__preview">{{ note.snippet }}</p>{% endif %}
-                            </article>
-                        </li>
-                    {% endfor %}
+                    {% for note in recent_notes %}{{ entry_card(note, url=url_for('notes.view_note', note_id=note.id) , heading_level=3) }}{% endfor %}
                 </ul>
             {% else %}
                 {{ empty_state('note', 'No notes yet.') }}
