@@ -107,7 +107,10 @@ STICKY_SEEDS = [
         "colour": "pink",
         "pinned": True,
     },
-    {"content": "Goederen zijn alle zaken en alle vermogensrechten.", "colour": "orange"},
+    {
+        "content": "Goederen zijn alle zaken en alle vermogensrechten.",
+        "colour": "orange",
+    },
     {
         "content": "Zaken zijn de voor menselijke beheersing vatbare stoffelijke objecten.",
         "colour": "green",
