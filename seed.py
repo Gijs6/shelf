@@ -6,311 +6,310 @@ from app import app
 from models import Note, StickyNote, Todo, db, now
 
 NOTE_SEEDS = [
-    ("Ruimte tussen geest en lichaam", "Ruimte scheidt de lichamen, niet de geesten."),
-    ("Kiesraad Den Haag", "Er is een Kiesraad, gevestigd te 's-Gravenhage."),
+    ("Artikel A 2 Kieswet", "Er is een Kiesraad, gevestigd te 's-Gravenhage."),
     (
-        "Secretariaat locatie Den Helder",
-        "Het secretariaat van het centrum is gevestigd Polderweg 60, den Helder.",
+        "Artikel 1 Grondwet",
+        "Allen die zich in Nederland bevinden, worden in gelijke gevallen gelijk behandeld. Discriminatie wegens godsdienst, levensovertuiging, politieke gezindheid, ras, geslacht, handicap, seksuele gerichtheid of op welke grond dan ook, is niet toegestaan.",
     ),
     (
-        "Essentie van schilderkunst",
-        "En de waarheid der Kunst, de waarheid der schilderkunst dat is de eigenschap van den Vorm en der kleur. Niets anders.",
+        "Artikel 5:1 BW",
+        "## Artikel 1\n\n1. Eigendom is het meest omvattende recht dat een persoon op een zaak kan hebben.\n2. Het staat de eigenaar met uitsluiting van een ieder vrij van de zaak gebruik te maken, mits dit gebruik niet strijdt met rechten van anderen en de op wettelijke voorschriften en regels van ongeschreven recht gegronde beperkingen daarbij in acht worden genomen.\n3. De eigenaar van de zaak wordt, behoudens rechten van anderen, eigenaar van de afgescheiden vruchten.",
     ),
     (
-        "Scheepsramp Hongkong bericht",
-        "Een Reuter-telegram uit Hongkong meldt, dat een inlandsch vaartuig op de Westrivier is omgeslagen en 200 personen daarbij zijn omgekomen.",
+        "Artikel 6:162 BW",
+        "## Artikel 162\n\n1. Hij die jegens een ander een onrechtmatige daad pleegt, welke hem kan worden toegerekend, is verplicht de schade die de ander dientengevolge lijdt, te vergoeden.\n2. Als onrechtmatige daad worden aangemerkt een inbreuk op een recht en een doen of nalaten in strijd met een wettelijke plicht of met hetgeen volgens ongeschreven recht in het maatschappelijk verkeer betaamt, een en ander behoudens de aanwezigheid van een rechtvaardigingsgrond.\n3. Een onrechtmatige daad kan aan de dader worden toegerekend, indien zij te wijten is aan zijn schuld of aan een oorzaak welke krachtens de wet of de in het verkeer geldende opvattingen voor zijn rekening komt.",
     ),
     (
-        "Correctie toneelverslag Elsloo/Hasloo",
-        "In ons verslag van de tooneeluitvoering van Zondag jl. was een fout geslopen. Niet de tooneelclub „Elsloo” doch „Hasloo” bracht een avond voor den Bond van Groote Gezinnen.",
+        "Artikel 310 Sr",
+        "Hij die enig goed dat geheel of ten dele aan een ander toebehoort wegneemt, met het oogmerk om het zich wederrechtelijk toe te eigenen, wordt, als schuldig aan *diefstal*, gestraft met gevangenisstraf van ten hoogste vier jaren of geldboete van de vierde categorie.",
     ),
     (
-        "Zitting Tweede Kamer – landbouwmissive",
-        "In de zitting van de Tweede Kamer der Staten-Generaal van heden is ingekomen eene missive der commissie van landbouw in Limburg, ten geleide van een afschrift van een aan Z. M. toegezonden adres. Dit stuk niet gezegeld zijnde, wordt ter zijde gelegd.",
+        None,
+        "Het is een ieder verboden zich zodanig te gedragen dat gevaar op de weg wordt veroorzaakt of kan worden veroorzaakt of dat het verkeer op de weg wordt gehinderd of kan worden gehinderd.",
+    ),
+    ("Artikel 114 Grondwet", "De doodstraf kan niet worden opgelegd."),
+    (
+        "Artikel 7 Grondwet",
+        "## Artikel 7\n\n1. Niemand heeft voorafgaand verlof nodig om door de drukpers gedachten of gevoelens te openbaren, behoudens ieders verantwoordelijkheid volgens de wet.\n2. De wet stelt regels omtrent radio en televisie. Er is geen voorafgaand toezicht op de inhoud van een radio- of televisieuitzending.\n3. Voor het openbaren van gedachten of gevoelens door andere dan in de voorgaande leden genoemde middelen heeft niemand voorafgaand verlof nodig wegens de inhoud daarvan, behoudens ieders verantwoordelijkheid volgens de wet. De wet kan het geven van vertoningen toegankelijk voor personen jonger dan zestien jaar regelen ter bescherming van de goede zeden.\n4. De voorgaande leden zijn niet van toepassing op het maken van handelsreclame.",
     ),
     (
-        "Parlementair wetsvoorstel vestingwerken",
-        "In de zitting van de Tweede Kamer der Staten-Generaal van heden zijn de beraadslagingen voortgezet over het wets-ontwerp, houdende bepalingen betrekkelijk het bouwen, planten en het maken van andere werken binnen zekeren afstand van vestingwerken van den Staat.",
+        "Artikel 7:1 BW",
+        "Koop is de overeenkomst waarbij de een zich verbindt een zaak te geven en de ander om daarvoor een prijs in geld te betalen.",
     ),
     (
-        "Socrates en de aanklacht",
-        "De formule der aanklacht wordt in de Verdediging zelf aangeduid, en ook bij Xenophon bijna geheel vermeld. Volledig vindt men ze bij Diogenes Laërtius in het leven van Socrates.",
+        None,
+        "## Artikel 3:1 BW\n\nGoederen zijn alle zaken en alle vermogensrechten.\n\n## Artikel 3:2 BW\n\nZaken zijn de voor menselijke beheersing vatbare stoffelijke objecten.",
     ),
     (
-        "Ptolemaeus en het Almagest",
-        "Ptolomaeus, Claudius: astronoom en wiskundige te Alexandrië in de eerste helft der 2e eeuw voor Chr. Zijn werk: „Syntaxis mathematica”, omtrent 827 in het Arabisch vertaald als: Almagest (het grote werk), ontvouwt het Ptolomaeische wereldsysteem met de aarde als middelpunt voor ons planetenstelsel.",
+        "Artikel 1:3 Awb",
+        "1. Onder besluit wordt verstaan: een schriftelijke beslissing van een bestuursorgaan, inhoudende een publiekrechtelijke rechtshandeling.\n2. Onder beschikking wordt verstaan: een besluit dat niet van algemene strekking is, met inbegrip van de afwijzing van een aanvraag daarvan.\n3. Onder aanvraag wordt verstaan: een verzoek van een belanghebbende, een besluit te nemen.\n4. Onder beleidsregel wordt verstaan: een bij besluit vastgestelde algemene regel, niet zijnde een algemeen verbindend voorschrift, omtrent de afweging van belangen, de vaststelling van feiten of de uitleg van wettelijke voorschriften bij het gebruik van een bevoegdheid van een bestuursorgaan.",
     ),
     (
-        "Seizoenen van arbeid en tijd",
-        "Nu het huis klaar was, konden de mannen, die het gebouwd hadden, voortaan hun makkers helpen in het vervoeren van goederen en levensmiddelen. En dat was gelukkig, want och, wat waren het al korte daagjes geworden!",
+        "Artikel 1:30 BW",
+        "Een huwelijk kan worden aangegaan door twee personen van verschillend of van gelijk geslacht.\n\nDe wet beschouwt het huwelijk alleen in zijn burgerlijke betrekkingen.",
     ),
     (
-        "Prijsvraag beeldhouwkunst Gent 1857",
-        "Het Koninkl. genootschap voor fraaije kunsten en Letterkunde te Gent heeft eene prijsvraag uitgeschreven, verlangende eene geschiedenis der beeldhouwkunst in Belgie, sedert de invoering des Christendoms tot op het einde der 18de eeuw. De uitgeloofde prijs is 500 fr. en de antwoorden moeten voor 1o Oct. 1857 ingezonden worden.",
-    ),
-    (
-        "Muzikale avond Brussel",
-        "In het conservatorium te Brussel hebben de Nederlandsche violiste Annie Mesritz en de Zwitsersche pianiste Carola Pajonk een interessanten sonatenavond gegeven, welken talrijke leden van de Nederlandsche kolonie, onder wie de gezant en mevrouw Patijn, hebben bijgewoond.",
-    ),
-    (
-        "Historische parallellen Frankrijk",
-        "In Frankrijk vermeerderen met den dag de teekenen van overeenkomst tusschen het heden en de gebeurtenissen van vóór 100 jaar; en telkenmale, waar het pas geeft, doen de bladen dit uitkomen.",
+        None,
+        "Hij die, zonder daartoe gerechtigd te zijn, zich op eens anders grond waarvan de toegang op een voor hem blijkbare wijze door de rechthebbende is verboden, bevindt of daar vee laat lopen, wordt gestraft met geldboete van de eerste categorie.",
     ),
     (
         None,
         "De militaire hospitaalschepen, waaronder te verstaan de schepen door de Staten gebouwd of ingericht in 't bijzonder en uitsluitend met het doel om hulp te verleenen aan de gewonden, zieken en schipbreukelingen, en waarvan de namen aan de oorlogvoerende Mogendheden moeten zijn medegedeeld bij den aanvang of in den loop der vijandelijkheden, in ieder geval vóór eenige ingebruikstelling, worden geëerbiedigd en kunnen gedurende de vijandelijkheden niet worden prijs gemaakt.",
     ),
     (
-        None,
-        "„Het Huis, oud en nieuw”, de uitgave van den architect Ed. Cuypers, die in de laatst verschenen afl. o. a. een door hem verbouwd buitenhuis te Princenhage afbeeldt en bespreekt, is deze maand grootendeels gewijd aan den stoel. Dr. Vogelsang vervolgt zijn opstel over „Zetels en Stoelen”, waarbij weer een aantal leuningstoelen zijn gereproduceerd. En hij belooft ons een hoofdstuk over den modernen armstoel, een zeer netelig onderwerp, waarnaar wij belangstellend uitzien.",
+        "Artikel 23 Grondwet",
+        "## Artikel 23\n\n1. Het onderwijs is een voorwerp van de aanhoudende zorg der regering.\n2. Het geven van onderwijs is vrij, behoudens het toezicht van de overheid en, voor wat bij de wet aangewezen vormen van onderwijs betreft, het onderzoek naar de bekwaamheid en de zedelijkheid van hen die onderwijs geven, een en ander bij de wet te regelen.\n3. Het openbaar onderwijs wordt, met eerbiediging van ieders godsdienst of levensovertuiging, bij de wet geregeld.\n4. In elke gemeente en in elk van de openbare lichamen, bedoeld in artikel 132a, wordt van overheidswege voldoend openbaar algemeen vormend lager onderwijs gegeven in een genoegzaam aantal openbare scholen. Volgens bij de wet te stellen regels kan afwijking van deze bepaling worden toegelaten, mits tot het ontvangen van zodanig onderwijs gelegenheid wordt gegeven, al dan niet in een openbare school.\n5. De eisen van deugdelijkheid, aan het geheel of ten dele uit de openbare kas te bekostigen onderwijs te stellen, worden bij de wet geregeld, met inachtneming, voor zover het bijzonder onderwijs betreft, van de vrijheid van richting.\n6. Deze eisen worden voor het algemeen vormend lager onderwijs zodanig geregeld, dat de deugdelijkheid van het geheel uit de openbare kas bekostigd bijzonder onderwijs en van het openbaar onderwijs even afdoende wordt gewaarborgd. Bij die regeling wordt met name de vrijheid van het bijzonder onderwijs betreffende de keuze der leermiddelen en de aanstelling der onderwijzers geëerbiedigd.\n7. Het bijzonder algemeen vormend lager onderwijs, dat aan de bij de wet te stellen voorwaarden voldoet, wordt naar dezelfde maatstaf als het openbaar onderwijs uit de openbare kas bekostigd. De wet stelt de voorwaarden vast, waarop voor het bijzonder algemeen vormend middelbaar en voorbereidend hoger onderwijs bijdragen uit de openbare kas worden verleend.\n8. De regering doet jaarlijks van de staat van het onderwijs verslag aan de Staten-Generaal.",
+    ),
+    (
+        "Artikel 21 Grondwet",
+        "De zorg van de overheid is gericht op de bewoonbaarheid van het land en de bescherming en verbetering van het leefmilieu.",
     ),
     (
         None,
-        "Het moderne socialisme is volgens zijn inhoud in de eerste plaats het product van de aanschouwing, eenerzijds van de in de huidige maatschappij heerschende klassentegenstellingen van bezittenden en bezitloozen, kapitalisten en loonarbeiders, anderzijds van de in de productie heerschende anarchie. Maar volgens zijn theoretischen vorm doet het zich aanvankelijk voor als een verder opgevoerde, zoogenaamd consequenter doorvoering van de door de groote fransche wijsgeeren der 18de eeuw geformuleerde beginselen. Als elke nieuwe theorie, moest het beginnen met aan te sluiten aan het aanwezig gedachtenmateriaal, hoezeer ook zijn wortel in de stoffelijke, economische feiten lag.",
+        "In elke gemeente is een raad, een college en een burgemeester.\n\nDe raad vertegenwoordigt de gehele bevolking van de gemeente.",
+    ),
+    (
+        "Artikel 300 Sr",
+        "1. Mishandeling wordt gestraft met gevangenisstraf van ten hoogste drie jaren of geldboete van de vierde categorie.\n2. Indien het feit zwaar lichamelijk letsel ten gevolge heeft, wordt de schuldige gestraft met gevangenisstraf van ten hoogste vier jaren of geldboete van de vierde categorie.\n3. Indien het feit de dood ten gevolge heeft, wordt hij gestraft met gevangenisstraf van ten hoogste zes jaren of geldboete van de vierde categorie.\n4. Met mishandeling wordt gelijkgesteld opzettelijke benadeling van de gezondheid.\n5. Poging tot dit misdrijf is niet strafbaar.",
+    ),
+    (
+        "Artikel 2 Grondwet",
+        "1. De wet regelt wie Nederlander is.\n2. De wet regelt de toelating en de uitzetting van vreemdelingen.\n3. Uitlevering kan slechts geschieden krachtens verdrag. Verdere voorschriften omtrent uitlevering worden bij de wet gegeven.\n4. Ieder heeft het recht het land te verlaten, behoudens in de gevallen, bij de wet bepaald.",
     ),
     (
         None,
-        "eder weet, dat vele dieren op bepaalde of onbepaalde tijden in groote scharen van de eene plaats naar de andere trekken. Zulk eene neiging tot verhuizing is ook aan sommige insekten eigen, en genoeg bekend is het, hoe in de warmere streken, somwijlen sprinkhanen (vooral Gryllus migratorius) in zulk een verbazend aantal zich te zamen op reis begeven, dat zij als eene wolk de zon verduisteren, en een ware plaag worden voor de bewoners wier velden zij bezoeken, om hunnen oogst binnen weinig tijds geheel te vernielen. Zeldzamer is het volgende geval, dat voor korten tijd in het naburige Belgie plaats greep, en door den hoogleeraar morren aan de Belgische Akademie in hare zitting van den 2den July 1853 werd medegedeeld.",
+        "1. Geen feit is strafbaar dan uit kracht van een daaraan voorafgegane wettelijke strafbepaling.\n2. Bij verandering in de wetgeving na het tijdstip waarop het feit begaan is, worden de voor de verdachte gunstigste bepalingen toegepast.",
+    ),
+    (
+        "Artikel 6:179 BW",
+        "De bezitter van een dier is aansprakelijk voor de door het dier aangerichte schade, tenzij aansprakelijkheid op grond van de vorige afdeling zou hebben ontbroken indien hij de gedraging van het dier waardoor de schade werd toegebracht, in zijn macht zou hebben gehad.",
+    ),
+    (
+        "Artikel 32 Grondwet",
+        "Nadat de Koning de uitoefening van het koninklijk gezag heeft aangevangen, wordt hij zodra mogelijk beëdigd en ingehuldigd in de hoofdstad Amsterdam in een openbare verenigde vergadering van de Staten-Generaal. Hij zweert of belooft trouw aan de Grondwet en een getrouwe vervulling van zijn ambt. De wet stelt nadere regels vast.",
+    ),
+    (
+        "Artikel 5:13 BW",
+        "## Artikel 13\n\n1. Een schat komt voor gelijke delen toe aan degene die hem ontdekt, en aan de eigenaar van de onroerende of roerende zaak, waarin de schat wordt aangetroffen.\n2. Een schat is een zaak van waarde, die zolang verborgen is geweest dat daardoor de eigenaar niet meer kan worden opgespoord.\n3. De ontdekker is verplicht van zijn vondst aangifte te doen overeenkomstig artikel 5 lid 1 onder a. Indien geen aangifte is gedaan of onzeker is aan wie de zaak toekomt, kan de gemeente overeenkomstig artikel 5 lid 1 onder c vorderen dat deze aan haar in bewaring wordt gegeven, totdat vaststaat wie rechthebbende is.",
     ),
     (
         None,
-        "Der dierbre Vrouw,\nwier liefde en trouw\nsints driemaal dertien jaren,\nin elken strijd,\nten allen tijd,\nin zielsbezwaren en gevaren,\nmy stond ter zij;\nen nu met my\nby d' aanblik weêr van deze bladen\ngeeft lof en eer\naan haren Heer,\nvan al Zijn wegen en Zijn daden.",
-    ),
-    (
-        None,
-        "De lente — ik sta midden in haar —\no daar komt ze daar daar\nwaar vliegt ze op mij aan, ze zoent me,\nze zoent me, ze zoent me en ze noemt me\nhaar zoete ademen, woord voor woord ;\no en daar vliegt ze voort\nde honnege fladderende lente,\ndaar naar de verte, daar naar de horizonnerige tenten,\nde zilveren, zilvervoetige, zilverhandige lente,\nde zomerige lente.",
-    ),
-    (
-        None,
-        "Kijk nu, ze strooit den zomer rond\ndie vliegt om haar rond\nuit haar mond,\nrond haar boezem, haar gladde rug, haar beenen\nzoo donslicht omschenen,\nze gaat langs de horizonnen\nmaar aldoor omme,\nze heeft toch zoo veel, ze kan geven\nwel, zie het lichte sneven\nvan al dat kwijnende levende stervende opflikkerend licht\nen daar midde' in haar gezicht,\nzie je het wel, zie je het wel —\nhow licht hoe wit hoe goud hoe schel,\nhoe kunnen we het toch verdragen\nvan ochtend tot avonddage,\nkom weer, kom bij me weer\ngij mijn lieve, mijn lieve, lieve, lieve oogenbegeer.",
-    ),
-    (
-        None,
-        "O ze valt op mijn borst,\nhaar mond midde' in de dorst\nvan mijn mond, haar roode zachte weeke punttong —\n't is of ze heelemaal in me drong.",
-    ),
-    (
-        None,
-        "De straalpralende dag,\nde aardwijde hemeldag,\nlente in nooit geziene\nlicht — het blauw moesseliene\nwittig schitt'rend omhoog,\nalleen ' t zongouden éénoog.\n\nBinnen is kalm gepraal\npaarllicht, niet één zonnestraal.",
-    ),
-    (
-        None,
-        "k zal terugkomen En dan zal ik de waarheid zeggen. Ik zal zeggen dat gij op de schilderijen van Van Gogh en den dommen Millet arme boeren en vervallen levens kunt zien; maar ik zèg wanneer ge iemand in de stad ziet wandelen in fraaigesneden kleeding, iemand met ’n opgeruimden tred en ’n lachend gelaat, zóó iemand arm is en ik zal er bijvoegen dat die boeren rijk zijn. Kijk eens naar de brabantsche dier-boeren welken Vincent schildert het is alles bij elkaâr ’n komedie van Armoede.\n\nNeen van Gogh, neen Millet! Gij liegt. De boer is ’n ongemest beest, dat zich zelf èn zijn vrouw en zijne kinderen laar verarmen en verhongeren. Hij wil er uitzien als ’n schooier en zijne familie is ’n familie van schooiers wonende in stinkende beestenhokken, levende op steenen vloeren. Wanneer ’n schilder dus bij mij, die nu de waarheid weet van den Boer aankomt met vervallen hutjes en arme gehavende boeren, dan zal ik in het openbaar waar mijn mond door iedereen gezien wordt, in het licht op dat werk spuwen.\n\nWeg met uwe Schijnvertooning van leugens. Wij willen de waarheid der Kunst.",
-    ),
-    (
-        None,
-        "Leidt ons niet in Verzoeking!\nTracht niet op ons sentimenteel gevoel te werken, door voor ons armoedige gezichten uit te stallen. Het is de bedoeling der Kunst niet dat wij na het zien van vorm en kleur de hand in den zak steken om ’n bedelaar of boer ’n aalmoes te geven. Het is de bedoeling der schilderkunst dat wij na het zien der eigenschappen van Vorm, kleur, rythme het Leven lief hebben de waarheid kennen, de gedachte begrijpen de hartstochten beminnen.",
-    ),
-    (
-        None,
-        "s Gravenhage den 27 July. Eergiſteren zyn dertig van des Konings Lyfguardes na Loo vertrokken. De Karoſſen van ſijn Majeſteit zyn na Honslardyk, en word Hoog gemelde ſijne Majt. in ’t kort te gemoet geſien. De Heeren Staten van Holland en Weſt-Vriesland, die tot giſteren middag by een zyn geweeſt, ſullen aenſtaende Dingsdag weder vergaderen. De Heer van Dykvelt word in 1 a 2 dagen van Bruſsel verwagt. De Tranſportſchepen met des Konings paerden zyn uyt Engeland aengekomen, en gaen de tachtig Lyfguardes morgen of overmorgen vanhier, om in de tranſportſchepen na Engeland ſcheep te gaen. Deſe voormiddag is de Envoyé van Portugael de Heer Pachieco van Utrecht weder alhier aengekomen. Wegens den Raed van State zyn tot de verpachtinge genomineerd de Heeren de Vicq en van Renſwou na ’s Hertogenboſch en andere plaetsen op de Maes, en de Heeren de Lange en Eeck na die van Vlaenderen, werwaerts zy in d’aenſtaende maend ſullen vertrekken. De Heer vander Clouſen is vertrokken, om de beſtedinge van de aerde Fortificatiewerken tot Zutphen en Swol, nevens andere Heeren Gecommitteerden van den Raed van State by te woonen. De Generael Zales, Gouverneur van Breda, is alhier aengekomen, en worden in ’t kort noch meer Generaels en andere Heeren verwagt, onder anderen de Hertog van Holſtein Pleun. De Brigadier en Opper Jagermeeſter van den Koning is uyt Engeland aengekomen.",
-    ),
-    (
-        None,
-        "Morgen, 16 Mei, zal de bouwmeester Dr. Cuypers den eerbiedwaardigen leeftijd van tachtig jaren hebben bereikt. Wij wenschen bij deze gelegenheid enkele feiten uit zijn werkzaam leven bijeen te brengen.\n\nPetrus Josephus Hubertus Cuypers, geboren 16 Mei 1827 te Roermond, ontving een gymnasiale opleiding in zijn geboortestad. Hij studeerde van 1846 af aan de Academie te Antwerpen en behaalde er in 1849 den »prix d’excellence« en de gouden medaille voor bouwkunst. Zijn verdere studie volbracht hij in Frankrijk en Duitschland. Op last van den bisschop van Roermond ontwierp hij in 1859 het restauratieplan van de Onze-Lieve-Vrouwen-Munsterkerk. Door een conflict met de kerkeraden kwam hij in aanraking met Viollet-le-Duc, die als scheidsrechter naar Roermond ontboden was, en van dien tijd dagteekent een groote vriendschap met den meest bekenden en kundigsten van alle Fransche archaeologen.",
+        "Allen die zich in Nederland bevinden, zijn vrij en bevoegd tot het genot van de burgerlijke rechten.\n\nPersoonlijke dienstbaarheden, van welke aard of onder welke benaming ook, worden niet geduld.",
     ),
 ]
 
-NOTE_GROUPS = ["Research", "Poetry", "History"]
+NOTE_GROUPS = ["Grondwet", "Strafrecht", "Privaatrecht"]
 
 STICKY_SEEDS = [
-    {"content": "Buy milk", "colour": "yellow"},
-    {"content": "Call dentist", "colour": "pink", "pinned": True},
-    {"content": "Pick up parcel", "colour": "orange"},
-    {"content": "Water plants", "colour": "green"},
+    {"content": "De wet regelt wie Nederlander is.", "colour": "yellow"},
     {
-        "title": "Pay rent",
-        "content": "Transfer by the 1st, landlord's account details are in the notes app.",
+        "content": "De doodstraf kan niet worden opgelegd.",
+        "colour": "pink",
+        "pinned": True,
+    },
+    {"content": "Goederen zijn alle zaken en alle vermogensrechten.", "colour": "orange"},
+    {
+        "content": "Zaken zijn de voor menselijke beheersing vatbare stoffelijke objecten.",
+        "colour": "green",
+    },
+    {
+        "title": "Artikel 6 Gemeentewet",
+        "content": "In elke gemeente is een raad, een college en een burgemeester.",
         "colour": "blue",
         "pinned": True,
     },
-    {"content": "Laundry", "colour": "yellow"},
     {
-        "title": "Groceries",
-        "content": "- [x] bread\n- [ ] cheese\n- [ ] coffee\n- [ ] something for the weekend",
+        "content": "De raad vertegenwoordigt de gehele bevolking van de gemeente.",
+        "colour": "yellow",
+    },
+    {
+        "title": "Artikel 300 Sr",
+        "content": "- [x] Mishandeling wordt gestraft met gevangenisstraf van ten hoogste drie jaren of geldboete van de vierde categorie.\n- [ ] Indien het feit zwaar lichamelijk letsel ten gevolge heeft, wordt de schuldige gestraft met gevangenisstraf van ten hoogste vier jaren of geldboete van de vierde categorie.\n- [ ] Met mishandeling wordt gelijkgesteld opzettelijke benadeling van de gezondheid.",
         "colour": "green",
     },
-    {"content": "Renew library books", "colour": "pink", "expires_days": -3},
-    {"content": "Bring plants inside", "colour": "orange", "expires_days": 2},
-    {"content": "Take out trash", "colour": "green"},
-    {"content": "Check tyre pressure", "colour": "blue"},
     {
-        "title": "Concert tickets",
+        "content": "Er is een Kiesraad, gevestigd te 's-Gravenhage.",
+        "colour": "pink",
+        "expires_days": -3,
+    },
+    {
+        "content": "De overheid treft maatregelen ter bevordering van de volksgezondheid.",
+        "colour": "orange",
+        "expires_days": 2,
+    },
+    {"content": "Poging tot dit misdrijf is niet strafbaar.", "colour": "green"},
+    {
+        "content": "Persoonlijke dienstbaarheden, van welke aard of onder welke benaming ook, worden niet geduld.",
+        "colour": "blue",
+    },
+    {
+        "title": "Artikel 7:1 BW",
         "colour": "purple",
         "expires_days": 5,
     },
     {
-        "title": "Old warranty reminder",
+        "title": "Artikel 453 Sr",
         "colour": "purple",
         "pinned": True,
         "expires_days": -10,
     },
-    {"content": "Cancel old subscription", "colour": "orange", "deleted": True},
+    {
+        "content": "Hij die zich in kennelijke staat van dronkenschap op de openbare weg bevindt, wordt gestraft met hechtenis van ten hoogste twaalf dagen of geldboete van de eerste categorie.",
+        "colour": "orange",
+        "deleted": True,
+    },
 ]
 
 
 TODO_SEEDS = [
     {
-        "title": "Clean apartment",
+        "title": "Hoofdstuk 1 Grondwet",
         "state": "open",
         "content": (
-            "Whole place needs a proper clean.\n\n"
-            "- [ ] vacuum floors\n"
-            "- [ ] wipe kitchen surfaces\n"
-            "- [ ] sort clutter on desk\n"
-            "- [ ] bathroom cleanup"
+            "- [ ] Allen die zich in Nederland bevinden, worden in gelijke gevallen gelijk behandeld. Discriminatie wegens godsdienst, levensovertuiging, politieke gezindheid, ras, geslacht, handicap, seksuele gerichtheid of op welke grond dan ook, is niet toegestaan.\n"
+            "- [ ] De wet regelt wie Nederlander is.\n"
+            "- [ ] De zorg van de overheid is gericht op de bewoonbaarheid van het land en de bescherming en verbetering van het leefmilieu.\n"
+            "- [ ] De overheid treft maatregelen ter bevordering van de volksgezondheid."
         ),
-        "group": "Home",
+        "group": "Grondwet",
     },
     {
-        "title": "Do groceries",
+        "title": "Artikel 2 Grondwet",
         "state": "active",
         "content": (
-            "Basic food supplies running low.\n\n"
-            "Need:\n\n"
-            "- [x] milk\n"
-            "- [x] bread\n"
-            "- [ ] eggs\n"
-            "- [ ] coffee\n"
-            "- [ ] fruit"
+            "- [x] De wet regelt wie Nederlander is.\n"
+            "- [x] De wet regelt de toelating en de uitzetting van vreemdelingen.\n"
+            "- [ ] Uitlevering kan slechts geschieden krachtens verdrag. Verdere voorschriften omtrent uitlevering worden bij de wet gegeven.\n"
+            "- [ ] Ieder heeft het recht het land te verlaten, behoudens in de gevallen, bij de wet bepaald."
         ),
-        "group": "Home",
+        "group": "Grondwet",
     },
     {
-        "title": "Call dentist",
+        "title": "Artikel 310 Sr",
         "state": "open",
-        "content": "Book routine check-up.\n\nPrefer morning slot if available.",
+        "content": "Hij die enig goed dat geheel of ten dele aan een ander toebehoort wegneemt, met het oogmerk om het zich wederrechtelijk toe te eigenen, wordt, als schuldig aan diefstal, gestraft met gevangenisstraf van ten hoogste vier jaren of geldboete van de vierde categorie.",
         "deadline_days": 3,
-        "group": "Health",
+        "group": "Strafrecht",
     },
     {
-        "title": "Sort paperwork",
+        "title": "Artikel 32 Grondwet",
         "state": "active",
-        "content": "Old letters and documents.\n\nMostly things that should probably be thrown away.",
+        "content": "Nadat de Koning de uitoefening van het koninklijk gezag heeft aangevangen, wordt hij zodra mogelijk beëdigd en ingehuldigd in de hoofdstad Amsterdam in een openbare verenigde vergadering van de Staten-Generaal. Hij zweert of belooft trouw aan de Grondwet en een getrouwe vervulling van zijn ambt. De wet stelt nadere regels vast.",
         "archived": True,
     },
     {
-        "title": "Laundry",
+        "title": "Artikel 114 Grondwet",
         "state": "done",
-        "content": "Washed and folded.\n\nStill need to put some things back in place.",
+        "content": "De doodstraf kan niet worden opgelegd.",
     },
     {
-        "title": "Return library books",
+        "title": "Artikel 461 Sr",
         "state": "open",
-        "content": "Due soon.\n\nCheck if there are any late fees already.",
+        "content": "Hij die, zonder daartoe gerechtigd te zijn, zich op eens anders grond waarvan de toegang op een voor hem blijkbare wijze door de rechthebbende is verboden, bevindt of daar vee laat lopen, wordt gestraft met geldboete van de eerste categorie.",
         "deadline_days": -2,
     },
     {
-        "title": "Pay bills",
+        "title": "Artikel 7:1 BW",
         "state": "active",
-        "content": "Internet and electricity pending.\n\nShould take less than 5 minutes once logged in.",
+        "content": "Koop is de overeenkomst waarbij de een zich verbindt een zaak te geven en de ander om daarvoor een prijs in geld te betalen.",
         "deadline_days": 1,
-        "group": "Finance",
+        "group": "Burgerlijk recht",
     },
     {
-        "title": "Plan weekend",
+        "title": "Artikel 6:162 BW",
         "state": "open",
         "content": (
-            "Keep it simple.\n\nMaybe:\n\n"
-            "- [ ] clean a bit\n"
-            "- [ ] go outside if weather is ok\n"
-            "- [ ] rest"
+            "- [ ] Hij die jegens een ander een onrechtmatige daad pleegt, welke hem kan worden toegerekend, is verplicht de schade die de ander dientengevolge lijdt, te vergoeden.\n"
+            "- [ ] Als onrechtmatige daad worden aangemerkt een inbreuk op een recht en een doen of nalaten in strijd met een wettelijke plicht of met hetgeen volgens ongeschreven recht in het maatschappelijk verkeer betaamt, een en ander behoudens de aanwezigheid van een rechtvaardigingsgrond.\n"
+            "- [ ] Een onrechtmatige daad kan aan de dader worden toegerekend, indien zij te wijten is aan zijn schuld of aan een oorzaak welke krachtens de wet of de in het verkeer geldende opvattingen voor zijn rekening komt."
         ),
     },
     {
-        "title": "Buy household items",
+        "title": "Artikelen 3:1, 3:2 en 5:1 BW",
         "state": "done",
         "content": (
-            "Lightbulbs, cleaning supplies.\n\n"
-            "- [x] lightbulbs\n"
-            "- [x] cleaning supplies\n"
-            "- [x] checked what else is running low"
+            "- [x] Goederen zijn alle zaken en alle vermogensrechten.\n"
+            "- [x] Zaken zijn de voor menselijke beheersing vatbare stoffelijke objecten.\n"
+            "- [x] Eigendom is het meest omvattende recht dat een persoon op een zaak kan hebben."
         ),
-        "group": "Home",
+        "group": "Burgerlijk recht",
     },
     {
-        "title": "Call family",
+        "title": "Artikel 6 Gemeentewet",
         "state": "active",
-        "content": "Check in sometime this week.",
+        "content": "In elke gemeente is een raad, een college en een burgemeester.",
     },
-    {"title": "Stamps", "state": "done", "content": ""},
-    {"title": "Wash car", "state": "cancelled", "content": "", "deleted": True},
+    {"title": "Artikel A 2 Kieswet", "state": "done", "content": ""},
     {
-        "title": "Book flights",
+        "title": "Artikel 453 Sr",
         "state": "cancelled",
-        "content": "Prices went up too much, waiting for a better deal.\n\nMight revisit next month.",
+        "content": "Vervallen per 01-07-2024.",
+        "deleted": True,
     },
     {
-        "title": "Repot plants",
+        "title": "Artikel 430b Sr",
+        "state": "cancelled",
+        "content": "Hij die zich in kennelijke staat van dronkenschap op de openbare weg bevindt, wordt gestraft met hechtenis van ten hoogste twaalf dagen of geldboete van de eerste categorie.",
+    },
+    {
+        "title": "Artikel 6:179 BW",
         "state": "done",
-        "content": "Did all three. One had root rot but seemed otherwise fine.",
+        "content": "De bezitter van een dier is aansprakelijk voor de door het dier aangerichte schade, tenzij aansprakelijkheid op grond van de vorige afdeling zou hebben ontbroken indien hij de gedraging van het dier waardoor de schade werd toegebracht, in zijn macht zou hebben gehad.",
     },
     {
-        "title": "Submit expense report",
+        "title": "Artikel 1:30 BW",
         "state": "open",
-        "content": "Due today, receipts are already scanned.",
+        "content": "Een huwelijk kan worden aangegaan door twee personen van verschillend of van gelijk geslacht.\n\nDe wet beschouwt het huwelijk alleen in zijn burgerlijke betrekkingen.",
         "deadline_days": 0,
-        "group": "Finance",
+        "group": "Burgerlijk recht",
     },
     {
-        "title": "Water succulents",
+        "title": "Artikel 22 Grondwet",
         "state": "open",
-        "content": "Only need this every couple of weeks.",
+        "content": "De overheid treft maatregelen ter bevordering van de volksgezondheid.\n\nBevordering van voldoende woongelegenheid is voorwerp van zorg der overheid.\n\nZij schept voorwaarden voor maatschappelijke en culturele ontplooiing en voor vrijetijdsbesteding.",
         "deadline_days": 20,
-        "group": "Home",
+        "group": "Grondwet",
     },
     {
-        "title": "Take out recycling",
+        "title": "Artikel 424 Sr",
         "state": "open",
-        "content": "Bins go out every other week.",
+        "content": "Hij die op of aan de openbare weg of op enige voor het publiek toegankelijke plaats tegen personen of goederen enige baldadigheid pleegt waardoor gevaar of nadeel kan worden teweeggebracht, wordt, als schuldig aan straatschenderij, gestraft met geldboete van de eerste categorie.",
         "deadline_days": 2,
-        "group": "Home",
+        "group": "Strafrecht",
     },
     {
-        "title": "Review monthly budget",
+        "title": "Artikel 5:13 BW",
         "state": "open",
-        "content": "Go through spending and update the sheet.",
+        "content": "Een schat komt voor gelijke delen toe aan degene die hem ontdekt, en aan de eigenaar van de onroerende of roerende zaak, waarin de schat wordt aangetroffen.\n\nEen schat is een zaak van waarde, die zolang verborgen is geweest dat daardoor de eigenaar niet meer kan worden opgespoord.",
         "deadline_days": 10,
-        "group": "Finance",
+        "group": "Burgerlijk recht",
     },
     {
-        "title": "Reorganize home office",
+        "title": "Artikelen 5:42 en 5:44 BW",
         "state": "open",
         "content": (
-            "Desk setup has been bugging me for a while, finally have a free day to deal with it.\n\n"
-            "## Plan\n\n"
-            "1. [ ] Take everything off the desk and sort into keep / trash / storage\n"
-            "2. [ ] Move monitor arm to the other side, cable runs are cleaner that way\n"
-            "3. [ ] Get rid of the second chair, it's just collecting stuff\n"
-            "4. [ ] Figure out where the box of old cables actually needs to go\n\n"
-            "## Cables\n\n"
-            "Should probably just buy a cable tray instead of doing another zip-tie job "
-            "that falls apart in three months.\n\n"
-            "## Not doing this time\n\n"
-            "- painting the wall (separate weekend project)\n"
-            "- new desk (current one is fine, just messy)\n\n"
-            "If this takes longer than a day I'll just stop and pick it up next weekend "
-            "instead of rushing it."
+            "## Artikel 42\n\n"
+            "1. Het is niet geoorloofd binnen de in lid 2 bepaalde afstand van de grenslijn van eens anders erf bomen, heesters of heggen te hebben, tenzij de eigenaar daartoe toestemming heeft gegeven of dat erf een openbare weg of een openbaar water is.\n"
+            "2. De in lid 1 bedoelde afstand bedraagt voor bomen twee meter te rekenen vanaf het midden van de voet van de boom en voor de heesters en heggen een halve meter, tenzij ingevolge een verordening of een plaatselijke gewoonte een kleinere afstand is toegelaten.\n"
+            "3. De nabuur kan zich niet verzetten tegen de aanwezigheid van bomen, heesters of heggen die niet hoger reiken dan de scheidsmuur tussen de erven.\n"
+            "4. Ter zake van een volgens dit artikel ongeoorloofde toestand is slechts vergoeding verschuldigd van de schade, ontstaan na het tijdstip waartegen tot opheffing van die toestand is aangemaand.\n\n"
+            "## Artikel 44\n\n"
+            "1. Indien een nabuur wiens beplantingen over eens anders erf heenhangen, ondanks aanmaning van de eigenaar van dit erf, nalaat het overhangende te verwijderen, kan laatstgenoemde eigenaar eigenmachtig het overhangende wegsnijden en zich toeëigenen.\n"
+            "2. Degene op wiens erf wortels van een ander erf doorschieten, mag deze voor zover ze doorgeschoten zijn weghakken en zich toeëigenen."
         ),
     },
     {
-        "title": "Prepare tax return",
+        "title": "Artikel 23 Grondwet",
         "state": "active",
         "content": (
-            "Deadline is coming up, so actually collecting everything instead of putting "
-            "it off again.\n\n"
-            "## To collect\n\n"
-            "- [x] annual income statement\n"
-            "- [ ] freelance receipts (spread across three folders, really need to fix that)\n"
-            "- [ ] mortgage overview\n"
-            "- [x] savings account statement as of December 31st\n\n"
-            "## Questions for the accountant\n\n"
-            "1. Does the new laptop still count as a deduction this year or only next year\n"
-            "2. What to do with the bit of freelance work from last year, separate or just include it\n\n"
-            "Don't want to leave it too long, last year it turned into a last-minute "
-            "scramble to get everything in on time."
+            "## Artikel 23\n\n"
+            "- [x] Het onderwijs is een voorwerp van de aanhoudende zorg der regering.\n"
+            "- [x] Het geven van onderwijs is vrij, behoudens het toezicht van de overheid en, voor wat bij de wet aangewezen vormen van onderwijs betreft, het onderzoek naar de bekwaamheid en de zedelijkheid van hen die onderwijs geven, een en ander bij de wet te regelen.\n"
+            "- [ ] Het openbaar onderwijs wordt, met eerbiediging van ieders godsdienst of levensovertuiging, bij de wet geregeld.\n"
+            "- [ ] De regering doet jaarlijks van de staat van het onderwijs verslag aan de Staten-Generaal."
         ),
         "deadline_days": 6,
-        "group": "Finance",
+        "group": "Grondwet",
     },
 ]
 
