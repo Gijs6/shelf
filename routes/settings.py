@@ -216,7 +216,7 @@ def import_data():
     file = request.files.get("file")
     if not file or not file.filename:
         flash("Choose a JSON file to import.", "error")
-        return redirect(url_for("settings.index"), code=303)
+        return index(), 400
 
     try:
         payload = json.load(file.stream)
@@ -247,7 +247,7 @@ def import_data():
     except (ValueError, TypeError, AttributeError, KeyError):
         db.session.rollback()
         flash("That file isn't a valid Shelf export.", "error")
-        return redirect(url_for("settings.index"), code=303)
+        return index(), 400
 
     calendar_token = (payload.get("settings") or {}).get("calendar_token")
     if calendar_token:
@@ -268,7 +268,7 @@ def rename_group():
 
     if not old_name or not new_name:
         flash("Enter a new group name.", "error")
-        return redirect(url_for("settings.index"), code=303)
+        return index(), 400
 
     existing = find_existing_group_name(new_name)
     if existing and existing != old_name:

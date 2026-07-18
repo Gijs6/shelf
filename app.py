@@ -123,7 +123,7 @@ def login_get():
 @app.post("/login", endpoint="login_post")
 def login_post():
     if is_logged_in():
-        return redirect(url_for("index"))
+        return redirect(url_for("index"), code=303)
     password = request.form.get("password", "")
     stored_hash = os.getenv("PASSWORD_HASH", "")
     if stored_hash and check_password_hash(stored_hash, password):
@@ -131,7 +131,7 @@ def login_post():
         session["last_login"] = now()
         return redirect(url_for("index"), code=303)
     flash("Incorrect password.", "error")
-    return render_template("login.jinja")
+    return render_template("login.jinja"), 401
 
 
 @app.post("/logout")
@@ -145,7 +145,7 @@ def require_login():
     allowed = ["login", "login_post", "logout", "static", "todos.ical_feed"]
     if request.endpoint and request.endpoint not in allowed:
         if not is_logged_in():
-            return redirect(url_for("login"))
+            return redirect(url_for("login"), code=303)
 
 
 @app.errorhandler(404)

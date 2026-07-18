@@ -231,7 +231,7 @@ def toggle_pin(sticky_note_id):
     )
 
 
-@sticky_notes_bp.delete("/<sticky_note_id>/delete")
+@sticky_notes_bp.delete("/<sticky_note_id>")
 def delete_sticky_note(sticky_note_id):
     sticky_note = StickyNote.query.get_or_404(sticky_note_id)
     sticky_note.deleted_at = now()

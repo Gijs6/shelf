@@ -181,7 +181,7 @@ def convert_note_to_sticky_note(note_id):
     )
 
 
-@notes_bp.delete("/<note_id>/delete")
+@notes_bp.delete("/<note_id>")
 def delete_note(note_id):
     note = Note.query.get_or_404(note_id)
     note.deleted_at = now()

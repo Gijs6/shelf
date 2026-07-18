@@ -230,7 +230,7 @@ def set_state(todo_id):
     state = request.form.get("state")
     if state not in TODO_STATES:
         flash("Invalid state.", "error")
-        return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
+        return render_template("todos/view.jinja", todo=todo, states=TODO_STATES), 400
 
     was_done = todo.state == "done"
     todo.state = state
@@ -312,7 +312,7 @@ def convert_todo_to_sticky_note(todo_id):
     )
 
 
-@todos_bp.delete("/<todo_id>/delete")
+@todos_bp.delete("/<todo_id>")
 def delete_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.deleted_at = now()
