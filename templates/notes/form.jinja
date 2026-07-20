@@ -1,6 +1,7 @@
 {% extends "base.jinja" %}
 
 {% from "partials/icons.jinja" import icon %}
+{% from "partials/indicator.jinja" import section_indicator %}
 
 {% block title %}
     {% if note and note.id %}
@@ -14,11 +15,12 @@
 {% block content %}
     <header class="page-header page-header--note">
         <div class="page-header__heading">
+            {{ section_indicator("note") }}
             <h1 class="page-header__title">
                 {% if note and note.id %}
-                    Notes > edit {{ note.id }}
+                    Edit {{ note.id }}
                 {% else %}
-                    Notes > new
+                    New
                 {% endif %}
             </h1>
         </div>

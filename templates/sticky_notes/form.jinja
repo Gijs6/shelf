@@ -1,6 +1,7 @@
 {% extends "base.jinja" %}
 
 {% from "partials/icons.jinja" import icon %}
+{% from "partials/indicator.jinja" import section_indicator %}
 
 {% block title %}
     {% if sticky_note and sticky_note.id %}
@@ -14,11 +15,12 @@
 {% block content %}
     <header class="page-header page-header--sticky">
         <div class="page-header__heading">
+            {{ section_indicator("sticky") }}
             <h1 class="page-header__title">
                 {% if sticky_note and sticky_note.id %}
-                    Sticky notes > edit {{ sticky_note.id }}
+                    Edit {{ sticky_note.id }}
                 {% else %}
-                    Sticky notes > new
+                    New
                 {% endif %}
             </h1>
         </div>
