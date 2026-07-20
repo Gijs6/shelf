@@ -58,7 +58,7 @@ def index():
         .limit(5)
         .all()
     )
-    
+
     recent_notes = (
         Note.query.filter(~Note.deleted).order_by(Note.updated_at.desc()).limit(5).all()
     )
