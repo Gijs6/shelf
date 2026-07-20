@@ -2,6 +2,7 @@ import secrets
 import string
 from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import and_
 from sqlalchemy.ext.hybrid import hybrid_property
 
 
@@ -86,12 +87,20 @@ class StickyNote(db.Model):
     pinned = db.Column(db.Boolean, nullable=False, default=False)
     deleted_at = db.Column(db.DateTime, nullable=True)
 
-    @property
+    @hybrid_property
     def expired(self):
         return (
             not self.pinned
             and self.expires_at is not None
             and self.expires_at < datetime.now()
+        )
+
+    @expired.expression
+    def expired(cls):
+        return and_(
+            cls.pinned.is_(False),
+            cls.expires_at.isnot(None),
+            cls.expires_at < datetime.now(),
         )
 
     @hybrid_property
@@ -149,12 +158,20 @@ class Todo(db.Model):
     def display_title(self):
         return self.title or self.snippet or "Untitled"
 
-    @property
+    @hybrid_property
     def overdue(self):
         return (
             self.deadline is not None
             and self.state not in ("done", "cancelled")
             and self.deadline < datetime.now()
+        )
+
+    @overdue.expression
+    def overdue(cls):
+        return and_(
+            cls.deadline.isnot(None),
+            cls.state.notin_(["done", "cancelled"]),
+            cls.deadline < datetime.now(),
         )
 
     @property

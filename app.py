@@ -47,70 +47,37 @@ def is_logged_in():
 
 @app.get("/")
 def index():
-    recent_notes = (
-        Note.query.filter(Note.deleted.is_(False))
-        .order_by(Note.updated_at.desc())
-        .limit(5)
-        .all()
-    )
-
-    sticky_notes = (
-        StickyNote.query.filter(StickyNote.deleted.is_(False))
-        .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
-        .all()
-    )
-    dashboard_sticky_notes = [s for s in sticky_notes if s.pinned or not s.expired][:6]
-
-    current_time = datetime.now()
-    week_ago = now() - timedelta(days=7)
-
-    stats = {
-        "total_items": (
-            Note.query.count() + Todo.query.count() + StickyNote.query.count()
-        ),
-        "notes": Note.query.filter(
-            Note.deleted.is_(False), Note.archived.is_(False)
-        ).count(),
-        "open_todos": Todo.query.filter(
-            Todo.deleted.is_(False),
-            Todo.archived.is_(False),
-            Todo.state.in_(["open", "active"]),
-        ).count(),
-        "overdue_todos": Todo.query.filter(
-            Todo.deleted.is_(False),
-            Todo.archived.is_(False),
-            Todo.state.notin_(["done", "cancelled"]),
-            Todo.deadline.isnot(None),
-            Todo.deadline < current_time,
-        ).count(),
-        "sticky_notes": StickyNote.query.filter(StickyNote.deleted.is_(False)).count(),
-        "completed_week": Todo.query.filter(
-            Todo.deleted.is_(False),
-            Todo.completed_at.isnot(None),
-            Todo.completed_at >= week_ago,
-        ).count(),
-    }
-
-    due_todos = (
+    upcoming_todos = (
         Todo.query.filter(
-            Todo.deleted.is_(False),
-            Todo.archived.is_(False),
+            ~Todo.deleted,
+            ~Todo.archived,
             Todo.deadline.isnot(None),
             Todo.state.notin_(["done", "cancelled"]),
         )
-        .order_by(Todo.deadline.asc())
+        .order_by(Todo.overdue.desc(), Todo.deadline.asc())
+        .limit(5)
         .all()
     )
+    
+    recent_notes = (
+        Note.query.filter(~Note.deleted).order_by(Note.updated_at.desc()).limit(5).all()
+    )
 
-    upcoming_todos = due_todos[:5]
+    sticky_notes = (
+        StickyNote.query.filter(
+            ~StickyNote.deleted,
+            StickyNote.pinned.is_(True) | ~StickyNote.expired,
+        )
+        .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
+        .limit(6)
+        .all()
+    )
 
     return render_template(
         "dashboard.jinja",
         recent_notes=recent_notes,
-        sticky_notes=dashboard_sticky_notes,
+        sticky_notes=sticky_notes,
         upcoming_todos=upcoming_todos,
-        current_time=current_time,
-        stats=stats,
     )
 
 

@@ -142,7 +142,7 @@ def is_blank(data):
 def expired_sticky_notes():
     return [
         sticky_note
-        for sticky_note in StickyNote.query.filter(StickyNote.deleted.is_(False)).all()
+        for sticky_note in StickyNote.query.filter(~StickyNote.deleted).all()
         if sticky_note.expired
     ]
 

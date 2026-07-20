@@ -12,7 +12,7 @@ notes_bp = Blueprint("notes", __name__, url_prefix="/notes")
 @notes_bp.get("/")
 def list_notes():
     notes = (
-        Note.query.filter(Note.deleted.is_(False), Note.archived.is_(False))
+        Note.query.filter(~Note.deleted, ~Note.archived)
         .order_by(Note.updated_at.desc())
         .all()
     )
@@ -29,7 +29,7 @@ def trash():
 @notes_bp.get("/archived")
 def archived():
     notes = (
-        Note.query.filter(Note.archived, Note.deleted.is_(False))
+        Note.query.filter(Note.archived, ~Note.deleted)
         .order_by(Note.archived_at.desc())
         .all()
     )
@@ -63,25 +63,25 @@ def create_note():
 
 @notes_bp.get("/<note_id>")
 def view_note(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
     return render_template("notes/view.jinja", note=note)
 
 
 @notes_bp.patch("/<note_id>/checkbox")
 def toggle_note_checkbox(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
     return toggle_item_checkbox(note, show_updated_at=True)
 
 
 @notes_bp.get("/<note_id>/edit")
 def edit_note(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
     return render_template("notes/form.jinja", note=note, groups=all_group_names())
 
 
 @notes_bp.put("/<note_id>")
 def update_note(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
 
     title = request.form.get("title", "").strip() or None
     content = request.form.get("content", "")
@@ -107,7 +107,7 @@ def update_note(note_id):
 
 @notes_bp.post("/<note_id>/duplicate")
 def duplicate_note(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
 
     duplicate = Note(title=note.title, content=note.content, group_name=note.group_name)
     db.session.add(duplicate)
@@ -118,7 +118,7 @@ def duplicate_note(note_id):
 
 @notes_bp.post("/<note_id>/convert/todo")
 def convert_note_to_todo(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
 
     todo = Todo(
         title=note.title,
@@ -136,7 +136,7 @@ def convert_note_to_todo(note_id):
 
 @notes_bp.post("/<note_id>/convert/sticky-note")
 def convert_note_to_sticky_note(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
 
     dropped = []
     if note.group_name:
@@ -199,7 +199,7 @@ def purge_note(note_id):
 
 @notes_bp.patch("/<note_id>/archive")
 def archive_note(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
     note.archived_at = now()
     db.session.commit()
     flash_with_undo("Note archived.", url_for("notes.unarchive_note", note_id=note.id))
@@ -208,7 +208,7 @@ def archive_note(note_id):
 
 @notes_bp.patch("/<note_id>/unarchive")
 def unarchive_note(note_id):
-    note = Note.query.filter(Note.id == note_id, Note.deleted.is_(False)).first_or_404()
+    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
     note.archived_at = None
     db.session.commit()
     flash_with_undo("Note unarchived.", url_for("notes.archive_note", note_id=note.id))

@@ -12,45 +12,6 @@
         <h1 class="page-header__title">Dashboard</h1>
     </header>
 
-    <dl class="stat-row">
-        <div class="stat-tile">
-            <dt class="stat-tile__label">{{ icon("database") }} Total items</dt>
-            <dd class="stat-tile__value">
-                {{ stats.total_items }}
-            </dd>
-        </div>
-        <div class="stat-tile">
-            <dt class="stat-tile__label">{{ icon("note") }} Notes</dt>
-            <dd class="stat-tile__value stat-tile__value--note">
-                {{ stats.notes }}
-            </dd>
-        </div>
-        <div class="stat-tile">
-            <dt class="stat-tile__label">{{ icon("todo") }} Open todos</dt>
-            <dd class="stat-tile__value stat-tile__value--todo">
-                {{ stats.open_todos }}
-            </dd>
-        </div>
-        <div class="stat-tile">
-            <dt class="stat-tile__label">{{ icon("clock") }} Overdue</dt>
-            <dd class="stat-tile__value{% if stats.overdue_todos %} stat-tile__value--danger{% endif %}">
-                {{ stats.overdue_todos }}
-            </dd>
-        </div>
-        <div class="stat-tile">
-            <dt class="stat-tile__label">{{ icon("sticky") }} Sticky notes</dt>
-            <dd class="stat-tile__value stat-tile__value--sticky">
-                {{ stats.sticky_notes }}
-            </dd>
-        </div>
-        <div class="stat-tile">
-            <dt class="stat-tile__label">{{ icon("check-circle") }} Completed this week</dt>
-            <dd class="stat-tile__value stat-tile__value--success">
-                {{ stats.completed_week }}
-            </dd>
-        </div>
-    </dl>
-
     <div class="dashboard-grid">
         <section class="dashboard-widget">
             <h2 class="dashboard-widget__title">{{ icon("clock") }} Upcoming and overdue todos</h2>

@@ -1,7 +1,7 @@
 import re
 from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import and_, func, or_
+from sqlalchemy import func, or_
 
 from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, make_snippet
 
@@ -124,7 +124,7 @@ def search(raw_query, limit=50):
     results = []
 
     if "note" in types:
-        query = Note.query.filter(Note.deleted.is_(False))
+        query = Note.query.filter(~Note.deleted)
         if parsed["archived"] is not None:
             query = query.filter(Note.archived.is_(parsed["archived"]))
         if parsed["group"]:
@@ -152,7 +152,7 @@ def search(raw_query, limit=50):
             )
 
     if "todo" in types:
-        query = Todo.query.filter(Todo.deleted.is_(False))
+        query = Todo.query.filter(~Todo.deleted)
         if parsed["archived"] is not None:
             query = query.filter(Todo.archived.is_(parsed["archived"]))
         if parsed["state"]:
@@ -160,13 +160,7 @@ def search(raw_query, limit=50):
         if parsed["group"]:
             query = query.filter(func.lower(Todo.group_name) == parsed["group"].lower())
         if parsed["overdue"] is not None:
-            current_time = datetime.now()
-            is_overdue = and_(
-                Todo.deadline.isnot(None),
-                Todo.state.notin_(["done", "cancelled"]),
-                Todo.deadline < current_time,
-            )
-            query = query.filter(is_overdue if parsed["overdue"] else ~is_overdue)
+            query = query.filter(Todo.overdue if parsed["overdue"] else ~Todo.overdue)
         if parsed["before"] is not None:
             query = query.filter(Todo.created_at < parsed["before"])
         if parsed["after"] is not None:
@@ -210,7 +204,7 @@ def search(raw_query, limit=50):
             )
 
     if "sticky" in types:
-        query = StickyNote.query.filter(StickyNote.deleted.is_(False))
+        query = StickyNote.query.filter(~StickyNote.deleted)
         if parsed["pinned"] is not None:
             query = query.filter(StickyNote.pinned == parsed["pinned"])
         if parsed["colour"]:
