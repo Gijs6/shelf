@@ -364,7 +364,7 @@ body {
 .entry-card {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 11rem;
+    grid-template-columns: 1fr auto;
     column-gap: var(--space-md);
     row-gap: var(--space-2xs);
     padding: var(--space-sm) var(--space-md);
