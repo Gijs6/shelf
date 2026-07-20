@@ -66,9 +66,7 @@ def index():
 
     stats = {
         "total_items": (
-            Note.query.filter(Note.deleted_at.is_(None)).count()
-            + Todo.query.filter(Todo.deleted_at.is_(None)).count()
-            + StickyNote.query.filter(StickyNote.deleted_at.is_(None)).count()
+            Note.query.count() + Todo.query.count() + StickyNote.query.count()
         ),
         "notes": Note.query.filter(
             Note.deleted_at.is_(None), Note.archived_at.is_(None)
