@@ -342,7 +342,7 @@ body {
     gap: var(--space-sm);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .editor__body {
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -469,7 +469,7 @@ body {
     color: var(--color-danger);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .entry-card {
         grid-template-columns: 1fr;
         grid-template-rows: none;
@@ -611,7 +611,7 @@ a.badge:hover {
     z-index: 200;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .flash {
         left: var(--space-md);
     }
@@ -789,7 +789,7 @@ a.badge:hover {
     font-weight: 700;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .markdown table {
         display: block;
         overflow-x: auto;

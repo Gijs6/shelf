@@ -58,7 +58,7 @@
     border: 1px solid var(--color-border);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .dashboard-widget {
         padding: var(--space-md);
     }

@@ -29,7 +29,7 @@
     font-weight: 700;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .navbar {
         gap: var(--space-sm);
         padding: var(--space-sm) var(--space-md);
@@ -98,7 +98,7 @@
     border-left: 3px solid var(--color-section);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .page {
         padding: var(--space-lg) var(--space-md);
     }
