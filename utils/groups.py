@@ -23,8 +23,8 @@ def all_group_names():
     for model in (Note, Todo):
         rows = (
             model.query.filter(
-                model.deleted_at.is_(None),
-                model.archived_at.is_(None),
+                model.deleted.is_(False),
+                model.archived.is_(False),
                 model.group_name.isnot(None),
             )
             .with_entities(model.group_name)
@@ -38,7 +38,7 @@ def find_existing_group_name(raw):
     for model in (Note, Todo):
         match = (
             model.query.filter(
-                model.deleted_at.is_(None), func.lower(model.group_name) == raw.lower()
+                model.deleted.is_(False), func.lower(model.group_name) == raw.lower()
             )
             .with_entities(model.group_name)
             .first()
@@ -60,8 +60,8 @@ def group_name_counts():
     for model, key in ((Note, "notes"), (Todo, "todos")):
         rows = (
             model.query.filter(
-                model.deleted_at.is_(None),
-                model.archived_at.is_(None),
+                model.deleted.is_(False),
+                model.archived.is_(False),
                 model.group_name.isnot(None),
             )
             .with_entities(model.group_name, func.count())

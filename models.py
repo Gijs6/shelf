@@ -2,6 +2,7 @@ import secrets
 import string
 from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 db = SQLAlchemy()
@@ -45,13 +46,21 @@ class Note(db.Model):
     deleted_at = db.Column(db.DateTime, nullable=True)
     archived_at = db.Column(db.DateTime, nullable=True)
 
-    @property
+    @hybrid_property
     def deleted(self):
         return self.deleted_at is not None
 
-    @property
+    @deleted.expression
+    def deleted(cls):
+        return cls.deleted_at.isnot(None)
+
+    @hybrid_property
     def archived(self):
         return self.archived_at is not None
+
+    @archived.expression
+    def archived(cls):
+        return cls.archived_at.isnot(None)
 
     @property
     def snippet(self):
@@ -85,9 +94,13 @@ class StickyNote(db.Model):
             and self.expires_at < datetime.now()
         )
 
-    @property
+    @hybrid_property
     def deleted(self):
         return self.deleted_at is not None
+
+    @deleted.expression
+    def deleted(cls):
+        return cls.deleted_at.isnot(None)
 
     @property
     def display_title(self):
@@ -112,13 +125,21 @@ class Todo(db.Model):
     deleted_at = db.Column(db.DateTime, nullable=True)
     archived_at = db.Column(db.DateTime, nullable=True)
 
-    @property
+    @hybrid_property
     def deleted(self):
         return self.deleted_at is not None
 
-    @property
+    @deleted.expression
+    def deleted(cls):
+        return cls.deleted_at.isnot(None)
+
+    @hybrid_property
     def archived(self):
         return self.archived_at is not None
+
+    @archived.expression
+    def archived(cls):
+        return cls.archived_at.isnot(None)
 
     @property
     def snippet(self):

@@ -48,14 +48,14 @@ def is_logged_in():
 @app.get("/")
 def index():
     recent_notes = (
-        Note.query.filter(Note.deleted_at.is_(None))
+        Note.query.filter(Note.deleted.is_(False))
         .order_by(Note.updated_at.desc())
         .limit(5)
         .all()
     )
 
     sticky_notes = (
-        StickyNote.query.filter(StickyNote.deleted_at.is_(None))
+        StickyNote.query.filter(StickyNote.deleted.is_(False))
         .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
         .all()
     )
@@ -69,25 +69,23 @@ def index():
             Note.query.count() + Todo.query.count() + StickyNote.query.count()
         ),
         "notes": Note.query.filter(
-            Note.deleted_at.is_(None), Note.archived_at.is_(None)
+            Note.deleted.is_(False), Note.archived.is_(False)
         ).count(),
         "open_todos": Todo.query.filter(
-            Todo.deleted_at.is_(None),
-            Todo.archived_at.is_(None),
+            Todo.deleted.is_(False),
+            Todo.archived.is_(False),
             Todo.state.in_(["open", "active"]),
         ).count(),
         "overdue_todos": Todo.query.filter(
-            Todo.deleted_at.is_(None),
-            Todo.archived_at.is_(None),
+            Todo.deleted.is_(False),
+            Todo.archived.is_(False),
             Todo.state.notin_(["done", "cancelled"]),
             Todo.deadline.isnot(None),
             Todo.deadline < current_time,
         ).count(),
-        "sticky_notes": StickyNote.query.filter(
-            StickyNote.deleted_at.is_(None)
-        ).count(),
+        "sticky_notes": StickyNote.query.filter(StickyNote.deleted.is_(False)).count(),
         "completed_week": Todo.query.filter(
-            Todo.deleted_at.is_(None),
+            Todo.deleted.is_(False),
             Todo.completed_at.isnot(None),
             Todo.completed_at >= week_ago,
         ).count(),
@@ -95,8 +93,8 @@ def index():
 
     due_todos = (
         Todo.query.filter(
-            Todo.deleted_at.is_(None),
-            Todo.archived_at.is_(None),
+            Todo.deleted.is_(False),
+            Todo.archived.is_(False),
             Todo.deadline.isnot(None),
             Todo.state.notin_(["done", "cancelled"]),
         )

@@ -142,9 +142,7 @@ def is_blank(data):
 def expired_sticky_notes():
     return [
         sticky_note
-        for sticky_note in StickyNote.query.filter(
-            StickyNote.deleted_at.is_(None)
-        ).all()
+        for sticky_note in StickyNote.query.filter(StickyNote.deleted.is_(False)).all()
         if sticky_note.expired
     ]
 
@@ -160,11 +158,9 @@ def index():
     last_login = session.get("last_login")
     session_expires_at = last_login + SESSION_LIFETIME if last_login else None
     trash_counts = {
-        "notes": Note.query.filter(Note.deleted_at.isnot(None)).count(),
-        "sticky_notes": StickyNote.query.filter(
-            StickyNote.deleted_at.isnot(None)
-        ).count(),
-        "todos": Todo.query.filter(Todo.deleted_at.isnot(None)).count(),
+        "notes": Note.query.filter(Note.deleted).count(),
+        "sticky_notes": StickyNote.query.filter(StickyNote.deleted).count(),
+        "todos": Todo.query.filter(Todo.deleted).count(),
     }
     return render_template(
         "settings/index.jinja",
@@ -292,15 +288,11 @@ def rename_group():
 @settings_bp.delete("/trash")
 def purge_all_trash():
     counts = {
-        "notes": Note.query.filter(Note.deleted_at.isnot(None)).delete(
+        "notes": Note.query.filter(Note.deleted).delete(synchronize_session=False),
+        "sticky_notes": StickyNote.query.filter(StickyNote.deleted).delete(
             synchronize_session=False
         ),
-        "sticky_notes": StickyNote.query.filter(
-            StickyNote.deleted_at.isnot(None)
-        ).delete(synchronize_session=False),
-        "todos": Todo.query.filter(Todo.deleted_at.isnot(None)).delete(
-            synchronize_session=False
-        ),
+        "todos": Todo.query.filter(Todo.deleted).delete(synchronize_session=False),
     }
     db.session.commit()
 

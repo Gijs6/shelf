@@ -124,13 +124,9 @@ def search(raw_query, limit=50):
     results = []
 
     if "note" in types:
-        query = Note.query.filter(Note.deleted_at.is_(None))
+        query = Note.query.filter(Note.deleted.is_(False))
         if parsed["archived"] is not None:
-            query = query.filter(
-                Note.archived_at.isnot(None)
-                if parsed["archived"]
-                else Note.archived_at.is_(None)
-            )
+            query = query.filter(Note.archived.is_(parsed["archived"]))
         if parsed["group"]:
             query = query.filter(func.lower(Note.group_name) == parsed["group"].lower())
         if parsed["before"] is not None:
@@ -156,13 +152,9 @@ def search(raw_query, limit=50):
             )
 
     if "todo" in types:
-        query = Todo.query.filter(Todo.deleted_at.is_(None))
+        query = Todo.query.filter(Todo.deleted.is_(False))
         if parsed["archived"] is not None:
-            query = query.filter(
-                Todo.archived_at.isnot(None)
-                if parsed["archived"]
-                else Todo.archived_at.is_(None)
-            )
+            query = query.filter(Todo.archived.is_(parsed["archived"]))
         if parsed["state"]:
             query = query.filter(Todo.state == parsed["state"])
         if parsed["group"]:
@@ -218,7 +210,7 @@ def search(raw_query, limit=50):
             )
 
     if "sticky" in types:
-        query = StickyNote.query.filter(StickyNote.deleted_at.is_(None))
+        query = StickyNote.query.filter(StickyNote.deleted.is_(False))
         if parsed["pinned"] is not None:
             query = query.filter(StickyNote.pinned == parsed["pinned"])
         if parsed["colour"]:

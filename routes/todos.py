@@ -52,7 +52,7 @@ def parse_todo_form(form):
 
 @todos_bp.get("/")
 def list_todos():
-    query = Todo.query.filter(Todo.deleted_at.is_(None), Todo.archived_at.is_(None))
+    query = Todo.query.filter(Todo.deleted.is_(False), Todo.archived.is_(False))
 
     if "state" in request.args:
         selected_states = [s for s in request.args.getlist("state") if s in TODO_STATES]
@@ -81,18 +81,14 @@ def list_todos():
 
 @todos_bp.get("/trash")
 def trash():
-    todos = (
-        Todo.query.filter(Todo.deleted_at.isnot(None))
-        .order_by(Todo.deleted_at.desc())
-        .all()
-    )
+    todos = Todo.query.filter(Todo.deleted).order_by(Todo.deleted_at.desc()).all()
     return render_template("todos/trash.jinja", todos=todos)
 
 
 @todos_bp.get("/archived")
 def archived():
     todos = (
-        Todo.query.filter(Todo.archived_at.isnot(None), Todo.deleted_at.is_(None))
+        Todo.query.filter(Todo.archived, Todo.deleted.is_(False))
         .order_by(Todo.archived_at.desc())
         .all()
     )
@@ -107,8 +103,8 @@ def ical_feed(token):
 
     todos = (
         Todo.query.filter(
-            Todo.deleted_at.is_(None),
-            Todo.archived_at.is_(None),
+            Todo.deleted.is_(False),
+            Todo.archived.is_(False),
             Todo.deadline.isnot(None),
             Todo.state.notin_(["done", "cancelled"]),
         )
@@ -151,25 +147,19 @@ def create_todo():
 
 @todos_bp.get("/<todo_id>")
 def view_todo(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
     return render_template("todos/view.jinja", todo=todo, states=TODO_STATES)
 
 
 @todos_bp.patch("/<todo_id>/checkbox")
 def toggle_todo_checkbox(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
     return toggle_item_checkbox(todo, show_updated_at=True)
 
 
 @todos_bp.get("/<todo_id>/edit")
 def edit_todo(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
     return render_template(
         "todos/form.jinja",
         todo=todo,
@@ -180,9 +170,7 @@ def edit_todo(todo_id):
 
 @todos_bp.put("/<todo_id>")
 def update_todo(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
 
     fields, error = parse_todo_form(request.form)
 
@@ -207,9 +195,7 @@ def update_todo(todo_id):
 
 @todos_bp.post("/<todo_id>/duplicate")
 def duplicate_todo(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
 
     duplicate = Todo(
         title=todo.title,
@@ -225,9 +211,7 @@ def duplicate_todo(todo_id):
 
 @todos_bp.patch("/<todo_id>/state")
 def set_state(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
     state = request.form.get("state")
     if state not in TODO_STATES:
         flash("Invalid state.", "error")
@@ -238,7 +222,7 @@ def set_state(todo_id):
     todo.completed_at = now() if state == "done" else None
     todo.active_at = now() if state == "active" else None
     todo.updated_at = now()
-    if state == "done" and todo.archived_at is None:
+    if state == "done" and not todo.archived:
         todo.archived_at = now()
     elif was_done and state != "done":
         todo.archived_at = None
@@ -262,9 +246,7 @@ def dropped_todo_fields(todo, include_group):
 
 @todos_bp.post("/<todo_id>/convert/note")
 def convert_todo_to_note(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
 
     dropped = dropped_todo_fields(todo, include_group=False)
     content = todo.content
@@ -288,9 +270,7 @@ def convert_todo_to_note(todo_id):
 
 @todos_bp.post("/<todo_id>/convert/sticky-note")
 def convert_todo_to_sticky_note(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
 
     dropped = dropped_todo_fields(todo, include_group=True)
     content = todo.content
@@ -339,9 +319,7 @@ def restore_todo(todo_id):
 
 @todos_bp.delete("/<todo_id>/purge")
 def purge_todo(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.isnot(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted).first_or_404()
     db.session.delete(todo)
     db.session.commit()
     flash("Todo permanently deleted.", "success")
@@ -350,9 +328,7 @@ def purge_todo(todo_id):
 
 @todos_bp.patch("/<todo_id>/archive")
 def archive_todo(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
     todo.archived_at = now()
     db.session.commit()
     flash_with_undo("Todo archived.", url_for("todos.unarchive_todo", todo_id=todo.id))
@@ -361,9 +337,7 @@ def archive_todo(todo_id):
 
 @todos_bp.patch("/<todo_id>/unarchive")
 def unarchive_todo(todo_id):
-    todo = Todo.query.filter(
-        Todo.id == todo_id, Todo.deleted_at.is_(None)
-    ).first_or_404()
+    todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted.is_(False)).first_or_404()
     todo.archived_at = None
     db.session.commit()
     flash_with_undo("Todo unarchived.", url_for("todos.archive_todo", todo_id=todo.id))
