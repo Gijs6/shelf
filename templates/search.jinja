@@ -34,84 +34,103 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">is:note</code> <code class="modal__chip">is:todo</code> <code class="modal__chip">is:sticky</code>
+                        <code class="modal__chip">is:note</code>
+                        <code class="modal__chip">is:todo</code>
+                        <code class="modal__chip">is:sticky</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Only that type (repeat to combine)
+                        Filter by item type. Multiple types can be combined.
                     </dd>
                 </div>
             </dl>
         </section>
 
         <section class="modal__group">
-            <h3 class="modal__group-title">Todo filters</h3>
+            <h3 class="modal__group-title">Todo</h3>
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">state:shelved|open|active|done|cancelled</code>
+                        <code class="modal__chip">state:open</code>
+                        <code class="modal__chip">state:active</code>
+                        <code class="modal__chip">state:done</code>
+                        <code class="modal__chip">state:cancelled</code>
+                        <code class="modal__chip">state:shelved</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        By todo state
+                        Filter by todo status.
                     </dd>
                 </div>
+
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">overdue:yes</code> / <code class="modal__chip">no</code>
+                        <code class="modal__chip">overdue:yes</code>
+                        <code class="modal__chip">overdue:no</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Overdue todos
+                        Show todos that are overdue or not overdue.
                     </dd>
                 </div>
+
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">due:today</code> / <code class="modal__chip">due:week</code>
+                        <code class="modal__chip">due:today</code>
+                        <code class="modal__chip">due:week</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Due today / within 7 days
+                        Show todos due today or within the next 7 days.
                     </dd>
                 </div>
             </dl>
         </section>
 
         <section class="modal__group">
-            <h3 class="modal__group-title">Sticky note filters</h3>
+            <h3 class="modal__group-title">Sticky notes</h3>
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">pinned:yes</code> / <code class="modal__chip">no</code>
+                        <code class="modal__chip">pinned:yes</code>
+                        <code class="modal__chip">pinned:no</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Pinned sticky notes
+                        Filter pinned sticky notes.
                     </dd>
                 </div>
+
                 <div class="modal__row">
                     <dt class="modal__row-term">
+                        <code class="modal__chip">colour:yellow</code>
                         <code class="modal__chip">colour:pink</code>
+                        <code class="modal__chip">colour:blue</code>
+                        <code class="modal__chip">colour:green</code>
+                        <code class="modal__chip">colour:purple</code>
+                        <code class="modal__chip">colour:orange</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        yellow, pink, blue, green, purple, orange
+                        Filter by sticky note colour.
                     </dd>
                 </div>
             </dl>
         </section>
 
         <section class="modal__group">
-            <h3 class="modal__group-title">Notes &amp; todos</h3>
+            <h3 class="modal__group-title">Groups &amp; archive</h3>
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
                         <code class="modal__chip">group:home</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Exact group name
+                        Match an exact group name.
                     </dd>
                 </div>
+
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">archived:yes</code> / <code class="modal__chip">no</code>
+                        <code class="modal__chip">archived:yes</code>
+                        <code class="modal__chip">archived:no</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Archived items
+                        Include or exclude archived items.
                     </dd>
                 </div>
             </dl>
@@ -122,38 +141,35 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">before:2026-01-01</code>
+                        <code class="modal__chip">before:YYYY-MM-DD</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Created before a date (YYYY-MM-DD, all types)
+                        Items created before this date.
                     </dd>
                 </div>
+
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">after:2026-01-01</code>
+                        <code class="modal__chip">after:YYYY-MM-DD</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Created on/after a date (YYYY-MM-DD, all types) - for todo deadlines use <code>due:today</code> / <code>due:week</code> instead
+                        Items created on or after this date.
                     </dd>
                 </div>
             </dl>
         </section>
 
         <section class="modal__group">
-            <h3 class="modal__group-title">Sorting &amp; text</h3>
+            <h3 class="modal__group-title">Sorting</h3>
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">sort:title</code> / <code class="modal__chip">sort:created</code> / <code class="modal__chip">sort:updated</code>
+                        <code class="modal__chip">sort:title</code>
+                        <code class="modal__chip">sort:created</code>
+                        <code class="modal__chip">sort:updated</code>
                     </dt>
                     <dd class="modal__row-desc">
-                        Default: last updated
-                    </dd>
-                </div>
-                <div class="modal__row">
-                    <dt class="modal__row-term">Any other words</dt>
-                    <dd class="modal__row-desc">
-                        Matched against title &amp; content
+                        Sort results. Default: last updated.
                     </dd>
                 </div>
             </dl>
