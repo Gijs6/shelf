@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from models import STICKY_COLOURS, Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
+from utils.flash import flash_with_undo
 
 
 sticky_notes_bp = Blueprint("sticky_notes", __name__, url_prefix="/sticky-notes")
@@ -236,7 +237,10 @@ def delete_sticky_note(sticky_note_id):
     sticky_note = StickyNote.query.get_or_404(sticky_note_id)
     sticky_note.deleted_at = now()
     db.session.commit()
-    flash("Sticky note moved to trash.", "success")
+    flash_with_undo(
+        "Sticky note moved to trash.",
+        url_for("sticky_notes.restore_sticky_note", sticky_note_id=sticky_note.id),
+    )
     return redirect(
         request.referrer or url_for("sticky_notes.list_sticky_notes"), code=303
     )
@@ -247,7 +251,11 @@ def restore_sticky_note(sticky_note_id):
     sticky_note = StickyNote.query.get_or_404(sticky_note_id)
     sticky_note.deleted_at = None
     db.session.commit()
-    flash("Sticky note restored.", "success")
+    flash_with_undo(
+        "Sticky note restored.",
+        url_for("sticky_notes.delete_sticky_note", sticky_note_id=sticky_note.id),
+        undo_method="DELETE",
+    )
     return redirect(url_for("sticky_notes.trash"), code=303)
 
 

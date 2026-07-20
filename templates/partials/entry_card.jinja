@@ -1,12 +1,12 @@
 {% macro todo_badges(todo) %}
-    <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
+    <span class="badge{% if todo.state=='shelved' %} badge--shelved{% elif todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
     {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
 {% endmacro %}
 
 {% macro entry_card(item, url=none, heading_level=2, timestamp=none, timestamp_label=none, badges=none) %}
     {% set shown_at = timestamp | default(item.updated_at, true) %}
     <li>
-        <article class="entry-card">
+        <article class="entry-card entry-card--{{ item.kind }}">
             {% set title_inner %}
                 {% if url %}
                     <a href="{{ url }}" class="entry-card__link">

@@ -14,13 +14,11 @@
         </div>
         <nav class="page-header__actions" aria-label="Note actions">
             <a href="{{ url_for('notes.archived') }}"
-               class="button button--ghost button--sm button--icon-only"
-               aria-label="Archived notes"
-               data-shortcut="archived">{{ icon("archive") }}</a>
+               class="button button--ghost"
+               data-shortcut="archived">{{ icon("archive") }} Archived</a>
             <a href="{{ url_for('notes.trash') }}"
-               class="button button--ghost button--sm button--icon-only"
-               aria-label="Trash"
-               data-shortcut="trash">{{ icon("trash") }}</a>
+               class="button button--ghost"
+               data-shortcut="trash">{{ icon("trash") }} Trash</a>
             <a href="{{ url_for('notes.new_note') }}"
                class="button"
                data-shortcut="new">{{ icon("plus") }} New</a>

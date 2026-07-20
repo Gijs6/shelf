@@ -9,10 +9,16 @@
 
 {% block content %}
     <header class="page-header">
-        <h1 class="page-header__title">{{ icon("home") }} Dashboard</h1>
+        <h1 class="page-header__title">Dashboard</h1>
     </header>
 
     <dl class="stat-row">
+        <div class="stat-tile">
+            <dt class="stat-tile__label">{{ icon("database") }} Total items</dt>
+            <dd class="stat-tile__value">
+                {{ stats.total_items }}
+            </dd>
+        </div>
         <div class="stat-tile">
             <dt class="stat-tile__label">{{ icon("note") }} Notes</dt>
             <dd class="stat-tile__value stat-tile__value--note">

@@ -9,7 +9,7 @@
 {% block content %}
     <header class="page-header">
         <div class="page-header__heading">
-            <h1 class="page-header__title">{{ icon("search") }} Search</h1>
+            <h1 class="page-header__title">Search</h1>
         </div>
         <menu class="page-header__actions">
             <li>
@@ -48,7 +48,7 @@
             <dl class="modal__list">
                 <div class="modal__row">
                     <dt class="modal__row-term">
-                        <code class="modal__chip">state:open|active|done|cancelled</code>
+                        <code class="modal__chip">state:shelved|open|active|done|cancelled</code>
                     </dt>
                     <dd class="modal__row-desc">
                         By todo state
@@ -186,14 +186,15 @@
         {% if not query %}
             {{ empty_state('search', 'Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes, due:today, due:week, before:2026-01-01, after:2026-01-01, sort:title, sort:created, colour:pink') }}
         {% elif results %}
+            <p class="search-results__count">{{ results | length }} result{{ "s" if results | length != 1 else "" }}</p>
             <ul class="card-list">
                 {% for result in results %}
                     {% set badges %}
                         <span class="badge badge--{{ result.kind }}">{{ icon(result.kind) }} {{ result.kind | capitalize }}</span>
                         {% if result.kind == "todo" %}{{ todo_badges(result) }}{% endif %}
-                        {% if result.kind in ("note", "todo") and result.archived %}<span class="badge">{{ icon("archive") }} Archived</span>{% endif %}
-                        {% if result.kind == "sticky" and result.pinned %}<span class="badge">{{ icon("pin") }} Pinned</span>{% endif %}
-                        {% if result.get("group_name") %}<span class="badge">{{ icon("folder") }} {{ result.group_name }}</span>{% endif %}
+                        {% if result.kind in ("note", "todo") and result.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
+                        {% if result.kind == "sticky" and result.pinned %}<span class="badge badge--neutral">{{ icon("pin") }} Pinned</span>{% endif %}
+                        {% if result.get("group_name") %}<span class="badge badge--group">{{ icon("folder") }} {{ result.group_name }}</span>{% endif %}
                     {% endset %}
                     {{ entry_card(result, url=url_for(result.endpoint, **result.url_kwargs) , badges=badges) }}
                 {% endfor %}

@@ -13,6 +13,7 @@ from datetime import datetime
 
 from models import TODO_STATES, Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
+from utils.flash import flash_with_undo
 from utils.groups import all_group_names, group_sections, normalize_group_name
 from utils.ical import build_todo_calendar
 from utils.settings import CALENDAR_TOKEN_KEY, get_setting
@@ -317,7 +318,9 @@ def delete_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.deleted_at = now()
     db.session.commit()
-    flash("Todo moved to trash.", "success")
+    flash_with_undo(
+        "Todo moved to trash.", url_for("todos.restore_todo", todo_id=todo.id)
+    )
     return redirect(url_for("todos.list_todos"), code=303)
 
 
@@ -326,7 +329,11 @@ def restore_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.deleted_at = None
     db.session.commit()
-    flash("Todo restored.", "success")
+    flash_with_undo(
+        "Todo restored.",
+        url_for("todos.delete_todo", todo_id=todo.id),
+        undo_method="DELETE",
+    )
     return redirect(url_for("todos.trash"), code=303)
 
 
@@ -348,7 +355,7 @@ def archive_todo(todo_id):
     ).first_or_404()
     todo.archived_at = now()
     db.session.commit()
-    flash("Todo archived.", "success")
+    flash_with_undo("Todo archived.", url_for("todos.unarchive_todo", todo_id=todo.id))
     return redirect(request.referrer or url_for("todos.list_todos"), code=303)
 
 
@@ -359,5 +366,5 @@ def unarchive_todo(todo_id):
     ).first_or_404()
     todo.archived_at = None
     db.session.commit()
-    flash("Todo unarchived.", "success")
+    flash_with_undo("Todo unarchived.", url_for("todos.archive_todo", todo_id=todo.id))
     return redirect(request.referrer or url_for("todos.archived"), code=303)

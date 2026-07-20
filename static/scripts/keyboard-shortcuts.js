@@ -6,7 +6,7 @@
         c: { n: routes.newNote, t: routes.newTodo, s: routes.newStickyNote }
     };
 
-    var TODO_STATE_ORDER = ["open", "active", "done", "cancelled"];
+    var TODO_STATE_ORDER = ["shelved", "open", "active", "done", "cancelled"];
 
     var pendingChord = null;
     var chordTimer = null;
@@ -119,7 +119,7 @@
                 e.preventDefault();
                 deleteForm.requestSubmit();
             }
-        } else if (e.key >= "1" && e.key <= "4") {
+        } else if (e.key >= "1" && e.key <= "5") {
             var state = TODO_STATE_ORDER[Number(e.key) - 1];
             var stateButton = document.querySelector('.state-picker button[data-state="' + state + '"]');
             if (stateButton) {

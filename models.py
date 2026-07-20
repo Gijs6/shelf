@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 STICKY_COLOURS = ["yellow", "pink", "blue", "green", "purple", "orange"]
-TODO_STATES = ["open", "active", "done", "cancelled"]
+TODO_STATES = ["shelved", "open", "active", "done", "cancelled"]
 SNIPPET_LENGTH = 80
 
 ID_LENGTH = 8
@@ -61,6 +61,10 @@ class Note(db.Model):
     def display_title(self):
         return self.title or self.snippet or "Untitled"
 
+    @property
+    def kind(self):
+        return "note"
+
 
 class StickyNote(db.Model):
     id = db.Column(db.String(ID_LENGTH), primary_key=True, default=generate_id)
@@ -88,6 +92,10 @@ class StickyNote(db.Model):
     @property
     def display_title(self):
         return self.title or make_snippet(self.content) or "Untitled"
+
+    @property
+    def kind(self):
+        return "sticky"
 
 
 class Todo(db.Model):
@@ -127,3 +135,7 @@ class Todo(db.Model):
             and self.state not in ("done", "cancelled")
             and self.deadline < datetime.now()
         )
+
+    @property
+    def kind(self):
+        return "todo"

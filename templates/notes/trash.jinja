@@ -3,6 +3,7 @@
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/empty_state.jinja" import empty_state %}
 {% from "partials/entry_card.jinja" import entry_card %}
+{% from "partials/indicator.jinja" import section_indicator %}
 
 {% block title %}Notes trash{% endblock %}
 {% block page_class %}page--note{% endblock %}
@@ -10,7 +11,8 @@
 {% block content %}
     <header class="page-header page-header--note">
         <div class="page-header__heading">
-            <h1 class="page-header__title">Notes trash</h1>
+            {{ section_indicator("note") }}
+            <h1 class="page-header__title">Trash</h1>
         </div>
     </header>
 

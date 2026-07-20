@@ -1,0 +1,5 @@
+.search-results__count {
+    margin: 0 0 var(--space-sm) 0;
+    color: var(--color-fg-muted);
+    font-size: var(--font-size-sm);
+}

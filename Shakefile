@@ -25,34 +25,5 @@ build() {
 deploy() {
   build
   echo "$(date +%Y.%m):$(git rev-parse --short HEAD):$(git rev-list --count HEAD)" > VERSION
-  lift deploy
-}
-
-format() {
-  ruff format .
-  prettier --write "**/*.{css,js}"
-  djlint . --reformat
-}
-
-genpass() {
-  python3 -c "from werkzeug.security import generate_password_hash; import sys; print(generate_password_hash(sys.argv[1]))" "$1"
-}
-
-
-publish() {
-  if ! git diff-index --quiet HEAD --; then
-    git stash push -m "bake-publish"
-    STASHED=1
-  else
-    STASHED=0
-  fi
-
-  format || true
-  git commit -a -m "Format repo" || true
-
-  if [ "$STASHED" -eq 1 ]; then
-    git stash pop
-  fi
-
-  git push & deploy & wait
+  shake_super deploy
 }

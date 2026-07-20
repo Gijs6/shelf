@@ -7,6 +7,12 @@
     border: none;
 }
 
+.state-picker__option--shelved.state-picker__option--selected {
+    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    border-color: var(--color-fg-muted);
+    color: var(--color-fg-muted);
+}
+
 .state-picker__option--open.state-picker__option--selected {
     background-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
     border-color: var(--color-accent);

@@ -5,6 +5,7 @@
             <div class="flash" aria-live="polite" aria-atomic="false">
                 <ul class="flash__list">
                     {% for category, message in messages %}
+                        {% set text = message.text if message is mapping else message %}
                         <li class="flash__item flash__item--{{ category }}">
                             {% if category == "success" %}
                                 {{ icon("check-circle") }}
@@ -13,7 +14,17 @@
                             {% elif category == "info" %}
                                 {{ icon("info") }}
                             {% endif %}
-                            {{ message }}
+                            <span class="flash__text">{{ text }}</span>
+                            {% if message is mapping and message.undo_url %}
+                                {# djlint:off #}
+                                <form class="flash__undo-form"
+                                      hx-{{ message.undo_method | lower }}="{{ message.undo_url }}"
+                                      hx-target="body"
+                                      hx-push-url="true">
+                                    <button type="submit" class="button button--ghost button--sm">Undo</button>
+                                </form>
+                                {# djlint:on #}
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>

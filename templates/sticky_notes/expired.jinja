@@ -2,6 +2,7 @@
 
 {% from "partials/empty_state.jinja" import empty_state %}
 {% from "partials/sticky_card.jinja" import sticky_card %}
+{% from "partials/indicator.jinja" import section_indicator %}
 
 {% block title %}Expired sticky notes{% endblock %}
 {% block page_class %}page--sticky{% endblock %}
@@ -9,7 +10,8 @@
 {% block content %}
     <header class="page-header page-header--sticky">
         <div class="page-header__heading">
-            <h1 class="page-header__title">Expired sticky notes</h1>
+            {{ section_indicator("sticky") }}
+            <h1 class="page-header__title">Expired</h1>
         </div>
     </header>
 

@@ -65,6 +65,11 @@ def index():
     week_ago = now() - timedelta(days=7)
 
     stats = {
+        "total_items": (
+            Note.query.filter(Note.deleted_at.is_(None)).count()
+            + Todo.query.filter(Todo.deleted_at.is_(None)).count()
+            + StickyNote.query.filter(StickyNote.deleted_at.is_(None)).count()
+        ),
         "notes": Note.query.filter(
             Note.deleted_at.is_(None), Note.archived_at.is_(None)
         ).count(),

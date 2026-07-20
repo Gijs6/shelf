@@ -1,7 +1,7 @@
 {% extends "base.jinja" %}
 
 {% from "partials/icons.jinja" import icon %}
-{% from "partials/eyebrow.jinja" import type_eyebrow %}
+{% from "partials/indicator.jinja" import type_indicator %}
 {% from "partials/updated_at.jinja" import updated_at_span %}
 
 {% block title %}{{ todo.display_title | markdown_plain }}{% endblock %}
@@ -11,13 +11,17 @@
     <article>
         <header class="page-header page-header--todo">
             <hgroup class="page-header__heading">
-                {{ type_eyebrow("todo") }}
+                {{ type_indicator("todo") }}
                 <h1 class="page-header__title">
                     {{ todo.display_title | markdown_inline }}
                     <span class="page-header__badges">
-                        <span class="badge{% if todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
+                        <span class="badge{% if todo.state=='shelved' %} badge--shelved{% elif todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
                         {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
-                        {% if todo.archived %}<span class="badge">Archived</span>{% endif %}
+                        {% if todo.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
+                        {% if todo.group_name %}
+                            <a class="badge badge--group"
+                               href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
+                        {% endif %}
                     </span>
                 </h1>
             </hgroup>
@@ -38,7 +42,7 @@
                           hx-post="{{ url_for('todos.duplicate_todo', todo_id=todo.id) }}"
                           hx-target="body"
                           hx-push-url="true">
-                        <button type="submit" class="button button--ghost">{{ icon("copy") }} Duplicate</button>
+                        <button type="submit" class="button button--ghost">{{ icon("duplicate") }} Duplicate</button>
                     </form>
                 </li>
                 <li>
@@ -89,11 +93,6 @@
         </form>
 
         <ul class="detail-meta">
-            {% if todo.group_name %}
-                <li class="detail-meta__item">
-                    <a href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
-                </li>
-            {% endif %}
             <li class="detail-meta__item">
                 Made
                 <time datetime="{{ todo.created_at | isoformat(local=False) }}">{{ todo.created_at | strftime(local=False) }}</time>

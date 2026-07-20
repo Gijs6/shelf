@@ -1,0 +1,21 @@
+{% from "partials/icons.jinja" import icon %}
+
+{% macro type_indicator(type) %}
+    {% if type == "note" %}
+        <p class="page-header__indicator page-header__indicator--note">{{ icon("note") }} Note</p>
+    {% elif type == "todo" %}
+        <p class="page-header__indicator page-header__indicator--todo">{{ icon("todo") }} Todo</p>
+    {% elif type == "sticky" %}
+        <p class="page-header__indicator page-header__indicator--sticky">{{ icon("sticky") }} Sticky note</p>
+    {% endif %}
+{% endmacro %}
+
+{% macro section_indicator(type) %}
+    {% if type == "note" %}
+        <p class="page-header__indicator page-header__indicator--note">Notes</p>
+    {% elif type == "todo" %}
+        <p class="page-header__indicator page-header__indicator--todo">Todos</p>
+    {% elif type == "sticky" %}
+        <p class="page-header__indicator page-header__indicator--sticky">Sticky notes</p>
+    {% endif %}
+{% endmacro %}

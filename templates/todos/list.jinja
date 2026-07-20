@@ -14,13 +14,11 @@
         </div>
         <nav class="page-header__actions" aria-label="Todo actions">
             <a href="{{ url_for('todos.archived') }}"
-               class="button button--ghost button--sm button--icon-only"
-               aria-label="Archived todos"
-               data-shortcut="archived">{{ icon("archive") }}</a>
+               class="button button--ghost"
+               data-shortcut="archived">{{ icon("archive") }} Archived</a>
             <a href="{{ url_for('todos.trash') }}"
-               class="button button--ghost button--sm button--icon-only"
-               aria-label="Trash"
-               data-shortcut="trash">{{ icon("trash") }}</a>
+               class="button button--ghost"
+               data-shortcut="trash">{{ icon("trash") }} Trash</a>
             <a href="{{ url_for('todos.new_todo') }}"
                class="button"
                data-shortcut="new">{{ icon("plus") }} New</a>

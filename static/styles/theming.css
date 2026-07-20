@@ -29,7 +29,7 @@ body {
 
 .button {
     display: inline-block;
-    padding: var(--space-xs) var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
     border: 1px solid transparent;
     background-color: var(--color-section-fill);
     color: var(--color-fg-on-section);
@@ -71,10 +71,6 @@ body {
 .button--block {
     width: 100%;
     justify-content: center;
-}
-
-.button--icon-only {
-    align-content: center;
 }
 
 .field__input {
@@ -374,6 +370,19 @@ body {
     padding: var(--space-sm) var(--space-md);
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-section);
+}
+
+.entry-card--note {
+    border-left-color: var(--color-note);
+}
+
+.entry-card--todo {
+    border-left-color: var(--color-todo);
+}
+
+.entry-card--sticky {
+    border-left-color: var(--color-sticky);
 }
 
 .entry-card__title {
@@ -509,56 +518,70 @@ body {
     font-weight: 700;
     background-color: var(--color-surface);
     color: var(--color-fg-muted);
-    border: 1px solid var(--color-border);
     text-wrap: nowrap;
+}
+
+.badge--shelved {
+    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    color: var(--color-fg-muted);
 }
 
 .badge--open {
     background-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
     color: var(--color-accent-text);
-    border-color: transparent;
 }
 
 .badge--active {
     background-color: color-mix(in srgb, var(--color-info) 16%, var(--color-surface));
     color: var(--color-info);
-    border-color: transparent;
 }
 
 .badge--done {
     background-color: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
     color: var(--color-success);
-    border-color: transparent;
 }
 
 .badge--cancelled {
     background-color: color-mix(in srgb, var(--color-warning) 16%, var(--color-surface));
     color: var(--color-warning);
-    border-color: transparent;
 }
 
 .badge--overdue {
     background-color: color-mix(in srgb, var(--color-danger) 16%, var(--color-surface));
     color: var(--color-danger);
-    border-color: transparent;
 }
 
 .badge--note {
     background-color: color-mix(in srgb, var(--color-note) 16%, var(--color-surface));
     color: var(--color-note);
-    border-color: transparent;
 }
 
 .badge--todo {
     background-color: color-mix(in srgb, var(--color-todo) 16%, var(--color-surface));
     color: var(--color-todo);
-    border-color: transparent;
 }
 
 .badge--sticky {
     background-color: color-mix(in srgb, var(--color-sticky) 16%, var(--color-surface));
     color: var(--color-sticky);
-    border-color: transparent;
+}
+
+.badge--group {
+    background-color: color-mix(in srgb, var(--color-cyan-6) 16%, var(--color-surface));
+    color: var(--color-cyan-4);
+}
+
+.badge--neutral {
+    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    color: var(--color-fg-muted);
+}
+
+a.badge {
+    text-decoration: none;
+}
+
+a.badge:hover {
+    background-color: color-mix(in srgb, currentColor 24%, var(--color-surface));
 }
 
 .empty-state {
@@ -604,10 +627,27 @@ body {
 }
 
 .flash__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
     padding: var(--space-sm) var(--space-md);
     background-color: var(--color-surface-raised);
     border: 1px solid var(--color-border);
     font-size: var(--font-size-sm);
+    animation: flash-dismiss 0.3s ease-in forwards;
+    animation-delay: 7.2s;
+}
+
+.flash__item:hover,
+.flash__item:focus-within {
+    animation-play-state: paused;
+}
+
+@keyframes flash-dismiss {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
 .flash__item--success {
@@ -620,6 +660,14 @@ body {
 
 .flash__item--info {
     color: var(--color-info);
+}
+
+.flash__text {
+    flex: 1;
+}
+
+.flash__undo-form {
+    flex-shrink: 0;
 }
 
 .filters {
@@ -651,6 +699,11 @@ body {
 
 .filters__chip--selected {
     opacity: 1;
+}
+
+.filters__chip--shelved {
+    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    color: var(--color-fg-muted);
 }
 
 .filters__chip--open {

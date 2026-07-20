@@ -2,6 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from models import Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
+from utils.flash import flash_with_undo
 from utils.groups import all_group_names, group_sections, normalize_group_name
 
 
@@ -186,7 +187,9 @@ def delete_note(note_id):
     note = Note.query.get_or_404(note_id)
     note.deleted_at = now()
     db.session.commit()
-    flash("Note moved to trash.", "success")
+    flash_with_undo(
+        "Note moved to trash.", url_for("notes.restore_note", note_id=note.id)
+    )
     return redirect(url_for("notes.list_notes"), code=303)
 
 
@@ -195,7 +198,11 @@ def restore_note(note_id):
     note = Note.query.get_or_404(note_id)
     note.deleted_at = None
     db.session.commit()
-    flash("Note restored.", "success")
+    flash_with_undo(
+        "Note restored.",
+        url_for("notes.delete_note", note_id=note.id),
+        undo_method="DELETE",
+    )
     return redirect(url_for("notes.trash"), code=303)
 
 
@@ -217,7 +224,7 @@ def archive_note(note_id):
     ).first_or_404()
     note.archived_at = now()
     db.session.commit()
-    flash("Note archived.", "success")
+    flash_with_undo("Note archived.", url_for("notes.unarchive_note", note_id=note.id))
     return redirect(request.referrer or url_for("notes.list_notes"), code=303)
 
 
@@ -228,5 +235,5 @@ def unarchive_note(note_id):
     ).first_or_404()
     note.archived_at = None
     db.session.commit()
-    flash("Note unarchived.", "success")
+    flash_with_undo("Note unarchived.", url_for("notes.archive_note", note_id=note.id))
     return redirect(request.referrer or url_for("notes.archived"), code=303)
