@@ -8,9 +8,7 @@
                  {% if auto_open %}data-autoedit{% endif %}>
             <div class="sticky-note__content">
                 <div class="sticky-note__view">
-                    {% if sticky_note.title %}
-                        <h{{ heading_level }} class="sticky-note__title">{{ sticky_note.title | markdown_inline(links=false) }}</h{{ heading_level }}>
-                    {% endif %}
+                    {% if sticky_note.title %}<h {{ heading_level }} class="sticky-note__title">{{ sticky_note.title | markdown_inline(links=false) }}</h {{ heading_level }}>{% endif %}
                     <div id="sticky-body-{{ sticky_note.id }}" class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
                 </div>
 
@@ -23,13 +21,16 @@
                            placeholder="Title"
                            value="{{ sticky_note.title or '' }}" />
 
-                    <label class="visually-hidden" for="sticky-content-input-{{ sticky_note.id }}">Content (markdown)</label>
+                    <label class="visually-hidden"
+                           for="sticky-content-input-{{ sticky_note.id }}">Content (markdown)</label>
                     <textarea id="sticky-content-input-{{ sticky_note.id }}"
                               name="content"
                               class="sticky-note__content-input"
                               placeholder="Write in markdown...">{{ sticky_note.content }}</textarea>
 
-                    <div class="colour-picker colour-picker--inline" role="group" aria-label="Colour">
+                    <div class="colour-picker colour-picker--inline"
+                         role="group"
+                         aria-label="Colour">
                         {% for colour in STICKY_COLOURS %}
                             <button type="button"
                                     class="colour-picker__option colour-picker__option--{{ colour }}{% if sticky_note.colour==colour %} colour-picker__option--selected{% endif %}"
@@ -44,7 +45,8 @@
                            class="sticky-note__colour-value"
                            value="{{ sticky_note.colour }}" />
 
-                    <label class="sticky-note__expiry-label" for="sticky-expires-input-{{ sticky_note.id }}">Expires</label>
+                    <label class="sticky-note__expiry-label"
+                           for="sticky-expires-input-{{ sticky_note.id }}">Expires</label>
                     <input type="datetime-local"
                            id="sticky-expires-input-{{ sticky_note.id }}"
                            name="expires_at"

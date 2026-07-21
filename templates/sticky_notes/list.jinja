@@ -27,13 +27,13 @@
 
     {% if pinned_notes %}
         <ul class="sticky-board sticky-board--pinned">
-            {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id==open_id)) }}{% endfor %}
+            {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id==open_id) ) }}{% endfor %}
         </ul>
     {% endif %}
 
     {% if active_notes %}
         <ul class="sticky-board">
-            {% for sticky_note in active_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id==open_id)) }}{% endfor %}
+            {% for sticky_note in active_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id==open_id) ) }}{% endfor %}
         </ul>
     {% elif not pinned_notes %}
         {{ empty_state("sticky", "No sticky notes yet.", url_for('sticky_notes.new_sticky_note') , "New sticky note") }}
