@@ -163,36 +163,45 @@
     --color-fg-on-accent: var(--color-white);
 
     --color-accent: var(--color-violet-7);
-    --color-accent-hover: color-mix(in srgb, var(--color-accent) 85%, black);
+    --color-accent-hover: color-mix(in srgb, var(--color-accent) 85%, var(--color-black));
     --color-accent-text: var(--color-violet-3);
     --color-accent-text-hover: var(--color-violet-2);
     --color-accent-subtle: color-mix(in srgb, var(--color-accent) 15%, var(--color-surface));
 
+    --color-fg-muted-subtle: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+
     --color-danger: var(--color-red-4);
     --color-danger-fill: var(--color-red-8);
     --color-danger-fill-hover: var(--color-red-9);
+    --color-danger-subtle: color-mix(in srgb, var(--color-danger) 16%, var(--color-surface));
     --color-success: var(--color-green-4);
     --color-success-fill: var(--color-green-7);
+    --color-success-subtle: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
     --color-info: var(--color-blue-4);
     --color-info-fill: var(--color-blue-6);
+    --color-info-subtle: color-mix(in srgb, var(--color-info) 16%, var(--color-surface));
     --color-warning: var(--color-orange-4);
     --color-warning-fill: var(--color-orange-6);
+    --color-warning-subtle: color-mix(in srgb, var(--color-warning) 16%, var(--color-surface));
+    --color-group: var(--color-cyan-4);
+    --color-group-fill: var(--color-cyan-6);
+    --color-group-subtle: color-mix(in srgb, var(--color-group-fill) 16%, var(--color-surface));
 
     --color-note: var(--color-teal-3);
     --color-note-fill: var(--color-teal-9);
-    --color-note-fill-hover: color-mix(in srgb, var(--color-note-fill) 85%, black);
+    --color-note-fill-hover: color-mix(in srgb, var(--color-note-fill) 85%, var(--color-black));
     --color-note-subtle: color-mix(in srgb, var(--color-note) 15%, var(--color-surface));
     --color-fg-on-note: var(--color-white);
 
     --color-todo: var(--color-red-5);
     --color-todo-fill: var(--color-red-9);
-    --color-todo-fill-hover: color-mix(in srgb, var(--color-todo-fill) 85%, black);
+    --color-todo-fill-hover: color-mix(in srgb, var(--color-todo-fill) 85%, var(--color-black));
     --color-todo-subtle: color-mix(in srgb, var(--color-todo) 15%, var(--color-surface));
     --color-fg-on-todo: var(--color-white);
 
     --color-sticky: var(--color-yellow-4);
     --color-sticky-fill: var(--color-yellow-6);
-    --color-sticky-fill-hover: color-mix(in srgb, var(--color-sticky-fill) 85%, white);
+    --color-sticky-fill-hover: color-mix(in srgb, var(--color-sticky-fill) 85%, var(--color-white));
     --color-sticky-subtle: color-mix(in srgb, var(--color-sticky) 15%, var(--color-surface));
     --color-fg-on-sticky: var(--color-black);
 

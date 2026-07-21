@@ -522,57 +522,57 @@ body {
 }
 
 .badge--shelved {
-    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    background-color: var(--color-fg-muted-subtle);
     color: var(--color-fg-muted);
 }
 
 .badge--open {
-    background-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
+    background-color: var(--color-accent-subtle);
     color: var(--color-accent-text);
 }
 
 .badge--active {
-    background-color: color-mix(in srgb, var(--color-info) 16%, var(--color-surface));
+    background-color: var(--color-info-subtle);
     color: var(--color-info);
 }
 
 .badge--done {
-    background-color: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
+    background-color: var(--color-success-subtle);
     color: var(--color-success);
 }
 
 .badge--cancelled {
-    background-color: color-mix(in srgb, var(--color-warning) 16%, var(--color-surface));
+    background-color: var(--color-warning-subtle);
     color: var(--color-warning);
 }
 
 .badge--overdue {
-    background-color: color-mix(in srgb, var(--color-danger) 16%, var(--color-surface));
+    background-color: var(--color-danger-subtle);
     color: var(--color-danger);
 }
 
 .badge--note {
-    background-color: color-mix(in srgb, var(--color-note) 16%, var(--color-surface));
+    background-color: var(--color-note-subtle);
     color: var(--color-note);
 }
 
 .badge--todo {
-    background-color: color-mix(in srgb, var(--color-todo) 16%, var(--color-surface));
+    background-color: var(--color-todo-subtle);
     color: var(--color-todo);
 }
 
 .badge--sticky {
-    background-color: color-mix(in srgb, var(--color-sticky) 16%, var(--color-surface));
+    background-color: var(--color-sticky-subtle);
     color: var(--color-sticky);
 }
 
 .badge--group {
-    background-color: color-mix(in srgb, var(--color-cyan-6) 16%, var(--color-surface));
-    color: var(--color-cyan-4);
+    background-color: var(--color-group-subtle);
+    color: var(--color-group);
 }
 
 .badge--neutral {
-    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    background-color: var(--color-fg-muted-subtle);
     color: var(--color-fg-muted);
 }
 
@@ -702,27 +702,27 @@ a.badge:hover {
 }
 
 .filters__chip--shelved {
-    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    background-color: var(--color-fg-muted-subtle);
     color: var(--color-fg-muted);
 }
 
 .filters__chip--open {
-    background-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
+    background-color: var(--color-accent-subtle);
     color: var(--color-accent-text);
 }
 
 .filters__chip--active {
-    background-color: color-mix(in srgb, var(--color-info) 16%, var(--color-surface));
+    background-color: var(--color-info-subtle);
     color: var(--color-info);
 }
 
 .filters__chip--done {
-    background-color: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
+    background-color: var(--color-success-subtle);
     color: var(--color-success);
 }
 
 .filters__chip--cancelled {
-    background-color: color-mix(in srgb, var(--color-warning) 16%, var(--color-surface));
+    background-color: var(--color-warning-subtle);
     color: var(--color-warning);
 }
 

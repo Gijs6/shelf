@@ -8,31 +8,31 @@
 }
 
 .state-picker__option--shelved.state-picker__option--selected {
-    background-color: color-mix(in srgb, var(--color-fg-muted) 16%, var(--color-surface));
+    background-color: var(--color-fg-muted-subtle);
     border-color: var(--color-fg-muted);
     color: var(--color-fg-muted);
 }
 
 .state-picker__option--open.state-picker__option--selected {
-    background-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
+    background-color: var(--color-accent-subtle);
     border-color: var(--color-accent);
     color: var(--color-accent-text);
 }
 
 .state-picker__option--active.state-picker__option--selected {
-    background-color: color-mix(in srgb, var(--color-info) 16%, var(--color-surface));
+    background-color: var(--color-info-subtle);
     border-color: var(--color-info);
     color: var(--color-info);
 }
 
 .state-picker__option--done.state-picker__option--selected {
-    background-color: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
+    background-color: var(--color-success-subtle);
     border-color: var(--color-success);
     color: var(--color-success);
 }
 
 .state-picker__option--cancelled.state-picker__option--selected {
-    background-color: color-mix(in srgb, var(--color-danger) 16%, var(--color-surface));
+    background-color: var(--color-danger-subtle);
     border-color: var(--color-danger);
     color: var(--color-danger);
 }
