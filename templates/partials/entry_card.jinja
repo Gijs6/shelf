@@ -7,22 +7,23 @@
     {% set shown_at = timestamp | default(item.updated_at, true) %}
     <li>
         <article class="entry-card entry-card--{{ item.kind }}">
-            {% set title_inner %}
-                {% if url %}
-                    <a href="{{ url }}" class="entry-card__link">
-                        <span class="entry-card__title-text">{{ item.display_title | default(item.title) | markdown_inline(links=false) }}</span>
-                        {% if badges %}<span class="entry-card__badges">{{ badges }}</span>{% endif %}
-                    </a>
+            <div class="entry-card__title-row">
+                {% set title_inner %}
+                    {% if url %}
+                        <a href="{{ url }}" class="entry-card__link">
+                            <span class="entry-card__title-text">{{ item.display_title | default(item.title) | markdown_inline(links=false) }}</span>
+                        </a>
+                    {% else %}
+                        <span class="entry-card__title-text">{{ item.display_title | default(item.title) | markdown_inline }}</span>
+                    {% endif %}
+                {% endset %}
+                {% if heading_level == 3 %}
+                    <h3 class="entry-card__title">{{ title_inner }}</h3>
                 {% else %}
-                    <span class="entry-card__title-text">{{ item.display_title | default(item.title) | markdown_inline }}</span>
-                    {% if badges %}<span class="entry-card__badges">{{ badges }}</span>{% endif %}
+                    <h2 class="entry-card__title">{{ title_inner }}</h2>
                 {% endif %}
-            {% endset %}
-            {% if heading_level == 3 %}
-                <h3 class="entry-card__title">{{ title_inner }}</h3>
-            {% else %}
-                <h2 class="entry-card__title">{{ title_inner }}</h2>
-            {% endif %}
+                {% if badges %}<span class="entry-card__badges">{{ badges }}</span>{% endif %}
+            </div>
             <p class="entry-card__timestamp">
                 {% if timestamp_label %}{{ timestamp_label }}{% endif %}
                 <time datetime="{{ shown_at | isoformat(local=False) }}" data-live>{{ shown_at | timeago(local=False) }}</time>

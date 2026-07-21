@@ -12,18 +12,16 @@
         <header class="page-header page-header--note">
             <hgroup class="page-header__heading">
                 {{ type_indicator("note") }}
-                <h1 class="page-header__title">
-                    {{ note.display_title | markdown_inline }}
-                    {% if note.archived or note.group_name %}
-                        <span class="page-header__badges">
-                            {% if note.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
-                            {% if note.group_name %}
-                                <a class="badge badge--group"
-                                   href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ icon("folder") }} {{ note.group_name }}</a>
-                            {% endif %}
-                        </span>
-                    {% endif %}
-                </h1>
+                <h1 class="page-header__title">{{ note.display_title | markdown_inline }}</h1>
+                {% if note.archived or note.group_name %}
+                    <p class="page-header__badges">
+                        {% if note.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
+                        {% if note.group_name %}
+                            <a class="badge badge--group"
+                               href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ icon("folder") }} {{ note.group_name }}</a>
+                        {% endif %}
+                    </p>
+                {% endif %}
             </hgroup>
             <menu class="page-header__actions">
                 <li>

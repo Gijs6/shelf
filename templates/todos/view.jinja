@@ -12,18 +12,16 @@
         <header class="page-header page-header--todo">
             <hgroup class="page-header__heading">
                 {{ type_indicator("todo") }}
-                <h1 class="page-header__title">
-                    {{ todo.display_title | markdown_inline }}
-                    <span class="page-header__badges">
-                        <span class="badge{% if todo.state=='shelved' %} badge--shelved{% elif todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
-                        {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
-                        {% if todo.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
-                        {% if todo.group_name %}
-                            <a class="badge badge--group"
-                               href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
-                        {% endif %}
-                    </span>
-                </h1>
+                <h1 class="page-header__title">{{ todo.display_title | markdown_inline }}</h1>
+                <p class="page-header__badges">
+                    <span class="badge{% if todo.state=='shelved' %} badge--shelved{% elif todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
+                    {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
+                    {% if todo.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
+                    {% if todo.group_name %}
+                        <a class="badge badge--group"
+                           href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ icon("folder") }} {{ todo.group_name }}</a>
+                    {% endif %}
+                </p>
             </hgroup>
             <menu class="page-header__actions">
                 <li>

@@ -385,12 +385,16 @@ body {
     border-left-color: var(--color-sticky);
 }
 
-.entry-card__title {
+.entry-card__title-row {
     grid-column: 1;
     grid-row: 1;
     display: flex;
     align-items: center;
     gap: var(--space-xs);
+    min-width: 0;
+}
+
+.entry-card__title {
     min-width: 0;
     margin: 0;
     font-size: inherit;
@@ -476,7 +480,7 @@ body {
         row-gap: var(--space-3xs);
     }
 
-    .entry-card__title,
+    .entry-card__title-row,
     .entry-card__timestamp,
     .entry-card__preview,
     .entry-card__due,
@@ -485,7 +489,7 @@ body {
         grid-row: auto;
     }
 
-    .entry-card__title {
+    .entry-card__title-row {
         flex-wrap: wrap;
     }
 

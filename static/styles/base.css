@@ -139,18 +139,12 @@
     font-weight: 700;
 }
 
-.page-header__title:has(.page-header__badges) {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-xs);
-}
-
 .page-header__badges {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2xs);
+    margin: 0;
 }
 
 .page-header__actions {
