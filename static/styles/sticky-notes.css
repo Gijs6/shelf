@@ -71,7 +71,6 @@
 .sticky-note__edit {
     display: none;
     flex-direction: column;
-    gap: var(--space-xs);
 }
 
 .sticky-note--editing .sticky-note__edit {
