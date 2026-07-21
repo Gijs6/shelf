@@ -1,16 +1,59 @@
 {% from "partials/icons.jinja" import icon %}
 
-{% macro sticky_card(sticky_note, compact=False, heading_level=3) %}
+{% macro sticky_card(sticky_note, compact=False, heading_level=3, auto_open=False) %}
     <li>
-        <article class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}">
+        <article id="sticky-{{ sticky_note.id }}"
+                 class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}{% if auto_open %} sticky-note--editing{% endif %}"
+                 data-update-url="{{ url_for('sticky_notes.update_sticky_note', sticky_note_id=sticky_note.id) }}"
+                 {% if auto_open %}data-autoedit{% endif %}>
             <div class="sticky-note__content">
-                {% if sticky_note.title %}
-                    <h {{ heading_level }} class="sticky-note__title">
-                    <a href="{{ url_for('sticky_notes.edit_sticky_note', sticky_note_id=sticky_note.id) }}"
-                       class="sticky-note__title-link">{{ sticky_note.title | markdown_inline(links=false) }}</a>
-                    </h {{ heading_level }}>
-                {% endif %}
-                <div id="sticky-body-{{ sticky_note.id }}" class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
+                <div class="sticky-note__view">
+                    {% if sticky_note.title %}
+                        <h{{ heading_level }} class="sticky-note__title">{{ sticky_note.title | markdown_inline(links=false) }}</h{{ heading_level }}>
+                    {% endif %}
+                    <div id="sticky-body-{{ sticky_note.id }}" class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
+                </div>
+
+                <form class="sticky-note__edit" novalidate>
+                    <label class="visually-hidden" for="sticky-title-input-{{ sticky_note.id }}">Title</label>
+                    <input type="text"
+                           id="sticky-title-input-{{ sticky_note.id }}"
+                           name="title"
+                           class="sticky-note__title-input"
+                           placeholder="Title"
+                           value="{{ sticky_note.title or '' }}" />
+
+                    <label class="visually-hidden" for="sticky-content-input-{{ sticky_note.id }}">Content (markdown)</label>
+                    <textarea id="sticky-content-input-{{ sticky_note.id }}"
+                              name="content"
+                              class="sticky-note__content-input"
+                              placeholder="Write in markdown...">{{ sticky_note.content }}</textarea>
+
+                    <div class="colour-picker colour-picker--inline" role="group" aria-label="Colour">
+                        {% for colour in STICKY_COLOURS %}
+                            <button type="button"
+                                    class="colour-picker__option colour-picker__option--{{ colour }}{% if sticky_note.colour==colour %} colour-picker__option--selected{% endif %}"
+                                    data-colour="{{ colour }}"
+                                    aria-pressed="{{ 'true' if sticky_note.colour==colour else 'false' }}">
+                                <span class="visually-hidden">{{ colour | capitalize }}</span>
+                            </button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden"
+                           name="colour"
+                           class="sticky-note__colour-value"
+                           value="{{ sticky_note.colour }}" />
+
+                    <label class="sticky-note__expiry-label" for="sticky-expires-input-{{ sticky_note.id }}">Expires</label>
+                    <input type="datetime-local"
+                           id="sticky-expires-input-{{ sticky_note.id }}"
+                           name="expires_at"
+                           class="sticky-note__expiry-input"
+                           value="{{ sticky_note.expires_at.strftime('%Y-%m-%dT%H:%M') if sticky_note.expires_at else '' }}" />
+
+                    <input type="hidden" name="heading_level" value="{{ heading_level }}" />
+                    <input type="hidden" name="compact" value="{{ '1' if compact else '' }}" />
+                </form>
             </div>
 
             {% if not compact %}

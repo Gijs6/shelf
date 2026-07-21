@@ -159,7 +159,7 @@ def convert_note_to_sticky_note(note_id):
     db.session.commit()
     flash("Note converted to sticky note.", "success")
     return redirect(
-        url_for("sticky_notes.edit_sticky_note", sticky_note_id=sticky_note.id),
+        url_for("sticky_notes.list_sticky_notes", open=sticky_note.id),
         code=303,
     )
 

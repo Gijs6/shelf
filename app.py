@@ -1,13 +1,12 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 import os
-from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 
 from migrations import run_migrations
-from models import TODO_STATES, Note, StickyNote, Todo, db, now
+from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, db, now
 from routes import register_routes
 from utils.filters import register_filters
 from utils.session import SESSION_LIFETIME
@@ -28,6 +27,7 @@ register_filters(app)
 register_routes(app)
 
 app.jinja_env.globals["TODO_STATES"] = TODO_STATES
+app.jinja_env.globals["STICKY_COLOURS"] = STICKY_COLOURS
 app.jinja_env.globals["APP_VERSION"] = get_version()
 
 os.makedirs(app.instance_path, exist_ok=True)
