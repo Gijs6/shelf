@@ -1,12 +1,6 @@
 (function () {
-    function autoResize(textarea) {
-        textarea.style.height = "auto";
-        textarea.style.height = textarea.scrollHeight + "px";
-    }
-
     function openSticky(article) {
         article.classList.add("sticky-note--editing");
-        article.querySelectorAll(".sticky-note__content-input").forEach(autoResize);
     }
 
     function saveSticky(article) {
@@ -89,10 +83,6 @@
             var contentInput = article.querySelector(".sticky-note__content-input");
             if (contentInput) contentInput.focus();
         }
-    });
-
-    document.addEventListener("input", function (e) {
-        if (e.target.classList.contains("sticky-note__content-input")) autoResize(e.target);
     });
 
     var autoEdit = document.querySelector(".sticky-note[data-autoedit]");

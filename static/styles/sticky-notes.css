@@ -100,10 +100,11 @@
 }
 
 .sticky-note__content-input {
+    field-sizing: content;
     resize: none;
-    overflow: hidden;
     font-size: var(--font-size-sm);
     line-height: 1.5;
+    min-height: unset;
 }
 
 .sticky-note__expiry-label {
@@ -127,19 +128,6 @@
 
 .sticky-note__expiry-input:focus {
     outline: none;
-}
-
-.colour-picker--inline {
-    gap: var(--space-2xs);
-}
-
-.colour-picker--inline .colour-picker__option::before {
-    width: var(--space-md);
-    height: var(--space-md);
-}
-
-.colour-picker--inline .colour-picker__option--selected::before {
-    border-color: currentColor;
 }
 
 .sticky-note__actions {
@@ -274,4 +262,18 @@
 
 .colour-picker__option--orange {
     --swatch-color: var(--color-sticky-orange);
+}
+
+.colour-picker--inline {
+    gap: var(--space-xs);
+    margin: var(--space-md) 0 var(--space-sm) 0;
+}
+
+.colour-picker--inline .colour-picker__option::before {
+    width: var(--space-md);
+    height: var(--space-md);
+}
+
+.colour-picker--inline .colour-picker__option--selected::before {
+    border-color: currentColor;
 }
