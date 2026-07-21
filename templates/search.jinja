@@ -199,9 +199,7 @@
     </search>
 
     <section id="search-results" aria-label="Search results">
-        {% if not query %}
-            {{ empty_state('search', 'Try is:todo, is:note, is:sticky, state:open, group:home, archived:yes, pinned:yes, overdue:yes, due:today, due:week, before:2026-01-01, after:2026-01-01, sort:title, sort:created, colour:pink') }}
-        {% elif results %}
+        {% if results %}
             <p class="search-results__count">{{ results | length }} result{{ "s" if results | length != 1 else "" }}</p>
             <ul class="card-list">
                 {% for result in results %}
