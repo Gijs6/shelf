@@ -216,6 +216,11 @@ body {
     border-color: var(--color-accent);
 }
 
+.EasyMDEContainer .CodeMirror:focus-visible,
+.EasyMDEContainer .CodeMirror *:focus-visible {
+    outline: none;
+}
+
 .EasyMDEContainer .CodeMirror-cursor {
     border-left-color: var(--color-fg);
 }
