@@ -532,10 +532,19 @@ body {
 
     .entry-card__link {
         flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .entry-card__title-text {
+        overflow: visible;
+        white-space: normal;
+        text-overflow: clip;
+        overflow-wrap: anywhere;
     }
 
     .entry-card__timestamp,
-    .entry-card__due {
+    .entry-card__due,
+    .entry-card__preview {
         justify-self: start;
         text-align: left;
         white-space: normal;

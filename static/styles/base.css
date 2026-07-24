@@ -106,6 +106,10 @@
     .page-header {
         flex-direction: column;
     }
+
+    .page-header__actions {
+        flex-wrap: wrap;
+    }
 }
 
 .page-header__heading {
