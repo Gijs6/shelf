@@ -64,7 +64,7 @@
     display: none;
 }
 
-.sticky-note--editing .sticky-note__footer {
+.sticky-note--editing .sticky-note__expires {
     display: none;
 }
 
