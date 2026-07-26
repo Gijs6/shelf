@@ -54,6 +54,11 @@
         if (e.target.classList.contains("sticky-note__edit")) e.preventDefault();
     });
 
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) return;
+        document.querySelectorAll(".sticky-note--editing").forEach(saveSticky);
+    });
+
     document.addEventListener("click", function (e) {
         var swatch = e.target.closest(".colour-picker__option");
         if (!swatch) return;
