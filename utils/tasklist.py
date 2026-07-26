@@ -27,51 +27,53 @@ class TaskListTreeprocessor(Treeprocessor):
         self.item_id = item_id
 
     def run(self, root):
-        index = 0
-        for parent in root.iter():
-            if parent.tag not in ("ul", "ol"):
+        parents = {child: parent for parent in root.iter() for child in parent}
+
+        task_items = []
+        for li in root.iter("li"):
+            if not li.text:
                 continue
-            has_task = False
-            for li in list(parent):
-                if li.tag != "li" or not li.text:
-                    continue
-                match = TASK_MARKER_RE.match(li.text)
-                if not match:
-                    continue
+            match = TASK_MARKER_RE.match(li.text)
+            if match:
+                task_items.append((li, match))
 
-                mark, rest = match.groups()
-                checkbox = etree.Element("input")
-                checkbox.set("type", "checkbox")
-                checkbox.set("class", "task-list__checkbox")
-                if mark.lower() == "x":
-                    checkbox.set("checked", "checked")
+        containers = []
+        for index, (li, match) in enumerate(task_items):
+            mark, rest = match.groups()
+            checkbox = etree.Element("input")
+            checkbox.set("type", "checkbox")
+            checkbox.set("class", "task-list__checkbox")
+            if mark.lower() == "x":
+                checkbox.set("checked", "checked")
 
-                if self.kind and self.item_id and self.kind in CHECKBOX_ENDPOINTS:
-                    endpoint, url_kwarg = CHECKBOX_ENDPOINTS[self.kind]
-                    url = url_for(endpoint, **{url_kwarg: self.item_id})
-                    checkbox.set("hx-patch", f"{url}?index={index}")
-                    checkbox.set("hx-trigger", "change")
-                    checkbox.set("hx-swap", "none")
-                else:
-                    checkbox.set("disabled", "disabled")
+            if self.kind and self.item_id and self.kind in CHECKBOX_ENDPOINTS:
+                endpoint, url_kwarg = CHECKBOX_ENDPOINTS[self.kind]
+                url = url_for(endpoint, **{url_kwarg: self.item_id})
+                checkbox.set("hx-patch", f"{url}?index={index}")
+                checkbox.set("hx-trigger", "change")
+                checkbox.set("hx-swap", "none")
+            else:
+                checkbox.set("disabled", "disabled")
 
-                li.set("class", f"{li.get('class', '')} task-list__item".strip())
+            li.set("class", f"{li.get('class', '')} task-list__item".strip())
 
-                body = etree.Element("span")
-                body.set("class", "task-list__item-body")
-                body.text = f" {rest}" if rest else " "
-                for child in list(li):
-                    li.remove(child)
-                    body.append(child)
+            body = etree.Element("span")
+            body.set("class", "task-list__item-body")
+            body.text = f" {rest}" if rest else " "
+            for child in list(li):
+                li.remove(child)
+                body.append(child)
 
-                li.text = None
-                li.append(checkbox)
-                li.append(body)
-                index += 1
-                has_task = True
+            li.text = None
+            li.append(checkbox)
+            li.append(body)
 
-            if has_task:
-                parent.set("class", f"{parent.get('class', '')} task-list".strip())
+            container = parents.get(li)
+            if container is not None and container not in containers:
+                containers.append(container)
+
+        for container in containers:
+            container.set("class", f"{container.get('class', '')} task-list".strip())
 
         return root
 
