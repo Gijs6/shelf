@@ -19,9 +19,11 @@
             <a href="{{ url_for('sticky_notes.trash') }}"
                class="button button--ghost"
                data-shortcut="trash">{{ icon("trash") }} Trash</a>
-            <a href="{{ url_for('sticky_notes.new_sticky_note') }}"
-               class="button"
-               data-shortcut="new">{{ icon("plus") }} New sticky note</a>
+            <form hx-post="{{ url_for('sticky_notes.new_sticky_note') }}"
+                  hx-target="body"
+                  hx-push-url="true">
+                <button type="submit" class="button" data-shortcut="new">{{ icon("plus") }} New sticky note</button>
+            </form>
         </nav>
     </header>
 
@@ -36,6 +38,6 @@
             {% for sticky_note in active_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id==open_id) ) }}{% endfor %}
         </ul>
     {% elif not pinned_notes %}
-        {{ empty_state("sticky", "No sticky notes yet.", url_for('sticky_notes.new_sticky_note') , "New sticky note") }}
+        {{ empty_state("sticky", "No sticky notes yet.", url_for('sticky_notes.new_sticky_note') , "New sticky note", cta_method="post") }}
     {% endif %}
 {% endblock %}

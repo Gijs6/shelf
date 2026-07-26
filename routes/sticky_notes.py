@@ -56,7 +56,7 @@ def trash():
     return render_template("sticky_notes/trash.jinja", notes=notes)
 
 
-@sticky_notes_bp.get("/new")
+@sticky_notes_bp.post("/new")
 def new_sticky_note():
     sticky_note = StickyNote(
         colour="yellow",

@@ -53,6 +53,7 @@
     margin: 0 0 var(--space-2xs) 0;
     color: inherit;
     font-size: inherit;
+    line-height: 1.55;
     font-weight: 700;
 }
 
@@ -93,9 +94,10 @@
 }
 
 .sticky-note__title-input {
+    field-sizing: content;
     margin: 0 0 var(--space-2xs) 0;
     font-size: inherit;
-    line-height: inherit;
+    line-height: 1.55;
     font-weight: 700;
 }
 

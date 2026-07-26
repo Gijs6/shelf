@@ -19,6 +19,16 @@
         }
     }
 
+    function hxPost(url) {
+        var form = document.createElement("form");
+        form.setAttribute("hx-post", url);
+        form.setAttribute("hx-target", "body");
+        form.setAttribute("hx-push-url", "true");
+        document.body.appendChild(form);
+        htmx.process(form);
+        form.requestSubmit();
+    }
+
     document.addEventListener("keydown", function (e) {
         if (e.defaultPrevented) return;
 
@@ -43,11 +53,16 @@
         if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
 
         if (pendingChord) {
-            var dest = CHORD_DESTINATIONS[pendingChord][e.key];
+            var chord = pendingChord;
+            var dest = CHORD_DESTINATIONS[chord][e.key];
             clearChord();
             if (dest) {
                 e.preventDefault();
-                window.location.href = dest;
+                if (chord === "c" && e.key === "s") {
+                    hxPost(dest);
+                } else {
+                    window.location.href = dest;
+                }
             }
             return;
         }
