@@ -106,7 +106,7 @@ def ical_feed(token):
             ~Todo.deleted,
             ~Todo.archived,
             Todo.deadline.isnot(None),
-            Todo.state.notin_(["done", "cancelled"]),
+            Todo.state.notin_(["shelved", "done", "cancelled"]),
         )
         .order_by(Todo.deadline.asc())
         .all()

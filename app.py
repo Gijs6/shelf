@@ -52,7 +52,7 @@ def index():
             ~Todo.deleted,
             ~Todo.archived,
             Todo.deadline.isnot(None),
-            Todo.state.notin_(["done", "cancelled"]),
+            Todo.state.notin_(["shelved", "done", "cancelled"]),
         )
         .order_by(Todo.overdue.desc(), Todo.deadline.asc())
         .limit(5)
