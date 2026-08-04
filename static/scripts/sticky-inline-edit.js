@@ -30,9 +30,7 @@
 
         openSticky(article);
         var titleField = e.target.closest("h2, h3, h4, .sticky-note__title");
-        var target = titleField
-            ? article.querySelector(".sticky-note__title-input")
-            : article.querySelector(".sticky-note__content-input");
+        var target = titleField ? article.querySelector(".sticky-note__title-input") : article.querySelector(".sticky-note__content-input");
         if (target) target.focus();
     });
 
@@ -41,10 +39,7 @@
         if (!article || !article.classList.contains("sticky-note--editing")) return;
         setTimeout(function () {
             if (!document.hasFocus()) return;
-            if (
-                article.classList.contains("sticky-note--editing") &&
-                !article.contains(document.activeElement)
-            ) {
+            if (article.classList.contains("sticky-note--editing") && !article.contains(document.activeElement)) {
                 saveSticky(article);
             }
         }, 0);
@@ -71,10 +66,7 @@
             option.classList.toggle("colour-picker__option--selected", selected);
             option.setAttribute("aria-pressed", selected ? "true" : "false");
         });
-        article.className = article.className.replace(
-            /\bsticky-note--(?!pinned\b|editing\b)\S+/,
-            "sticky-note--" + colour
-        );
+        article.className = article.className.replace(/\bsticky-note--(?!pinned\b|editing\b)\S+/, "sticky-note--" + colour);
     });
 
     document.addEventListener("keydown", function (e) {
