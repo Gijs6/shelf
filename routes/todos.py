@@ -62,6 +62,7 @@ def list_todos():
     return render_template(
         "todos/list.jinja",
         sections=group_sections(todos),
+        states=TODO_STATES,
         selected_states=selected,
         chip_links=chip_links,
     )
