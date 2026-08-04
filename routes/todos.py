@@ -202,15 +202,10 @@ def set_state(todo_id):
         flash("Invalid state.", "error")
         return render_template("todos/view.jinja", todo=todo, states=TODO_STATES), 400
 
-    was_done = todo.state == "done"
     todo.state = state
     todo.completed_at = now() if state == "done" else None
     todo.active_at = now() if state == "active" else None
     todo.updated_at = now()
-    if state == "done" and not todo.archived:
-        todo.archived_at = now()
-    elif was_done and state != "done":
-        todo.archived_at = None
     db.session.commit()
     flash("Todo updated.", "success")
     return redirect(
