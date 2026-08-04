@@ -1,8 +1,8 @@
 from .notes import notes_bp
+from .search import search_bp
+from .settings import settings_bp
 from .sticky_notes import sticky_notes_bp
 from .todos import todos_bp
-from .settings import settings_bp
-from .search import search_bp
 
 
 def register_routes(app):

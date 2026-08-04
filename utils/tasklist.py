@@ -1,10 +1,10 @@
+from flask import url_for
+
 import re
 import xml.etree.ElementTree as etree
 
-from flask import url_for
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
-
 
 TASK_MARKER_RE = re.compile(r"^\[([ xX])\]\s?(.*)$", re.DOTALL)
 
@@ -115,12 +115,10 @@ def iter_checkbox_lines(content):
 
 def toggle_checkbox(content, index):
     lines = content.splitlines()
-    count = 0
-    for i, match in iter_checkbox_lines(content):
+    for count, (i, match) in enumerate(iter_checkbox_lines(content)):
         if count == index:
             new_mark = " " if match.group("mark").lower() == "x" else "x"
             start, end = match.span("mark")
             lines[i] = lines[i][:start] + new_mark + lines[i][end:]
             return "\n".join(lines)
-        count += 1
     return content

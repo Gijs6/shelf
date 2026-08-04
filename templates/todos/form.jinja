@@ -2,6 +2,7 @@
 
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/indicator.jinja" import section_indicator %}
+{% from "partials/date_chips.jinja" import date_chips %}
 
 {% block title %}
     {% if todo and todo.id %}
@@ -58,6 +59,9 @@
                                    name="group"
                                    class="field__input"
                                    data-autocomplete="todo-groups"
+                                   data-no-spaces
+                                   pattern="\S*"
+                                   title="Group names can't contain spaces"
                                    autocomplete="off"
                                    placeholder="Search or create a group"
                                    value="{{ todo.group_name or '' }}" />
@@ -75,7 +79,8 @@
                                    id="deadline"
                                    name="deadline"
                                    class="field__input"
-                                   value="{{ todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
+                                   value="{{ todo.deadline | strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
+                            {{ date_chips("deadline") }}
                         </div>
                     </fieldset>
                 </div>

@@ -77,7 +77,8 @@
         <ul class="detail-meta">
             <li class="detail-meta__item">
                 Made
-                <time datetime="{{ note.created_at | isoformat(local=False) }}">{{ note.created_at | strftime(local=False) }}</time>
+                <time datetime="{{ note.created_at | isoformat }}" data-live>{{ note.created_at | timeago }}</time>
+                (<time datetime="{{ note.created_at | isoformat }}">{{ note.created_at | strftime("%d %b %Y, %H:%M") }}</time>)
                 - edited
                 {{ updated_at_span(note) }}
             </li>

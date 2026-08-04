@@ -5,7 +5,6 @@ from sqlalchemy import func, or_
 
 from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, make_snippet
 
-
 TYPE_ALIASES = {
     "note": "note",
     "notes": "note",
@@ -35,10 +34,10 @@ def parse_bool(value):
 
 def parse_date(value):
     try:
-        local_midnight = datetime.strptime(value, "%Y-%m-%d")
+        local_midnight = datetime.strptime(value, "%Y-%m-%d").astimezone()
     except ValueError:
         return None
-    return local_midnight.astimezone().astimezone(timezone.utc)
+    return local_midnight.astimezone(timezone.utc).replace(tzinfo=None)
 
 
 def parse_query(raw_query):
@@ -166,9 +165,12 @@ def search(raw_query, limit=50):
         if parsed["after"] is not None:
             query = query.filter(Todo.created_at >= parsed["after"])
         if parsed["due"] == "today":
-            day_start = datetime.now().replace(
-                hour=0, minute=0, second=0, microsecond=0
+            local_midnight = (
+                datetime.now()
+                .astimezone()
+                .replace(hour=0, minute=0, second=0, microsecond=0)
             )
+            day_start = local_midnight.astimezone(timezone.utc).replace(tzinfo=None)
             query = query.filter(
                 Todo.deadline.isnot(None),
                 Todo.deadline >= day_start,
@@ -176,7 +178,7 @@ def search(raw_query, limit=50):
                 Todo.state.notin_(["done", "cancelled"]),
             )
         elif parsed["due"] == "week":
-            current_time = datetime.now()
+            current_time = datetime.now(timezone.utc).replace(tzinfo=None)
             query = query.filter(
                 Todo.deadline.isnot(None),
                 Todo.deadline >= current_time,
@@ -200,6 +202,7 @@ def search(raw_query, limit=50):
                     "archived": todo.archived,
                     "state": todo.state,
                     "overdue": todo.overdue,
+                    "deadline": todo.deadline,
                 }
             )
 

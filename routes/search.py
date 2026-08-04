@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request
 
 from utils.search import search
 
-
 search_bp = Blueprint("search", __name__, url_prefix="/search")
 
 

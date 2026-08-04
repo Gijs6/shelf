@@ -1,24 +1,19 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
-from datetime import datetime, timedelta
-
-from models import STICKY_COLOURS, Note, StickyNote, Todo, db, now
+from models import (
+    STICKY_COLOURS,
+    Note,
+    StickyNote,
+    Todo,
+    db,
+    default_sticky_expiry,
+    now,
+)
 from utils.checklist import toggle_item_checkbox
+from utils.datetimes import local_to_utc, parse_local_datetime, utc_to_local
 from utils.flash import flash_with_undo
 
-
 sticky_notes_bp = Blueprint("sticky_notes", __name__, url_prefix="/sticky-notes")
-
-DEFAULT_EXPIRY_DAYS = 30
-
-
-def parse_expires_at(raw):
-    if not raw:
-        return None
-    try:
-        return datetime.fromisoformat(raw)
-    except ValueError:
-        return None
 
 
 @sticky_notes_bp.get("/")
@@ -60,7 +55,7 @@ def trash():
 def new_sticky_note():
     sticky_note = StickyNote(
         colour="yellow",
-        expires_at=datetime.now() + timedelta(days=DEFAULT_EXPIRY_DAYS),
+        expires_at=default_sticky_expiry(),
     )
     db.session.add(sticky_note)
     db.session.commit()
@@ -98,7 +93,10 @@ def update_sticky_note(sticky_note_id):
     sticky_note.title = title
     sticky_note.content = content
     sticky_note.colour = colour
-    sticky_note.expires_at = parse_expires_at(request.form.get("expires_at"))
+    if not sticky_note.pinned:
+        sticky_note.expires_at = local_to_utc(
+            parse_local_datetime(request.form.get("expires_at"))
+        )
     sticky_note.updated_at = now()
     db.session.commit()
     return render_template(
@@ -114,7 +112,8 @@ def dropped_sticky_note_fields(sticky_note):
     if sticky_note.pinned:
         dropped.append("pinned")
     if sticky_note.expires_at:
-        dropped.append(f"expires: {sticky_note.expires_at.strftime('%d %b %Y, %H:%M')}")
+        local_expires = utc_to_local(sticky_note.expires_at)
+        dropped.append(f"expires: {local_expires.strftime('%d %b %Y, %H:%M')}")
     return dropped
 
 

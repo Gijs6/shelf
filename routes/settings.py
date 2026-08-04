@@ -11,7 +11,6 @@ from flask import (
 
 import json
 import secrets
-from datetime import datetime
 
 from models import (
     STICKY_COLOURS,
@@ -23,20 +22,12 @@ from models import (
     generate_id,
     now,
 )
-from utils.groups import find_existing_group_name, group_name_counts
+from utils.datetimes import parse_utc_datetime, utc_isoformat
+from utils.groups import group_name_counts, normalize_group_name
 from utils.session import SESSION_LIFETIME
 from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
 
-
 settings_bp = Blueprint("settings", __name__, url_prefix="/settings")
-
-
-def iso(dt):
-    return dt.isoformat() if dt else None
-
-
-def parse_dt(value):
-    return datetime.fromisoformat(value) if value else None
 
 
 def note_to_dict(note):
@@ -44,11 +35,11 @@ def note_to_dict(note):
         "id": note.id,
         "title": note.title,
         "content": note.content,
-        "created_at": iso(note.created_at),
-        "updated_at": iso(note.updated_at),
+        "created_at": utc_isoformat(note.created_at),
+        "updated_at": utc_isoformat(note.updated_at),
         "group_name": note.group_name,
-        "deleted_at": iso(note.deleted_at),
-        "archived_at": iso(note.archived_at),
+        "deleted_at": utc_isoformat(note.deleted_at),
+        "archived_at": utc_isoformat(note.archived_at),
     }
 
 
@@ -57,12 +48,12 @@ def sticky_note_to_dict(sticky_note):
         "id": sticky_note.id,
         "title": sticky_note.title,
         "content": sticky_note.content,
-        "created_at": iso(sticky_note.created_at),
-        "updated_at": iso(sticky_note.updated_at),
-        "expires_at": iso(sticky_note.expires_at),
+        "created_at": utc_isoformat(sticky_note.created_at),
+        "updated_at": utc_isoformat(sticky_note.updated_at),
+        "expires_at": utc_isoformat(sticky_note.expires_at),
         "colour": sticky_note.colour,
         "pinned": sticky_note.pinned,
-        "deleted_at": iso(sticky_note.deleted_at),
+        "deleted_at": utc_isoformat(sticky_note.deleted_at),
     }
 
 
@@ -71,15 +62,15 @@ def todo_to_dict(todo):
         "id": todo.id,
         "title": todo.title,
         "content": todo.content,
-        "created_at": iso(todo.created_at),
-        "updated_at": iso(todo.updated_at),
+        "created_at": utc_isoformat(todo.created_at),
+        "updated_at": utc_isoformat(todo.updated_at),
         "state": todo.state,
-        "completed_at": iso(todo.completed_at),
-        "active_at": iso(todo.active_at),
+        "completed_at": utc_isoformat(todo.completed_at),
+        "active_at": utc_isoformat(todo.active_at),
         "group_name": todo.group_name,
-        "deadline": iso(todo.deadline),
-        "deleted_at": iso(todo.deleted_at),
-        "archived_at": iso(todo.archived_at),
+        "deadline": utc_isoformat(todo.deadline),
+        "deleted_at": utc_isoformat(todo.deleted_at),
+        "archived_at": utc_isoformat(todo.archived_at),
     }
 
 
@@ -94,10 +85,10 @@ def apply_note(data):
     note.title = data.get("title")
     note.content = data.get("content", "")
     note.group_name = data.get("group_name")
-    note.created_at = parse_dt(data.get("created_at")) or now()
-    note.updated_at = parse_dt(data.get("updated_at")) or now()
-    note.deleted_at = parse_dt(data.get("deleted_at"))
-    note.archived_at = parse_dt(data.get("archived_at"))
+    note.created_at = parse_utc_datetime(data.get("created_at")) or now()
+    note.updated_at = parse_utc_datetime(data.get("updated_at")) or now()
+    note.deleted_at = parse_utc_datetime(data.get("deleted_at"))
+    note.archived_at = parse_utc_datetime(data.get("archived_at"))
     return note
 
 
@@ -108,10 +99,10 @@ def apply_sticky_note(data):
     sticky_note.content = data.get("content", "")
     sticky_note.colour = colour if colour in STICKY_COLOURS else "yellow"
     sticky_note.pinned = bool(data.get("pinned"))
-    sticky_note.created_at = parse_dt(data.get("created_at")) or now()
-    sticky_note.updated_at = parse_dt(data.get("updated_at")) or now()
-    sticky_note.expires_at = parse_dt(data.get("expires_at"))
-    sticky_note.deleted_at = parse_dt(data.get("deleted_at"))
+    sticky_note.created_at = parse_utc_datetime(data.get("created_at")) or now()
+    sticky_note.updated_at = parse_utc_datetime(data.get("updated_at")) or now()
+    sticky_note.expires_at = parse_utc_datetime(data.get("expires_at"))
+    sticky_note.deleted_at = parse_utc_datetime(data.get("deleted_at"))
     return sticky_note
 
 
@@ -122,13 +113,13 @@ def apply_todo(data):
     todo.content = data.get("content", "")
     todo.state = state if state in TODO_STATES else "open"
     todo.group_name = data.get("group_name")
-    todo.created_at = parse_dt(data.get("created_at")) or now()
-    todo.updated_at = parse_dt(data.get("updated_at")) or now()
-    todo.completed_at = parse_dt(data.get("completed_at"))
-    todo.active_at = parse_dt(data.get("active_at"))
-    todo.deadline = parse_dt(data.get("deadline"))
-    todo.deleted_at = parse_dt(data.get("deleted_at"))
-    todo.archived_at = parse_dt(data.get("archived_at"))
+    todo.created_at = parse_utc_datetime(data.get("created_at")) or now()
+    todo.updated_at = parse_utc_datetime(data.get("updated_at")) or now()
+    todo.completed_at = parse_utc_datetime(data.get("completed_at"))
+    todo.active_at = parse_utc_datetime(data.get("active_at"))
+    todo.deadline = parse_utc_datetime(data.get("deadline"))
+    todo.deleted_at = parse_utc_datetime(data.get("deleted_at"))
+    todo.archived_at = parse_utc_datetime(data.get("archived_at"))
     return todo
 
 
@@ -191,7 +182,7 @@ def revoke_calendar_token():
 @settings_bp.get("/export")
 def export():
     payload = {
-        "exported_at": iso(now()),
+        "exported_at": utc_isoformat(now()),
         "notes": [note_to_dict(note) for note in Note.query.all()],
         "sticky_notes": [
             sticky_note_to_dict(sticky_note) for sticky_note in StickyNote.query.all()
@@ -217,7 +208,7 @@ def import_data():
     try:
         payload = json.load(file.stream)
         if not isinstance(payload, dict):
-            raise ValueError("Expected a JSON object")
+            raise TypeError("Expected a JSON object")
 
         counts = {"notes": 0, "sticky_notes": 0, "todos": 0}
 
@@ -260,15 +251,11 @@ def import_data():
 @settings_bp.post("/groups/rename")
 def rename_group():
     old_name = (request.form.get("old_name") or "").strip()
-    new_name = (request.form.get("new_name") or "").strip()
+    new_name = normalize_group_name(request.form.get("new_name"), exclude=old_name)
 
     if not old_name or not new_name:
         flash("Enter a new group name.", "error")
         return index(), 400
-
-    existing = find_existing_group_name(new_name)
-    if existing and existing != old_name:
-        new_name = existing
 
     note_count = Note.query.filter(Note.group_name == old_name).update(
         {"group_name": new_name}, synchronize_session=False

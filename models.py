@@ -1,16 +1,20 @@
 import secrets
 import string
-from datetime import datetime, timezone
+from datetime import timedelta
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 
+from utils.datetimes import now, now_naive
 
 db = SQLAlchemy()
 
 STICKY_COLOURS = ["yellow", "pink", "blue", "green", "purple", "orange"]
 TODO_STATES = ["shelved", "open", "active", "done", "cancelled"]
 SNIPPET_LENGTH = 80
+STICKY_EXPIRY_DAYS = 30
 
 ID_LENGTH = 8
 
@@ -20,8 +24,14 @@ def generate_id():
     return "".join(secrets.choice(chars) for _ in range(ID_LENGTH))
 
 
-def now():
-    return datetime.now(timezone.utc)
+def default_sticky_expiry():
+    return now_naive() + timedelta(days=STICKY_EXPIRY_DAYS)
+
+
+def normalize_group_name_value(value):
+    if value is None:
+        return None
+    return "".join(value.split()) or None
 
 
 def make_snippet(content, length=SNIPPET_LENGTH):
@@ -63,6 +73,10 @@ class Note(db.Model):
     def archived(cls):
         return cls.archived_at.isnot(None)
 
+    @validates("group_name")
+    def validate_group_name(self, key, value):
+        return normalize_group_name_value(value)
+
     @property
     def snippet(self):
         return make_snippet(self.content)
@@ -92,7 +106,7 @@ class StickyNote(db.Model):
         return (
             not self.pinned
             and self.expires_at is not None
-            and self.expires_at < datetime.now()
+            and self.expires_at < now_naive()
         )
 
     @expired.expression
@@ -100,7 +114,7 @@ class StickyNote(db.Model):
         return and_(
             cls.pinned.is_(False),
             cls.expires_at.isnot(None),
-            cls.expires_at < datetime.now(),
+            cls.expires_at < now_naive(),
         )
 
     @hybrid_property
@@ -150,6 +164,10 @@ class Todo(db.Model):
     def archived(cls):
         return cls.archived_at.isnot(None)
 
+    @validates("group_name")
+    def validate_group_name(self, key, value):
+        return normalize_group_name_value(value)
+
     @property
     def snippet(self):
         return make_snippet(self.content)
@@ -163,7 +181,7 @@ class Todo(db.Model):
         return (
             self.deadline is not None
             and self.state not in ("done", "cancelled")
-            and self.deadline < datetime.now()
+            and self.deadline < now_naive()
         )
 
     @overdue.expression
@@ -171,7 +189,7 @@ class Todo(db.Model):
         return and_(
             cls.deadline.isnot(None),
             cls.state.notin_(["done", "cancelled"]),
-            cls.deadline < datetime.now(),
+            cls.deadline < now_naive(),
         )
 
     @property

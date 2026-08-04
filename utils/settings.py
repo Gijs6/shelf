@@ -1,6 +1,5 @@
 from models import Setting, db
 
-
 CALENDAR_TOKEN_KEY = "calendar_token"
 
 

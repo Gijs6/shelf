@@ -29,7 +29,7 @@
         {% for state in states %}
             <a href="{{ chip_links[state] }}"
                class="filters__chip filters__chip--{{ state }} {% if state in selected_states %}filters__chip--selected{% endif %}"
-               {% if state in selected_states %}aria-current="true"{% endif %}>{{ state | replace('_', ' ') | title }}</a>
+               {% if state in selected_states %}aria-current="true"{% endif %}>{{ state | title }}</a>
         {% endfor %}
     </nav>
 
@@ -38,7 +38,7 @@
             <section class="list-section">
                 <h2 class="list-section__title">{{ label }}</h2>
                 <ul class="card-list">
-                    {% for todo in items %}{{ entry_card(todo, url=url_for('todos.view_todo', todo_id=todo.id) , heading_level=3, badges=todo_badges(todo)) }}{% endfor %}
+                    {% for todo in items %}{{ entry_card(todo, url=url_for('todos.view_todo', todo_id=todo.id) , heading_level=3, timestamp=todo.created_at, badges=todo_badges(todo)) }}{% endfor %}
                 </ul>
             </section>
         {% endfor %}

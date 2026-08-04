@@ -3,7 +3,6 @@ from sqlalchemy.exc import OperationalError
 
 from models import db
 
-
 MIGRATIONS = [
     "ALTER TABLE sticky_note ADD COLUMN deleted_at DATETIME",
     "ALTER TABLE todo DROP COLUMN recur_interval",

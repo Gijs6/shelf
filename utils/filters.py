@@ -1,36 +1,30 @@
-import markdown
 import re
 from datetime import datetime, timezone
+
+import markdown
 from markupsafe import Markup
 
 from utils.autolink import AutoLinkExtension
+from utils.datetimes import utc_to_local
 from utils.tasklist import TaskListExtension
 
 
-def ensure_tz(dt, local=True):
-    if dt is None:
-        return None
-    if dt.tzinfo is None:
-        dt = dt.astimezone() if local else dt.replace(tzinfo=timezone.utc)
-    return dt.astimezone()
-
-
-def strftime_filter(value, fmt="%d %b %Y", local=True):
-    value = ensure_tz(value, local=local)
+def strftime_filter(value, fmt="%d %b %Y"):
+    value = utc_to_local(value)
     if value is None:
         return "-"
     return value.strftime(fmt)
 
 
-def isoformat_filter(value, local=True):
-    value = ensure_tz(value, local=local)
+def isoformat_filter(value):
+    value = utc_to_local(value)
     if value is None:
         return ""
     return value.isoformat()
 
 
-def timeago_filter(value, local=True):
-    value = ensure_tz(value, local=local)
+def timeago_filter(value):
+    value = utc_to_local(value)
     if value is None:
         return "never"
 

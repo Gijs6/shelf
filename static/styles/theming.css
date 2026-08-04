@@ -6,6 +6,7 @@
     --space-md: 1rem;
     --space-lg: 1.5rem;
     --space-xl: 2rem;
+    --space-2xl: 2.5rem;
     --space-3xl: 3rem;
     --font-size-sm: 0.875rem;
     --font-size-md: 1rem;
@@ -133,6 +134,27 @@ body {
 .field--checkbox .field__label {
     flex-direction: row-reverse;
     gap: var(--space-xs);
+}
+
+.date-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+}
+
+.date-chips__chip {
+    padding: var(--space-3xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-fg);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.date-chips__chip:hover {
+    background-color: var(--color-surface);
+    border-color: var(--color-border-strong);
 }
 
 .autocomplete {

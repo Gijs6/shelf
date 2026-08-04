@@ -1,6 +1,7 @@
 import os
 import subprocess
-from datetime import datetime
+
+from utils.datetimes import now
 
 VERSION_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "VERSION")
 
@@ -26,4 +27,4 @@ def get_version():
         )
     except (OSError, subprocess.CalledProcessError):
         return None
-    return f"{datetime.now():%Y.%m}:{commit}:{commit_count}"
+    return f"{now():%Y.%m}:{commit}:{commit_count}"

@@ -9,33 +9,22 @@ from flask import (
     url_for,
 )
 
-from datetime import datetime
-
-from models import TODO_STATES, Note, StickyNote, Todo, db, now
+from models import TODO_STATES, Note, StickyNote, Todo, db, default_sticky_expiry, now
 from utils.checklist import toggle_item_checkbox
+from utils.datetimes import local_to_utc, parse_local_datetime, utc_to_local
 from utils.flash import flash_with_undo
 from utils.groups import all_group_names, group_sections, normalize_group_name
 from utils.ical import build_todo_calendar
 from utils.settings import CALENDAR_TOKEN_KEY, get_setting
 
-
 todos_bp = Blueprint("todos", __name__, url_prefix="/todos")
-
-
-def parse_deadline(raw):
-    if not raw:
-        return None
-    try:
-        return datetime.fromisoformat(raw)
-    except ValueError:
-        return None
 
 
 def parse_todo_form(form):
     title = form.get("title", "").strip() or None
     content = form.get("content", "")
     group_name = normalize_group_name(form.get("group", ""))
-    deadline = parse_deadline(form.get("deadline"))
+    deadline = local_to_utc(parse_local_datetime(form.get("deadline")))
 
     error = None
     if not title and not content.strip():
@@ -73,7 +62,6 @@ def list_todos():
     return render_template(
         "todos/list.jinja",
         sections=group_sections(todos),
-        states=TODO_STATES,
         selected_states=selected,
         chip_links=chip_links,
     )
@@ -120,7 +108,6 @@ def new_todo():
         "todos/form.jinja",
         todo=None,
         groups=all_group_names(),
-        states=TODO_STATES,
     )
 
 
@@ -135,7 +122,6 @@ def create_todo():
             "todos/form.jinja",
             todo=todo,
             groups=all_group_names(),
-            states=TODO_STATES,
         ), 400
 
     todo = Todo(**fields)
@@ -164,7 +150,6 @@ def edit_todo(todo_id):
         "todos/form.jinja",
         todo=todo,
         groups=all_group_names(),
-        states=TODO_STATES,
     )
 
 
@@ -182,7 +167,6 @@ def update_todo(todo_id):
             "todos/form.jinja",
             todo=todo,
             groups=all_group_names(),
-            states=TODO_STATES,
         ), 400
 
     for key, value in fields.items():
@@ -238,9 +222,10 @@ def dropped_todo_fields(todo, include_group):
     if include_group and todo.group_name:
         dropped.append(f"group: {todo.group_name}")
     if todo.state != "open":
-        dropped.append(f"state: {todo.state.replace('_', ' ')}")
+        dropped.append(f"state: {todo.state}")
     if todo.deadline:
-        dropped.append(f"deadline: {todo.deadline.strftime('%d %b %Y, %H:%M')}")
+        local_deadline = utc_to_local(todo.deadline)
+        dropped.append(f"deadline: {local_deadline.strftime('%d %b %Y, %H:%M')}")
     return dropped
 
 
@@ -282,6 +267,7 @@ def convert_todo_to_sticky_note(todo_id):
         title=todo.title,
         content=content,
         created_at=todo.created_at,
+        expires_at=default_sticky_expiry(),
     )
     db.session.add(sticky_note)
     db.session.delete(todo)

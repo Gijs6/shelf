@@ -58,6 +58,9 @@
                                    name="group"
                                    class="field__input"
                                    data-autocomplete="note-groups"
+                                   data-no-spaces
+                                   pattern="\S*"
+                                   title="Group names can't contain spaces"
                                    autocomplete="off"
                                    placeholder="Search or create a group"
                                    value="{{ note.group_name or '' }}" />

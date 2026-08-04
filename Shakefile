@@ -1,17 +1,16 @@
 #!/bin/bash
+FORMAT_HTML=1
 
 setup() {
-  python3 -m venv .venv
-  .venv/bin/pip install -r requirements.txt
-  npm install
-  mkdir -p static/vendor
-  cp node_modules/htmx.org/dist/htmx.min.js static/vendor/htmx.min.js
-  cp node_modules/easymde/dist/easymde.min.js static/vendor/easymde.min.js
-  cp node_modules/easymde/dist/easymde.min.css static/vendor/easymde.min.css
+  i:venv
+  i:npm_install
+  i:vendor htmx.org/dist/htmx.min.js
+  i:vendor easymde/dist/easymde.min.js
+  i:vendor easymde/dist/easymde.min.css
 }
 
 serve() {
-  .venv/bin/python app.py
+  i:serve_flask
 }
 
 seed() {
@@ -19,11 +18,11 @@ seed() {
 }
 
 build() {
-  npm run build:css
+  i:build_css
 }
 
 deploy() {
   build
   echo "$(date +%Y.%m):$(git rev-parse --short HEAD):$(git rev-list --count HEAD)" > VERSION
-  shake_super deploy
+  g:deploy
 }

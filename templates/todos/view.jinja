@@ -3,6 +3,7 @@
 {% from "partials/icons.jinja" import icon %}
 {% from "partials/indicator.jinja" import type_indicator %}
 {% from "partials/updated_at.jinja" import updated_at_span %}
+{% from "partials/badges.jinja" import state_badge %}
 
 {% block title %}{{ todo.display_title | markdown_plain }}{% endblock %}
 {% block page_class %}page--todo{% endblock %}
@@ -14,7 +15,7 @@
                 {{ type_indicator("todo") }}
                 <h1 class="page-header__title">{{ todo.display_title | markdown_inline }}</h1>
                 <p class="page-header__badges">
-                    <span class="badge{% if todo.state=='shelved' %} badge--shelved{% elif todo.state=='open' %} badge--open{% elif todo.state=='active' %} badge--active{% elif todo.state=='done' %} badge--done{% elif todo.state=='cancelled' %} badge--cancelled{% endif %}">{{ todo.state | replace('_', ' ') | title }}</span>
+                    {{ state_badge(todo) }}
                     {% if todo.overdue %}<span class="badge badge--overdue">Overdue</span>{% endif %}
                     {% if todo.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
                     {% if todo.group_name %}
@@ -85,7 +86,7 @@
                             value="{{ state }}"
                             data-state="{{ state }}"
                             aria-pressed="{{ 'true' if todo.state==state else 'false' }}"
-                            class="button button--sm state-picker__option state-picker__option--{{ state }} {% if todo.state==state %}state-picker__option--selected{% else %}button--ghost{% endif %}">{{ state | replace('_', ' ') | title }}</button>
+                            class="button button--sm state-picker__option state-picker__option--{{ state }} {% if todo.state==state %}state-picker__option--selected{% else %}button--ghost{% endif %}">{{ state | title }}</button>
                 {% endfor %}
             </fieldset>
         </form>
@@ -93,7 +94,8 @@
         <ul class="detail-meta">
             <li class="detail-meta__item">
                 Made
-                <time datetime="{{ todo.created_at | isoformat(local=False) }}">{{ todo.created_at | strftime(local=False) }}</time>
+                <time datetime="{{ todo.created_at | isoformat }}" data-live>{{ todo.created_at | timeago }}</time>
+                (<time datetime="{{ todo.created_at | isoformat }}">{{ todo.created_at | strftime("%d %b %Y, %H:%M") }}</time>)
                 - edited
                 {{ updated_at_span(todo) }}
             </li>
@@ -106,14 +108,15 @@
             {% if todo.state == "active" and todo.active_at %}
                 <li class="detail-meta__item">
                     Active since
-                    <time datetime="{{ todo.active_at | isoformat(local=False) }}" data-live>{{ todo.active_at | timeago(local=False) }}</time>
-                    (<time datetime="{{ todo.active_at | isoformat(local=False) }}">{{ todo.active_at | strftime("%d %b %Y, %H:%M", local=False) }}</time>)
+                    <time datetime="{{ todo.active_at | isoformat }}" data-live>{{ todo.active_at | timeago }}</time>
+                    (<time datetime="{{ todo.active_at | isoformat }}">{{ todo.active_at | strftime("%d %b %Y, %H:%M") }}</time>)
                 </li>
             {% endif %}
             {% if todo.completed_at %}
                 <li class="detail-meta__item">
                     Completed
-                    <time datetime="{{ todo.completed_at | isoformat(local=False) }}">{{ todo.completed_at | strftime(local=False) }}</time>
+                    <time datetime="{{ todo.completed_at | isoformat }}" data-live>{{ todo.completed_at | timeago }}</time>
+                    (<time datetime="{{ todo.completed_at | isoformat }}">{{ todo.completed_at | strftime("%d %b %Y, %H:%M") }}</time>)
                 </li>
             {% endif %}
         </ul>

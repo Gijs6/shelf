@@ -1,14 +1,7 @@
-from datetime import timezone
-
 from icalendar import Calendar, Event
 
 from models import now
-
-
-def to_utc(dt):
-    if dt.tzinfo is None:
-        dt = dt.astimezone()
-    return dt.astimezone(timezone.utc)
+from utils.datetimes import as_utc
 
 
 def build_todo_calendar(todos):
@@ -19,12 +12,12 @@ def build_todo_calendar(todos):
     calendar.add("method", "PUBLISH")
     calendar.add("x-wr-calname", "Shelf todos")
 
-    stamp = to_utc(now())
+    stamp = as_utc(now())
     for todo in todos:
         event = Event()
         event.add("uid", f"{todo.id}@shelf")
         event.add("dtstamp", stamp)
-        deadline = to_utc(todo.deadline)
+        deadline = as_utc(todo.deadline)
         event.add("dtstart", deadline)
         event.add("dtend", deadline)
         event.add("summary", todo.display_title)

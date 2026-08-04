@@ -12,7 +12,6 @@ from utils.filters import register_filters
 from utils.session import SESSION_LIFETIME
 from utils.version import get_version
 
-
 load_dotenv(override=True)
 
 app = Flask(__name__)
@@ -60,13 +59,16 @@ def index():
     )
 
     recent_notes = (
-        Note.query.filter(~Note.deleted).order_by(Note.updated_at.desc()).limit(5).all()
+        Note.query.filter(~Note.deleted, ~Note.archived)
+        .order_by(Note.updated_at.desc())
+        .limit(5)
+        .all()
     )
 
     sticky_notes = (
         StickyNote.query.filter(
             ~StickyNote.deleted,
-            StickyNote.pinned.is_(True) | ~StickyNote.expired,
+            ~StickyNote.expired,
         )
         .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
         .limit(6)
@@ -111,9 +113,8 @@ def logout():
 @app.before_request
 def require_login():
     allowed = ["login", "login_post", "logout", "static", "todos.ical_feed"]
-    if request.endpoint and request.endpoint not in allowed:
-        if not is_logged_in():
-            return redirect(url_for("login"), code=303)
+    if request.endpoint and request.endpoint not in allowed and not is_logged_in():
+        return redirect(url_for("login"), code=303)
 
 
 @app.errorhandler(404)

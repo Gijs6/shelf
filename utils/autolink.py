@@ -3,7 +3,6 @@ import xml.etree.ElementTree as etree
 from markdown.extensions import Extension
 from markdown.inlinepatterns import InlineProcessor
 
-
 BARE_URL_RE = r"https?://[^\s<>\[\]\"']+"
 
 TRAILING_PUNCTUATION = ".,;:!?)]}\"'"

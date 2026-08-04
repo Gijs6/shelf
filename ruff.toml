@@ -1,0 +1,12 @@
+[lint.isort]
+section-order = [
+    "future",
+    "flask",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[lint.isort.sections]
+flask = ["flask"]

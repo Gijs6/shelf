@@ -34,25 +34,24 @@ def all_group_names():
     return sorted(names, key=str.lower)
 
 
-def find_existing_group_name(raw):
+def find_existing_group_name(raw, exclude=None):
     for model in (Note, Todo):
-        match = (
-            model.query.filter(
-                ~model.deleted, func.lower(model.group_name) == raw.lower()
-            )
-            .with_entities(model.group_name)
-            .first()
+        query = model.query.filter(
+            ~model.deleted, func.lower(model.group_name) == raw.lower()
         )
+        if exclude is not None:
+            query = query.filter(model.group_name != exclude)
+        match = query.with_entities(model.group_name).first()
         if match:
             return match[0]
     return None
 
 
-def normalize_group_name(raw):
-    raw = (raw or "").strip()
-    if not raw:
+def normalize_group_name(raw, exclude=None):
+    cleaned = "".join((raw or "").split())
+    if not cleaned:
         return None
-    return find_existing_group_name(raw) or raw
+    return find_existing_group_name(cleaned, exclude=exclude) or cleaned
 
 
 def group_name_counts():
