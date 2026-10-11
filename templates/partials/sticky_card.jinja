@@ -1,4 +1,4 @@
-{% from "partials/icons.jinja" import icon %}
+{% from "partials/entries.jinja" import when %}
 {% from "partials/date_chips.jinja" import date_chips %}
 
 {% macro sticky_card(sticky_note, compact=False, heading_level=3, auto_open=False) %}
@@ -31,7 +31,7 @@
                               class="sticky-note__content-input"
                               placeholder="Write in markdown...">{{ sticky_note.content }}</textarea>
 
-                    <div class="colour-picker colour-picker--inline"
+                    <div class="colour-picker"
                          role="group"
                          aria-label="Colour">
                         {% for colour in STICKY_COLOURS %}
@@ -71,9 +71,7 @@
                               hx-target="body"
                               hx-push-url="true"
                               data-shortcut="sticky-pin">
-                            <button type="submit"
-                                    class="sticky-note__icon-button sticky-note__icon-button--pin">
-                                {{ icon("pin") }}
+                            <button type="submit" class="sticky-note__action">
                                 {% if sticky_note.pinned %}
                                     Unpin
                                 {% else %}
@@ -84,16 +82,16 @@
                     </li>
                     <li>
                         <button type="button"
-                                class="sticky-note__icon-button"
+                                class="sticky-note__action"
                                 data-copy-html-target="sticky-body-{{ sticky_note.id }}"
-                                data-copy-title="{{ sticky_note.title or '' }}">{{ icon("copy") }} Copy</button>
+                                data-copy-title="{{ sticky_note.title or '' }}">Copy text</button>
                     </li>
                     <li>
                         <form hx-delete="{{ url_for('sticky_notes.delete_sticky_note', sticky_note_id=sticky_note.id) }}"
                               hx-target="body"
                               hx-push-url="true"
                               data-shortcut="sticky-delete">
-                            <button type="submit" class="sticky-note__icon-button">{{ icon("trash") }} Delete</button>
+                            <button type="submit" class="sticky-note__action">Delete</button>
                         </form>
                     </li>
                 </menu>
@@ -106,13 +104,11 @@
                             {% else %}
                                 Expires
                             {% endif %}
-                            <time datetime="{{ sticky_note.expires_at | isoformat }}" data-live>{{ sticky_note.expires_at | timeago }}</time>
-                            (<time datetime="{{ sticky_note.expires_at | isoformat }}">{{ sticky_note.expires_at | strftime("%d %b %Y, %H:%M") }}</time>)
+                            {{ when(sticky_note.expires_at) }}
                         </p>
                     {% endif %}
                     <p class="sticky-note__made">
-                        Made <time datetime="{{ sticky_note.created_at | isoformat }}" data-live>{{ sticky_note.created_at | timeago }}</time>
-                        (<time datetime="{{ sticky_note.created_at | isoformat }}">{{ sticky_note.created_at | strftime("%d %b %Y, %H:%M") }}</time>)
+                        Made {{ when(sticky_note.created_at) }}
                     </p>
                 </footer>
             {% endif %}
