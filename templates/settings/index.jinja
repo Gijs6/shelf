@@ -1,63 +1,64 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
+{% from "partials/entries.jinja" import when %}
 
 {% block title %}Settings{% endblock %}
 
 {% block content %}
-    <header class="page-header">
-        <div class="page-header__heading">
-            <h1 class="page-header__title">Settings</h1>
+    <div class="page-head">
+        <h1>Settings</h1>
+    </div>
+
+    <section class="panel">
+        <h2 class="panel__heading">Export all data</h2>
+        <div class="panel__body">
+            <a href="{{ url_for('settings.export') }}" class="btn">Export JSON</a>
         </div>
-    </header>
+    </section>
 
-    <div class="settings-grid">
+    <form method="post"
+          action="{{ url_for('settings.import_data') }}"
+          enctype="multipart/form-data">
+        <fieldset class="fieldset">
+            <legend>Import data</legend>
+            <div class="field">
+                <label for="file" class="field__label">JSON file</label>
+                <input type="file"
+                       id="file"
+                       name="file"
+                       accept="application/json,.json"
+                       required />
+            </div>
+            <div class="form__actions">
+                <button type="submit" class="btn">Import data</button>
+            </div>
+        </fieldset>
+    </form>
 
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("download") }} Export all data</h2>
-            <a href="{{ url_for('settings.export') }}" class="button">{{ icon("download") }} Export JSON</a>
-        </section>
-
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("upload") }} Import data</h2>
-            <form method="post"
-                  action="{{ url_for('settings.import_data') }}"
-                  enctype="multipart/form-data"
-                  class="form">
-                <div class="field">
-                    <label for="file" class="field__label">JSON file</label>
-                    <input type="file"
-                           id="file"
-                           name="file"
-                           class="field__input"
-                           accept="application/json,.json"
-                           required />
-                </div>
-                <button type="submit" class="button">{{ icon("upload") }} Import</button>
-            </form>
-        </section>
-
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("database") }} Purge trash</h2>
+    <section class="panel">
+        <h2 class="panel__heading">Trash</h2>
+        <div class="panel__body">
             {% if total_trash %}
                 <p>
                     {{ trash_counts.notes }} {{ trash_counts.notes | pluralize("note") }},
-                    {{ trash_counts.sticky_notes }} sticky {{ trash_counts.sticky_notes | pluralize("note") }},
-                    {{ trash_counts.todos }} {{ trash_counts.todos | pluralize("todo") }} in trash.
+                    {{ trash_counts.sticky_notes }} sticky {{ trash_counts.sticky_notes | pluralize("note") }}
+                    and {{ trash_counts.todos }} {{ trash_counts.todos | pluralize("todo") }} in trash.
                 </p>
                 <form hx-delete="{{ url_for('settings.purge_all_trash') }}"
                       hx-target="body"
                       hx-push-url="true"
-                      hx-confirm="Permanently delete everything in trash across notes, todos and sticky notes? THIS CANNOT BE UNDONE.">
-                    <button type="submit" class="button button--danger">{{ icon("trash") }} Purge all trash</button>
+                      hx-confirm="Delete everything in trash across notes, todos and sticky notes? This can't be undone.">
+                    <button type="submit" class="btn btn--danger">Empty trash</button>
                 </form>
             {% else %}
                 <p>Trash is empty.</p>
             {% endif %}
-        </section>
+        </div>
+    </section>
 
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("sticky") }} Expired sticky notes</h2>
+    <section class="panel">
+        <h2 class="panel__heading">Expired sticky notes</h2>
+        <div class="panel__body">
             {% if expired_sticky_note_count %}
                 <p>
                     {{ expired_sticky_note_count }} expired sticky
@@ -67,134 +68,154 @@
                       hx-target="body"
                       hx-push-url="true"
                       hx-confirm="Move all expired sticky notes to trash?">
-                    <button type="submit" class="button button--danger">{{ icon("trash") }} Clear expired</button>
+                    <button type="submit" class="btn btn--danger">Move expired to trash</button>
                 </form>
             {% else %}
                 <p>No expired sticky notes.</p>
             {% endif %}
-        </section>
+        </div>
+    </section>
 
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("folder") }} Groups</h2>
-            {% if group_counts %}
-                <ul class="settings-list">
-                    {% for name, counts in group_counts.items() %}
-                        <li class="settings-list__item">
-                            <span class="settings-list__name">{{ name }}</span>
-                            <span class="settings-list__meta">
-                                {{ counts.notes }} {{ counts.notes | pluralize("note") }},
-                                {{ counts.todos }} {{ counts.todos | pluralize("todo") }}
-                            </span>
-                            <button type="button"
-                                    class="button button--ghost button--sm"
-                                    data-rename-group="{{ name }}"
-                                    aria-haspopup="dialog">{{ icon("edit") }} Rename</button>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No groups in use yet.</p>
-            {% endif %}
-        </section>
+    <section class="panel">
+        <h2 class="panel__heading">Groups</h2>
+        {% if group_counts %}
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Group</th>
+                            <th class="table__num">Notes</th>
+                            <th class="table__num">Todos</th>
+                            <th class="table__actions">
+                                <span class="visually-hidden">Actions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for name, counts in group_counts.items() %}
+                            <tr>
+                                <td>{{ name }}</td>
+                                <td class="table__num">{{ "{:,}".format(counts.notes) }}</td>
+                                <td class="table__num">{{ "{:,}".format(counts.todos) }}</td>
+                                <td class="table__actions">
+                                    <button type="button"
+                                            class="btn btn--sm"
+                                            data-rename-group="{{ name }}"
+                                            aria-haspopup="dialog">Rename</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty">
+                <p class="empty__title">No groups yet</p>
+            </div>
+        {% endif %}
+    </section>
 
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("trash") }} Remove all data</h2>
+    <section class="panel">
+        <h2 class="panel__heading">Delete all data</h2>
+        <div class="panel__body">
             <form hx-delete="{{ url_for('settings.remove_all') }}"
                   hx-target="body"
                   hx-push-url="true"
-                  hx-confirm="Are you really sure to PERMANENTLY delete ALL notes, todos and sticky notes? THIS CANNOT BE UNDONE.">
-                <button type="submit" class="button button--danger">{{ icon("trash") }} Remove all data</button>
+                  hx-confirm="Delete all notes, todos and sticky notes? This can't be undone.">
+                <button type="submit" class="btn btn--danger">Delete all data</button>
             </form>
-        </section>
+        </div>
+    </section>
 
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("calendar") }} Calendar feed</h2>
+    <section class="panel">
+        <h2 class="panel__heading">Calendar feed</h2>
+        <div class="panel__body">
             {% if calendar_url %}
-                <p>Subscribe to this URL from your favourite calendar app to see todo deadlines.</p>
-                <div class="field">
-                    <label for="calendar-url" class="field__label">Feed URL</label>
-                    <input type="text"
-                           id="calendar-url"
-                           class="field__input"
-                           value="{{ calendar_url }}"
-                           readonly />
+                <p>Subscribe to this URL from your calendar app to see todo deadlines.</p>
+                <div class="input-row">
+                    <label for="calendar-url" class="visually-hidden">Feed URL</label>
+                    <input type="text" id="calendar-url" value="{{ calendar_url }}" readonly />
+                    <button type="button"
+                            class="btn"
+                            data-copy-target="calendar-url"
+                            data-copied="Link copied.">Copy link</button>
                 </div>
-                <menu class="settings-panel__actions">
-                    <li>
-                        <button type="button"
-                                class="button button--ghost"
-                                data-copy-target="calendar-url">{{ icon("copy") }} Copy</button>
-                    </li>
-                    <li>
-                        <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
-                              hx-target="body"
-                              hx-push-url="true"
-                              hx-confirm="Regenerate the token? The old feed URL will stop working.">
-                            <button type="submit" class="button button--ghost">{{ icon("repeat") }} Regenerate</button>
-                        </form>
-                    </li>
-                    <li>
-                        <form hx-delete="{{ url_for('settings.revoke_calendar_token') }}"
-                              hx-target="body"
-                              hx-push-url="true">
-                            <button type="submit" class="button button--danger">{{ icon("trash") }} Revoke</button>
-                        </form>
-                    </li>
-                </menu>
+                <div class="form__actions">
+                    <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
+                          hx-target="body"
+                          hx-push-url="true"
+                          hx-confirm="Regenerate the token? The old feed URL stops working.">
+                        <button type="submit" class="btn">Regenerate token</button>
+                    </form>
+                    <form hx-delete="{{ url_for('settings.revoke_calendar_token') }}"
+                          hx-target="body"
+                          hx-push-url="true">
+                        <button type="submit" class="btn btn--danger">Revoke token</button>
+                    </form>
+                </div>
             {% else %}
-                <p>Generate a token to get a private URL you can subscribe to from a calendar app.</p>
+                <p>A token gives you a private URL you can subscribe to from a calendar app.</p>
                 <form hx-post="{{ url_for('settings.generate_calendar_token') }}"
                       hx-target="body"
                       hx-push-url="true">
-                    <button type="submit" class="button">{{ icon("calendar") }} Generate token</button>
+                    <button type="submit" class="btn">Generate token</button>
                 </form>
             {% endif %}
-        </section>
+        </div>
+    </section>
 
-        <section class="settings-panel">
-            <h2 class="settings-panel__title">{{ icon("logout") }} Session</h2>
+    <section class="panel">
+        <h2 class="panel__heading">Session</h2>
+        <div class="panel__body">
             {% if last_login %}
                 <p>
-                    Logged in since
-                    <time datetime="{{ last_login | isoformat }}" data-live>{{ last_login | timeago }}</time>
-                    (<time datetime="{{ last_login | isoformat }}">{{ last_login | strftime("%d %b %Y, %H:%M") }}</time>).
-                    <br />
-                    Session expires
-                    <time datetime="{{ session_expires_at | isoformat }}" data-live>{{ session_expires_at | timeago }}</time>
-                    (<time datetime="{{ session_expires_at | isoformat }}">{{ session_expires_at | strftime("%d %b %Y, %H:%M") }}</time>).
+                    Signed in since {{ when(last_login) }}.
+                    Session expires {{ when(session_expires_at) }}.
                 </p>
             {% endif %}
             <form method="post" action="{{ url_for('logout') }}">
-                <button type="submit" class="button">{{ icon("logout") }} Log out</button>
+                <button type="submit" class="btn">Sign out</button>
             </form>
+        </div>
+    </section>
+
+    {% if APP_VERSION %}
+        <section class="panel">
+            <h2 class="panel__heading">Version</h2>
+            <div class="panel__body">
+                <p>
+                    Shelf v<code>{{ APP_VERSION }}</code>
+                </p>
+            </div>
         </section>
-    </div>
+    {% endif %}
 
-    <dialog id="rename-group-modal" class="modal modal--stacked">
-        <header class="modal__header">
-            <h2 class="modal__title">Rename group</h2>
+    <dialog id="rename-group-modal" class="dialog" aria-labelledby="rename-group-title">
+        <div class="dialog__head">
+            <h2 id="rename-group-title">Rename group</h2>
             <form method="dialog">
-                <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
+                <button type="submit" class="dialog__close" aria-label="Close">&times;</button>
             </form>
-        </header>
-
+        </div>
         <form hx-post="{{ url_for('settings.rename_group') }}"
               hx-target="body"
               hx-push-url="true">
-            <input type="hidden" name="old_name" value="" />
-            <div class="field">
-                <label for="rename-group-name" class="field__label">New name</label>
-                <input type="text"
-                       id="rename-group-name"
-                       name="new_name"
-                       class="field__input"
-                       data-no-spaces
-                       pattern="\S*"
-                       title="Group names can't contain spaces"
-                       required />
+            <div class="dialog__body">
+                <input type="hidden" name="old_name" value="" />
+                <div class="field">
+                    <label for="rename-group-name" class="field__label">New name</label>
+                    <input type="text"
+                           id="rename-group-name"
+                           name="new_name"
+                           data-no-spaces
+                           pattern="\S*"
+                           title="Group names can't contain spaces"
+                           required />
+                </div>
             </div>
-            <button type="submit" class="button">{{ icon("edit") }} Rename</button>
+            <div class="dialog__actions">
+                <button type="submit" class="btn">Save name</button>
+            </div>
         </form>
     </dialog>
-
 {% endblock %}

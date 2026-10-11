@@ -2,7 +2,7 @@
     var modal = document.getElementById("rename-group-modal");
     if (!modal) return;
 
-    var title = modal.querySelector(".modal__title");
+    var title = document.getElementById("rename-group-title");
     var oldNameInput = modal.querySelector("input[name='old_name']");
     var newNameInput = modal.querySelector("input[name='new_name']");
 
