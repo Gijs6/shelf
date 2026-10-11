@@ -1,6 +1,5 @@
 import secrets
 import string
-from datetime import timedelta
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
@@ -14,7 +13,6 @@ db = SQLAlchemy()
 STICKY_COLOURS = ["yellow", "pink", "blue", "green", "purple", "orange"]
 TODO_STATES = ["shelved", "open", "active", "done", "cancelled"]
 SNIPPET_LENGTH = 80
-STICKY_EXPIRY_DAYS = 30
 
 ID_LENGTH = 8
 
@@ -22,10 +20,6 @@ ID_LENGTH = 8
 def generate_id():
     chars = string.ascii_uppercase + string.digits
     return "".join(secrets.choice(chars) for _ in range(ID_LENGTH))
-
-
-def default_sticky_expiry():
-    return now_naive() + timedelta(days=STICKY_EXPIRY_DAYS)
 
 
 def normalize_group_name_value(value):
@@ -96,26 +90,9 @@ class StickyNote(db.Model):
     content = db.Column(db.Text, nullable=False, default="")
     created_at = db.Column(db.DateTime, default=now)
     updated_at = db.Column(db.DateTime, default=now)
-    expires_at = db.Column(db.DateTime, nullable=True)
     colour = db.Column(db.String(20), nullable=False, default="yellow")
     pinned = db.Column(db.Boolean, nullable=False, default=False)
     deleted_at = db.Column(db.DateTime, nullable=True)
-
-    @hybrid_property
-    def expired(self):
-        return (
-            not self.pinned
-            and self.expires_at is not None
-            and self.expires_at < now_naive()
-        )
-
-    @expired.expression
-    def expired(cls):
-        return and_(
-            cls.pinned.is_(False),
-            cls.expires_at.isnot(None),
-            cls.expires_at < now_naive(),
-        )
 
     @hybrid_property
     def deleted(self):

@@ -6,11 +6,9 @@ from models import (
     StickyNote,
     Todo,
     db,
-    default_sticky_expiry,
     now,
 )
 from utils.checklist import toggle_item_checkbox
-from utils.datetimes import local_to_utc, parse_local_datetime, utc_to_local
 from utils.flash import flash_with_undo
 
 sticky_notes_bp = Blueprint("sticky_notes", __name__, url_prefix="/sticky-notes")
@@ -23,7 +21,6 @@ def list_sticky_notes():
         .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
         .all()
     )
-    active = [n for n in active if not n.expired]
     pinned = [n for n in active if n.pinned]
     unpinned = [n for n in active if not n.pinned]
     return render_template(
@@ -32,13 +29,6 @@ def list_sticky_notes():
         active_notes=unpinned,
         open_id=request.args.get("open"),
     )
-
-
-@sticky_notes_bp.get("/expired")
-def expired():
-    notes = [n for n in StickyNote.query.filter(~StickyNote.deleted).all() if n.expired]
-    notes.sort(key=lambda n: n.expires_at, reverse=True)
-    return render_template("sticky_notes/expired.jinja", notes=notes)
 
 
 @sticky_notes_bp.get("/trash")
@@ -53,10 +43,7 @@ def trash():
 
 @sticky_notes_bp.post("/new")
 def new_sticky_note():
-    sticky_note = StickyNote(
-        colour="yellow",
-        expires_at=default_sticky_expiry(),
-    )
+    sticky_note = StickyNote(colour="yellow")
     db.session.add(sticky_note)
     db.session.commit()
     flash("Sticky note created.", "success")
@@ -94,10 +81,6 @@ def update_sticky_note(sticky_note_id):
     sticky_note.title = title
     sticky_note.content = content
     sticky_note.colour = colour
-    if not sticky_note.pinned:
-        sticky_note.expires_at = local_to_utc(
-            parse_local_datetime(request.form.get("expires_at"))
-        )
     sticky_note.updated_at = now()
     db.session.commit()
     return render_template(
@@ -112,9 +95,6 @@ def dropped_sticky_note_fields(sticky_note):
     dropped = []
     if sticky_note.pinned:
         dropped.append("pinned")
-    if sticky_note.expires_at:
-        local_expires = utc_to_local(sticky_note.expires_at)
-        dropped.append(f"expires: {local_expires.strftime('%-d %b %Y, %H:%M')}")
     return dropped
 
 

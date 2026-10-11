@@ -229,12 +229,9 @@ def search(raw_query, limit=50):
                     "snippet": make_snippet(sticky_note.content),
                     "created_at": sticky_note.created_at,
                     "updated_at": sticky_note.updated_at,
-                    "endpoint": "sticky_notes.expired"
-                    if sticky_note.expired
-                    else "sticky_notes.list_sticky_notes",
+                    "endpoint": "sticky_notes.list_sticky_notes",
                     "url_kwargs": {"_anchor": f"sticky-{sticky_note.id}"},
                     "pinned": sticky_note.pinned,
-                    "expired": sticky_note.expired,
                     "colour": sticky_note.colour,
                 }
             )

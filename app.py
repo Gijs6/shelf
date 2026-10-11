@@ -70,10 +70,7 @@ def index():
     )
 
     sticky_notes = (
-        StickyNote.query.filter(
-            ~StickyNote.deleted,
-            ~StickyNote.expired,
-        )
+        StickyNote.query.filter(~StickyNote.deleted)
         .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
         .limit(6)
         .all()

@@ -1,5 +1,4 @@
 {% from "partials/entries.jinja" import when %}
-{% from "partials/date_chips.jinja" import date_chips %}
 
 {% macro sticky_card(sticky_note, compact=False, heading_level=3, auto_open=False) %}
     <li>
@@ -48,17 +47,6 @@
                            class="sticky-note__colour-value"
                            value="{{ sticky_note.colour }}" />
 
-                    {% if not sticky_note.pinned %}
-                        <label class="sticky-note__expiry-label"
-                               for="sticky-expires-input-{{ sticky_note.id }}">Expires</label>
-                        <input type="datetime-local"
-                               id="sticky-expires-input-{{ sticky_note.id }}"
-                               name="expires_at"
-                               class="sticky-note__expiry-input"
-                               value="{{ sticky_note.expires_at | strftime('%Y-%m-%dT%H:%M') if sticky_note.expires_at else '' }}" />
-                        {{ date_chips("sticky-expires-input-" ~ sticky_note.id) }}
-                    {% endif %}
-
                     <input type="hidden" name="heading_level" value="{{ heading_level }}" />
                     <input type="hidden" name="compact" value="{{ '1' if compact else '' }}" />
                 </form>
@@ -97,16 +85,6 @@
                 </menu>
 
                 <footer class="sticky-note__footer">
-                    {% if sticky_note.expires_at and not sticky_note.pinned %}
-                        <p class="sticky-note__expires">
-                            {% if sticky_note.expired %}
-                                Expired
-                            {% else %}
-                                Expires
-                            {% endif %}
-                            {{ when(sticky_note.expires_at) }}
-                        </p>
-                    {% endif %}
                     <p class="sticky-note__made">
                         Made {{ when(sticky_note.created_at) }}
                     </p>

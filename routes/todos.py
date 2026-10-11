@@ -9,7 +9,7 @@ from flask import (
     url_for,
 )
 
-from models import TODO_STATES, Note, StickyNote, Todo, db, default_sticky_expiry, now
+from models import TODO_STATES, Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
 from utils.datetimes import local_to_utc, parse_local_datetime, utc_to_local
 from utils.flash import flash_with_undo
@@ -263,7 +263,6 @@ def convert_todo_to_sticky_note(todo_id):
         title=todo.title,
         content=content,
         created_at=todo.created_at,
-        expires_at=default_sticky_expiry(),
     )
     db.session.add(sticky_note)
     db.session.delete(todo)

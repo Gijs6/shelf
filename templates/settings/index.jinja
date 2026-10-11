@@ -60,28 +60,6 @@
     </section>
 
     <section class="panel">
-        <h2 class="panel__heading">Expired sticky notes</h2>
-        {% if expired_sticky_note_count %}
-            <div class="panel__body">
-                <p>
-                    {{ expired_sticky_note_count }} expired sticky
-                    {{ expired_sticky_note_count | pluralize("note") }} not yet in trash.
-                </p>
-                <form hx-delete="{{ url_for('settings.clear_expired_sticky_notes') }}"
-                      hx-target="body"
-                      hx-push-url="true"
-                      hx-confirm="Move all expired sticky notes to trash?">
-                    <button type="submit" class="btn">Move expired to trash</button>
-                </form>
-            </div>
-        {% else %}
-            <div class="empty">
-                <p class="empty__title">No expired sticky notes</p>
-            </div>
-        {% endif %}
-    </section>
-
-    <section class="panel">
         <h2 class="panel__heading">Groups</h2>
         {% if group_counts %}
             <div class="table-wrap">

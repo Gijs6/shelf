@@ -133,12 +133,10 @@ STICKY_SEEDS = [
     {
         "content": "Er is een Kiesraad, gevestigd te 's-Gravenhage.",
         "colour": "pink",
-        "expires_days": -3,
     },
     {
         "content": "De overheid treft maatregelen ter bevordering van de volksgezondheid.",
         "colour": "orange",
-        "expires_days": 2,
     },
     {"content": "Poging tot dit misdrijf is niet strafbaar.", "colour": "green"},
     {
@@ -148,13 +146,11 @@ STICKY_SEEDS = [
     {
         "title": "Artikel 7:1 BW",
         "colour": "purple",
-        "expires_days": 5,
     },
     {
         "title": "Artikel 453 Sr",
         "colour": "purple",
         "pinned": True,
-        "expires_days": -10,
     },
     {
         "content": "Hij die zich in kennelijke staat van dronkenschap op de openbare weg bevindt, wordt gestraft met hechtenis van ten hoogste twaalf dagen of geldboete van de eerste categorie.",
@@ -347,17 +343,12 @@ def seed_notes(rng):
 
 def seed_sticky_notes(rng):
     for seed in STICKY_SEEDS:
-        expires_days = seed.get("expires_days")
-
         db.session.add(
             StickyNote(
                 title=seed.get("title"),
                 content=seed.get("content"),
                 colour=seed["colour"],
                 pinned=seed.get("pinned", False),
-                expires_at=days_from_now(expires_days)
-                if expires_days is not None
-                else None,
                 created_at=days_ago(rng.randint(0, 20)),
                 deleted_at=now() if seed.get("deleted") else None,
             )

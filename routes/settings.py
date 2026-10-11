@@ -51,7 +51,6 @@ def sticky_note_to_dict(sticky_note):
         "content": sticky_note.content,
         "created_at": utc_isoformat(sticky_note.created_at),
         "updated_at": utc_isoformat(sticky_note.updated_at),
-        "expires_at": utc_isoformat(sticky_note.expires_at),
         "colour": sticky_note.colour,
         "pinned": sticky_note.pinned,
         "deleted_at": utc_isoformat(sticky_note.deleted_at),
@@ -102,7 +101,6 @@ def apply_sticky_note(data):
     sticky_note.pinned = bool(data.get("pinned"))
     sticky_note.created_at = parse_utc_datetime(data.get("created_at")) or now()
     sticky_note.updated_at = parse_utc_datetime(data.get("updated_at")) or now()
-    sticky_note.expires_at = parse_utc_datetime(data.get("expires_at"))
     sticky_note.deleted_at = parse_utc_datetime(data.get("deleted_at"))
     return sticky_note
 
@@ -129,14 +127,6 @@ def is_blank(data):
         not (data.get("title") or "").strip()
         and not (data.get("content") or "").strip()
     )
-
-
-def expired_sticky_notes():
-    return [
-        sticky_note
-        for sticky_note in StickyNote.query.filter(~StickyNote.deleted).all()
-        if sticky_note.expired
-    ]
 
 
 def count_summary(counts):
@@ -172,7 +162,6 @@ def index():
         session_expires_at=session_expires_at,
         trash_counts=trash_counts,
         total_trash=sum(trash_counts.values()),
-        expired_sticky_note_count=len(expired_sticky_notes()),
         group_counts=group_name_counts(),
     )
 
@@ -293,21 +282,6 @@ def purge_all_trash():
     db.session.commit()
 
     flash(f"Deleted {count_summary(counts)} from trash.", "success")
-    return redirect(url_for("settings.index"), code=303)
-
-
-@settings_bp.delete("/expired-sticky-notes")
-def clear_expired_sticky_notes():
-    notes = expired_sticky_notes()
-    for sticky_note in notes:
-        sticky_note.deleted_at = now()
-    db.session.commit()
-
-    count = len(notes)
-    flash(
-        f"Moved {count} expired sticky {pluralize(count, 'note')} to trash.",
-        "success",
-    )
     return redirect(url_for("settings.index"), code=303)
 
 

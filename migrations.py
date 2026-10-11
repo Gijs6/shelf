@@ -8,6 +8,7 @@ MIGRATIONS = [
     "ALTER TABLE todo DROP COLUMN recur_interval",
     "ALTER TABLE todo DROP COLUMN recur_unit",
     "ALTER TABLE todo DROP COLUMN notify_before_days",
+    "ALTER TABLE sticky_note DROP COLUMN expires_at",
 ]
 
 

@@ -405,8 +405,7 @@ kbd {
 }
 
 .sticky-note--editing {
-    .sticky-note__view,
-    .sticky-note__expires {
+    .sticky-note__view {
         display: none;
     }
     .sticky-note__edit {
@@ -432,31 +431,6 @@ kbd {
 .sticky-note__content-input {
     min-block-size: 4lh;
     resize: none;
-}
-
-.sticky-note__expiry-label {
-    margin-block-start: var(--space-sm);
-    font-weight: 700;
-}
-
-.sticky-note__expiry-input {
-    inline-size: auto;
-    max-inline-size: 100%;
-    margin-block-start: var(--space-2xs);
-    padding: var(--space-xs) var(--space-sm);
-    color: inherit;
-    background: transparent;
-    border: 1px solid currentColor;
-}
-
-.sticky-note .date-chips__chip {
-    color: inherit;
-    background: transparent;
-    border-color: currentColor;
-
-    &:hover {
-        background: color-mix(in srgb, currentColor 12%, transparent);
-    }
 }
 
 .sticky-note__actions {

@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
-from models import Note, StickyNote, Todo, db, default_sticky_expiry, now
+from models import Note, StickyNote, Todo, db, now
 from utils.checklist import toggle_item_checkbox
 from utils.flash import flash_with_undo
 from utils.groups import all_group_names, group_sections, normalize_group_name
@@ -152,7 +152,6 @@ def convert_note_to_sticky_note(note_id):
         title=note.title,
         content=content,
         created_at=note.created_at,
-        expires_at=default_sticky_expiry(),
     )
     db.session.add(sticky_note)
     db.session.delete(note)
