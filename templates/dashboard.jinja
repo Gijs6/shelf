@@ -1,49 +1,47 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/empty_state.jinja" import empty_state %}
+{% from "partials/entries.jinja" import entry_table %}
 {% from "partials/sticky_card.jinja" import sticky_card %}
-{% from "partials/entry_card.jinja" import entry_card, todo_badges %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <header class="page-header">
-        <h1 class="page-header__title">Dashboard</h1>
-    </header>
-
-    <div class="dashboard-grid">
-        <section class="dashboard-widget">
-            <h2 class="dashboard-widget__title">{{ icon("clock") }} Upcoming and overdue todos</h2>
-            {% if upcoming_todos %}
-                <ul class="card-list">
-                    {% for todo in upcoming_todos %}{{ entry_card(todo, url=url_for('todos.view_todo', todo_id=todo.id) , heading_level=3, badges=todo_badges(todo)) }}{% endfor %}
-                </ul>
-            {% else %}
-                {{ empty_state('clock', 'Nothing due.') }}
-            {% endif %}
-        </section>
-
-        <section class="dashboard-widget">
-            <h2 class="dashboard-widget__title">{{ icon("note") }} Recent notes</h2>
-            {% if recent_notes %}
-                <ul class="card-list">
-                    {% for note in recent_notes %}{{ entry_card(note, url=url_for('notes.view_note', note_id=note.id) , heading_level=3) }}{% endfor %}
-                </ul>
-            {% else %}
-                {{ empty_state('note', 'No notes yet.') }}
-            {% endif %}
-        </section>
-
-        <section class="dashboard-widget">
-            <h2 class="dashboard-widget__title">{{ icon("sticky") }} Pinned and active sticky notes</h2>
-            {% if sticky_notes %}
-                <ul class="sticky-board">
-                    {% for sticky_note in sticky_notes %}{{ sticky_card(sticky_note, compact=True) }}{% endfor %}
-                </ul>
-            {% else %}
-                {{ empty_state('sticky', 'No sticky notes yet.') }}
-            {% endif %}
-        </section>
+    <div class="page-head">
+        <h1>Dashboard</h1>
     </div>
+
+    <section class="panel">
+        <h2 class="panel__heading">Upcoming and overdue todos</h2>
+        {% if upcoming_todos %}
+            {{ entry_table(upcoming_todos, state=True, due=True) }}
+        {% else %}
+            <div class="empty">
+                <p class="empty__title">Nothing due</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="panel">
+        <h2 class="panel__heading">Recent notes</h2>
+        {% if recent_notes %}
+            {{ entry_table(recent_notes) }}
+        {% else %}
+            <div class="empty">
+                <p class="empty__title">No notes yet</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="panel">
+        <h2 class="panel__heading">Pinned and active sticky notes</h2>
+        {% if sticky_notes %}
+            <ul class="sticky-board">
+                {% for sticky_note in sticky_notes %}{{ sticky_card(sticky_note, compact=True) }}{% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty">
+                <p class="empty__title">No sticky notes yet</p>
+            </div>
+        {% endif %}
+    </section>
 {% endblock %}
