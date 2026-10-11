@@ -3,7 +3,7 @@
         const now = Date.now();
         const value = new Date(dt).getTime();
 
-        if (value == null || isNaN(value)) return "never";
+        if (value == null || isNaN(value)) return "Never";
 
         let secs = Math.floor((now - value) / 1000);
         const future = secs < 0;

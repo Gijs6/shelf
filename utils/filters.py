@@ -26,7 +26,7 @@ def isoformat_filter(value):
 def timeago_filter(value):
     value = utc_to_local(value)
     if value is None:
-        return "never"
+        return "Never"
 
     now = datetime.now(timezone.utc)
     secs = int((now - value).total_seconds())
