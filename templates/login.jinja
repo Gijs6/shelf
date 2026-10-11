@@ -1,32 +1,30 @@
 {% extends "skeleton.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-
 {% block title %}Sign in{% endblock %}
-{% block body_class %}auth-page{% endblock %}
 
 {% block body_content %}
+    <header class="navbar">
+        <div class="navbar__inner">
+            <a href="{{ url_for('index') }}" class="navbar__brand">{% include "mark.svg" %}Shelf</a>
+        </div>
+    </header>
 
-    <main class="auth-layout">
-        <p class="auth-layout__brand">{{ icon("note") }} Shelf</p>
+    <main class="page page--narrow">
+        <h1>Sign in</h1>
 
-        <section class="auth-layout__panel">
-            <h1 class="auth-layout__heading">{{ icon("login") }} Sign in</h1>
-            <form method="post" action="{{ url_for('login_post') }}" class="form">
-                <div class="field">
-                    <label for="password" class="field__label">{{ icon("lock") }} Password</label>
-                    <input type="password"
-                           id="password"
-                           name="password"
-                           class="field__input"
-                           required
-                           autofocus
-                           autocomplete="current-password" />
-                </div>
-                <button type="submit" class="button button--block">{{ icon("login") }} Sign in</button>
-            </form>
-        </section>
-
-        <p class="auth-layout__footer">Shelf</p>
+        <form method="post" action="{{ url_for('login_post') }}">
+            <div class="field">
+                <label class="field__label" for="password">Password</label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       required
+                       autofocus
+                       autocomplete="current-password" />
+            </div>
+            <div class="form__actions">
+                <button type="submit" class="btn">Sign in</button>
+            </div>
+        </form>
     </main>
 {% endblock %}
