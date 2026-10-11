@@ -1,0 +1,76 @@
+{% macro when(dt) -%}
+    <time datetime="{{ dt | isoformat }}">{{ dt | strftime("%-d %b %Y, %H:%M") }}</time> (<time datetime="{{ dt | isoformat }}" data-live>{{ dt | timeago }}</time>)
+{%- endmacro %}
+
+{% macro state_label(todo) -%}
+    <span class="status {{ {'open': 'status--open', 'active': 'status--warn', 'done': 'status--ok'}.get(todo.state, '') }}">{{ todo.state | capitalize }}</span>
+    {%- if todo.overdue %}, <span class="status status--bad">overdue</span>{% endif %}
+{%- endmacro %}
+
+{% macro kind_label(item) -%}
+    {{ {"note": "Note", "todo": "Todo", "sticky": "Sticky note"}[item.kind] }}
+    {%- if item.archived %} (archived){% endif %}
+    {%- if item.pinned %} (pinned){% endif %}
+{%- endmacro %}
+
+{% macro entry_url(item) -%}
+    {%- if item.endpoint -%}
+        {{ url_for(item.endpoint, **item.url_kwargs) }}
+    {%- elif item.kind == "note" -%}
+        {{ url_for('notes.view_note', note_id=item.id) }}
+    {%- elif item.kind == "todo" -%}
+        {{ url_for('todos.view_todo', todo_id=item.id) }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro entry_table(items, date_label="Updated", date_attr="updated_at", kind=False, state=False, group=False, due=False, links=True) %}
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    {% if kind %}<th>Type</th>{% endif %}
+                    {% if state %}<th>State</th>{% endif %}
+                    {% if group %}<th>Group</th>{% endif %}
+                    {% if due %}<th>Due</th>{% endif %}
+                    <th>{{ date_label }}</th>
+                    {% if caller %}
+                        <th class="table__actions">
+                            <span class="visually-hidden">Actions</span>
+                        </th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    {% set url = entry_url(item) if links else "" %}
+                    {% set title = item.display_title or item.title %}
+                    <tr>
+                        <td>
+                            {% if url %}
+                                <a href="{{ url }}">{{ title | markdown_inline(links=false) }}</a>
+                            {% else %}
+                                {{ title | markdown_inline }}
+                            {% endif %}
+                            {% if item.title and item.snippet %}<span class="snippet">{{ item.snippet | markdown_inline }}</span>{% endif %}
+                        </td>
+                        {% if kind %}<td class="nowrap">{{ kind_label(item) }}</td>{% endif %}
+                        {% if state %}
+                            <td class="nowrap">
+                                {% if item.state %}{{ state_label(item) }}{% endif %}
+                            </td>
+                        {% endif %}
+                        {% if group %}<td>{{ item.group_name or "" }}</td>{% endif %}
+                        {% if due %}
+                            <td class="nowrap">
+                                {% if item.deadline %}{{ when(item.deadline) }}{% endif %}
+                            </td>
+                        {% endif %}
+                        <td class="nowrap">{{ when(item[date_attr]) }}</td>
+                        {% if caller %}<td class="table__actions">{{ caller(item) }}</td>{% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}
