@@ -164,20 +164,17 @@
         </div>
     </section>
 
-    <section class="panel">
-        <h2 class="panel__heading">Session</h2>
-        <div class="panel__body">
-            {% if last_login %}
+    {% if last_login %}
+        <section class="panel">
+            <h2 class="panel__heading">Session</h2>
+            <div class="panel__body">
                 <p>
                     Signed in since {{ when(last_login) }}.
                     Session expires {{ when(session_expires_at) }}.
                 </p>
-            {% endif %}
-            <form method="post" action="{{ url_for('logout') }}">
-                <button type="submit" class="btn">Sign out</button>
-            </form>
-        </div>
-    </section>
+            </div>
+        </section>
+    {% endif %}
 
     {% if APP_VERSION %}
         <section class="panel">

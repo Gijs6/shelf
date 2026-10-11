@@ -16,6 +16,9 @@
                 {{ nav_link('sticky_notes.list_sticky_notes', 'Sticky notes') }}
                 {{ nav_link('search.search_view', 'Search') }}
                 {{ nav_link('settings.index', 'Settings') }}
+                <form method="post" action="{{ url_for('logout') }}">
+                    <button type="submit">Sign out</button>
+                </form>
             </nav>
         </div>
     </header>
