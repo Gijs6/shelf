@@ -288,25 +288,25 @@ kbd {
     }
     :is(.k, .kc, .kd, .kn, .kp, .kr, .kt, .ow, .nt) {
         font-weight: 700;
-        color: light-dark(#8a2b8a, #c678dd);
+        color: var(--purple-text);
     }
     :is(.s, .s1, .s2, .sb, .sc, .sd, .se, .sh, .si, .sx, .sr, .ss, .dl, .sa) {
-        color: light-dark(#3c7a3b, #98c379);
+        color: var(--green-text);
     }
     :is(.m, .mb, .mf, .mh, .mi, .mo, .il) {
-        color: light-dark(#8a5d00, #d19a66);
+        color: var(--orange-text);
     }
     :is(.nb, .bp) {
-        color: light-dark(#0e6a8f, #56b6c2);
+        color: var(--cyan-text);
     }
     :is(.nc, .nf, .nn, .fm) {
-        color: light-dark(#2f5fcf, #61afef);
+        color: var(--indigo-text);
     }
     :is(.nv, .vc, .vg, .vi, .vm, .no) {
-        color: light-dark(#b23a2e, #ef7f88);
+        color: var(--red-text);
     }
     .nd {
-        color: light-dark(#7a5c00, #e5c07b);
+        color: var(--lime-text);
     }
     :is(.gd, .err) {
         color: var(--bad);
@@ -318,27 +318,27 @@ kbd {
 
 .sticky-note--yellow,
 .colour-picker__option--yellow {
-    --sticky: #ffe066;
+    --sticky: var(--lime-tint-line);
 }
 .sticky-note--pink,
 .colour-picker__option--pink {
-    --sticky: #faa2c1;
+    --sticky: var(--pink-tint-line);
 }
 .sticky-note--blue,
 .colour-picker__option--blue {
-    --sticky: #74c0fc;
+    --sticky: var(--cyan-tint-line);
 }
 .sticky-note--green,
 .colour-picker__option--green {
-    --sticky: #8ce99a;
+    --sticky: var(--green-tint-line);
 }
 .sticky-note--purple,
 .colour-picker__option--purple {
-    --sticky: #b197fc;
+    --sticky: var(--purple-tint-line);
 }
 .sticky-note--orange,
 .colour-picker__option--orange {
-    --sticky: #ffc078;
+    --sticky: var(--orange-tint-line);
 }
 
 .sticky-board {
@@ -361,10 +361,9 @@ kbd {
     gap: var(--space-xs) var(--space-md);
     block-size: 100%;
     padding: var(--space-md) var(--space-lg);
-    color: #222222;
-    color-scheme: light;
+    color: var(--fg);
     background: var(--sticky);
-    border: 1px solid color-mix(in srgb, var(--sticky) 65%, #000000);
+    border: 1px solid color-mix(in srgb, var(--sticky) 65%, var(--black));
 
     a {
         color: inherit;
