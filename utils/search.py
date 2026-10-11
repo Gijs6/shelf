@@ -218,9 +218,7 @@ def search(raw_query, limit=50):
             query = query.filter(StickyNote.created_at >= parsed["after"])
         if parsed["text"]:
             like = f"%{parsed['text']}%"
-            query = query.filter(
-                StickyNote.content.ilike(like)
-            )
+            query = query.filter(StickyNote.content.ilike(like))
         for sticky_note in query.all():
             results.append(
                 {
