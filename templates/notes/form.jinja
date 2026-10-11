@@ -1,12 +1,6 @@
 {% extends "base.jinja" %}
 
-{% block title %}
-    {% if note and note.id %}
-        Edit note
-    {% else %}
-        New note
-    {% endif %}
-{% endblock %}
+{% block title %}{{ "Edit note" if note and note.id else "New note" }}{% endblock %}
 
 {% block content %}
     <div class="page-head">
