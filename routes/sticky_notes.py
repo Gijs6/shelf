@@ -113,7 +113,7 @@ def dropped_sticky_note_fields(sticky_note):
         dropped.append("pinned")
     if sticky_note.expires_at:
         local_expires = utc_to_local(sticky_note.expires_at)
-        dropped.append(f"expires: {local_expires.strftime('%d %b %Y, %H:%M')}")
+        dropped.append(f"expires: {local_expires.strftime('%-d %b %Y, %H:%M')}")
     return dropped
 
 

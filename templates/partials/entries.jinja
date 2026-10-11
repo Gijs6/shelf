@@ -1,5 +1,5 @@
 {% macro when(dt) -%}
-    <time datetime="{{ dt | isoformat }}">{{ dt | strftime("%-d %b %Y, %H:%M") }}</time> (<time datetime="{{ dt | isoformat }}" data-live>{{ dt | timeago }}</time>)
+    <time datetime="{{ dt | isoformat }}">{{ dt | strftime }}</time> (<time datetime="{{ dt | isoformat }}" data-live>{{ dt | timeago }}</time>)
 {%- endmacro %}
 
 {% macro state_label(todo) -%}

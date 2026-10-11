@@ -9,7 +9,7 @@ from utils.datetimes import utc_to_local
 from utils.tasklist import TaskListExtension
 
 
-def strftime_filter(value, fmt="%d %b %Y"):
+def strftime_filter(value, fmt="%-d %b %Y, %H:%M"):
     value = utc_to_local(value)
     if value is None:
         return "-"

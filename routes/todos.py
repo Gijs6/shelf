@@ -221,7 +221,7 @@ def dropped_todo_fields(todo, include_group):
         dropped.append(f"state: {todo.state}")
     if todo.deadline:
         local_deadline = utc_to_local(todo.deadline)
-        dropped.append(f"deadline: {local_deadline.strftime('%d %b %Y, %H:%M')}")
+        dropped.append(f"deadline: {local_deadline.strftime('%-d %b %Y, %H:%M')}")
     return dropped
 
 
