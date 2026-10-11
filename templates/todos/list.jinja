@@ -1,48 +1,41 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/empty_state.jinja" import empty_state %}
-{% from "partials/entry_card.jinja" import entry_card, todo_badges %}
+{% from "partials/entries.jinja" import entry_table %}
 
 {% block title %}Todos{% endblock %}
-{% block page_class %}page--todo{% endblock %}
 
 {% block content %}
-    <header class="page-header page-header--todo">
-        <div class="page-header__heading">
-            <h1 class="page-header__title">Todos</h1>
-        </div>
-        <nav class="page-header__actions" aria-label="Todo actions">
+    <div class="page-head">
+        <h1>Todos</h1>
+        <div class="page-head__actions">
             <a href="{{ url_for('todos.archived') }}"
-               class="button button--ghost"
-               data-shortcut="archived">{{ icon("archive") }} Archived</a>
-            <a href="{{ url_for('todos.trash') }}"
-               class="button button--ghost"
-               data-shortcut="trash">{{ icon("trash") }} Trash</a>
+               class="btn"
+               data-shortcut="archived">Archived</a>
+            <a href="{{ url_for('todos.trash') }}" class="btn" data-shortcut="trash">Trash</a>
             <a href="{{ url_for('todos.new_todo') }}"
-               class="button"
-               data-shortcut="new">{{ icon("plus") }} New</a>
-        </nav>
-    </header>
+               class="btn"
+               data-shortcut="new">New todo</a>
+        </div>
+    </div>
 
-    <nav class="filters" aria-label="Filter todos by state">
+    <nav class="btn-group" aria-label="Filter todos by state">
         {% for state in states %}
             <a href="{{ chip_links[state] }}"
-               class="filters__chip filters__chip--{{ state }} {% if state in selected_states %}filters__chip--selected{% endif %}"
-               {% if state in selected_states %}aria-current="true"{% endif %}>{{ state | title }}</a>
+               class="btn btn--sm"
+               {% if state in selected_states %}aria-current="true"{% endif %}>{{ state | capitalize }}</a>
         {% endfor %}
     </nav>
 
     {% if sections %}
         {% for label, items in sections %}
-            <section class="list-section">
-                <h2 class="list-section__title">{{ label }}</h2>
-                <ul class="card-list">
-                    {% for todo in items %}{{ entry_card(todo, url=url_for('todos.view_todo', todo_id=todo.id) , heading_level=3, timestamp=todo.created_at, badges=todo_badges(todo)) }}{% endfor %}
-                </ul>
+            <section class="panel">
+                <h2 class="panel__heading">{{ label }}</h2>
+                {{ entry_table(items, date_label="Created", date_attr="created_at", state=True, due=True) }}
             </section>
         {% endfor %}
     {% else %}
-        {{ empty_state("todo", "No todos yet.", url_for('todos.new_todo') , "New todo") }}
+        <div class="empty">
+            <p class="empty__title">No todos yet</p>
+        </div>
     {% endif %}
 {% endblock %}
