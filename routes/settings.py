@@ -23,6 +23,7 @@ from models import (
     now,
 )
 from utils.datetimes import parse_utc_datetime, utc_isoformat
+from utils.filters import pluralize_filter as pluralize
 from utils.groups import group_name_counts, normalize_group_name
 from utils.session import SESSION_LIFETIME
 from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
@@ -138,6 +139,17 @@ def expired_sticky_notes():
     ]
 
 
+def count_summary(counts):
+    notes = counts["notes"]
+    sticky_notes = counts["sticky_notes"]
+    todos = counts["todos"]
+    return (
+        f"{notes} {pluralize(notes, 'note')}, "
+        f"{sticky_notes} sticky {pluralize(sticky_notes, 'note')} and "
+        f"{todos} {pluralize(todos, 'todo')}"
+    )
+
+
 @settings_bp.get("/")
 def index():
     calendar_token = get_setting(CALENDAR_TOKEN_KEY)
@@ -240,11 +252,7 @@ def import_data():
     if calendar_token:
         set_setting(CALENDAR_TOKEN_KEY, calendar_token)
 
-    flash(
-        f"Imported {counts['notes']} notes, {counts['sticky_notes']} sticky notes and "
-        f"{counts['todos']} todos.",
-        "success",
-    )
+    flash(f"Imported {count_summary(counts)}.", "success")
     return redirect(url_for("settings.index"), code=303)
 
 
@@ -265,8 +273,9 @@ def rename_group():
     )
     db.session.commit()
 
+    item_count = note_count + todo_count
     flash(
-        f'Renamed "{old_name}" to "{new_name}" ({note_count + todo_count} items).',
+        f'Renamed "{old_name}" to "{new_name}" ({item_count} {pluralize(item_count, "item")}).',
         "success",
     )
     return redirect(url_for("settings.index"), code=303)
@@ -283,11 +292,7 @@ def purge_all_trash():
     }
     db.session.commit()
 
-    flash(
-        f"Deleted {counts['notes']} notes, {counts['sticky_notes']} sticky notes and "
-        f"{counts['todos']} todos from trash.",
-        "success",
-    )
+    flash(f"Deleted {count_summary(counts)} from trash.", "success")
     return redirect(url_for("settings.index"), code=303)
 
 
@@ -300,7 +305,7 @@ def clear_expired_sticky_notes():
 
     count = len(notes)
     flash(
-        f"Moved {count} expired sticky {'note' if count == 1 else 'notes'} to trash.",
+        f"Moved {count} expired sticky {pluralize(count, 'note')} to trash.",
         "success",
     )
     return redirect(url_for("settings.index"), code=303)
