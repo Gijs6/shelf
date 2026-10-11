@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "build:css": "lightningcss --bundle --minify --browserslist static/styles/main.css -o static/styles/main.min.css"
+        "build:css": "lightningcss --minify --browserslist static/styles/app.css -o static/styles/app.min.css"
     },
     "dependencies": {
         "easymde": "^2.21.0",
