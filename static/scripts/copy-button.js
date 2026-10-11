@@ -20,21 +20,6 @@
         return Promise.resolve();
     }
 
-    function showTooltip(button) {
-        var existing = button.querySelector(".tooltip");
-        if (existing) existing.remove();
-
-        var tooltip = document.createElement("span");
-        tooltip.className = "tooltip";
-        tooltip.textContent = "Copied!";
-        button.classList.add("tooltip-anchor");
-        button.appendChild(tooltip);
-
-        setTimeout(function () {
-            tooltip.remove();
-        }, 1500);
-    }
-
     document.addEventListener("click", function (e) {
         var button = e.target.closest("[data-copy-target], [data-copy-html-target]");
         if (!button) return;
@@ -56,7 +41,7 @@
         }
 
         copyText(text).then(function () {
-            showTooltip(button);
+            window.toast(button.getAttribute("data-copied") || "Text copied.", { type: "success" });
         });
     });
 })();
