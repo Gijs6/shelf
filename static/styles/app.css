@@ -382,6 +382,10 @@ kbd {
     list-style: none;
 }
 
+.panel > .sticky-board {
+    margin-block-end: 0;
+}
+
 .sticky-note {
     display: grid;
     grid-template-columns: 1fr auto;
