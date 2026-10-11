@@ -47,7 +47,6 @@ def note_to_dict(note):
 def sticky_note_to_dict(sticky_note):
     return {
         "id": sticky_note.id,
-        "title": sticky_note.title,
         "content": sticky_note.content,
         "created_at": utc_isoformat(sticky_note.created_at),
         "updated_at": utc_isoformat(sticky_note.updated_at),
@@ -95,7 +94,6 @@ def apply_note(data):
 def apply_sticky_note(data):
     sticky_note = get_or_create(StickyNote, data)
     colour = data.get("colour", "yellow")
-    sticky_note.title = data.get("title")
     sticky_note.content = data.get("content", "")
     sticky_note.colour = colour if colour in STICKY_COLOURS else "yellow"
     sticky_note.pinned = bool(data.get("pinned"))

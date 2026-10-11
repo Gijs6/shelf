@@ -388,11 +388,6 @@ kbd {
     cursor: text;
 }
 
-.sticky-note__title {
-    margin: 0 0 var(--space-2xs);
-    font-size: 14px;
-}
-
 .sticky-note__body {
     & > :last-child {
         margin-block-end: 0;
@@ -413,19 +408,12 @@ kbd {
     }
 }
 
-.sticky-note__title-input,
 .sticky-note__content-input {
     padding: var(--space-xs) var(--space-sm);
     color: inherit;
     background: transparent;
     border: 1px solid var(--sticky-line);
     field-sizing: content;
-}
-
-.sticky-note__title-input {
-    margin: 0 0 var(--space-2xs);
-    font-size: 14px;
-    font-weight: 700;
 }
 
 .sticky-note__content-input {

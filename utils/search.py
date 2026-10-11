@@ -219,7 +219,7 @@ def search(raw_query, limit=50):
         if parsed["text"]:
             like = f"%{parsed['text']}%"
             query = query.filter(
-                or_(StickyNote.title.ilike(like), StickyNote.content.ilike(like))
+                StickyNote.content.ilike(like)
             )
         for sticky_note in query.all():
             results.append(

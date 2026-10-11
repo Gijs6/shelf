@@ -1,6 +1,6 @@
 {% from "partials/entries.jinja" import when %}
 
-{% macro sticky_card(sticky_note, compact=False, heading_level=3, auto_open=False) %}
+{% macro sticky_card(sticky_note, compact=False, auto_open=False) %}
     <li>
         <article id="sticky-{{ sticky_note.id }}"
                  class="sticky-note sticky-note--{{ sticky_note.colour }}{% if sticky_note.pinned %} sticky-note--pinned{% endif %}{% if auto_open %} sticky-note--editing{% endif %}"
@@ -8,21 +8,10 @@
                  {% if auto_open %}data-autoedit{% endif %}>
             <div class="sticky-note__content">
                 <div class="sticky-note__view">
-                    {# djlint:off #}
-                    {% if sticky_note.title %}<h{{ heading_level }} class="sticky-note__title">{{ sticky_note.title | markdown_inline(links=false) }}</h{{ heading_level }}>{% endif %}
-                    {# djlint:on #}
                     <div id="sticky-body-{{ sticky_note.id }}" class="sticky-note__body">{{ sticky_note.content | markdown(kind="sticky", item_id=sticky_note.id) }}</div>
                 </div>
 
                 <form class="sticky-note__edit" novalidate>
-                    <label class="visually-hidden" for="sticky-title-input-{{ sticky_note.id }}">Title</label>
-                    <input type="text"
-                           id="sticky-title-input-{{ sticky_note.id }}"
-                           name="title"
-                           class="sticky-note__title-input"
-                           placeholder="Title"
-                           value="{{ sticky_note.title or '' }}" />
-
                     <label class="visually-hidden"
                            for="sticky-content-input-{{ sticky_note.id }}">Content (markdown)</label>
                     <textarea id="sticky-content-input-{{ sticky_note.id }}"
@@ -47,7 +36,6 @@
                            class="sticky-note__colour-value"
                            value="{{ sticky_note.colour }}" />
 
-                    <input type="hidden" name="heading_level" value="{{ heading_level }}" />
                     <input type="hidden" name="compact" value="{{ '1' if compact else '' }}" />
                 </form>
             </div>
@@ -71,8 +59,7 @@
                     <li>
                         <button type="button"
                                 class="sticky-note__action"
-                                data-copy-html-target="sticky-body-{{ sticky_note.id }}"
-                                data-copy-title="{{ sticky_note.title or '' }}">Copy text</button>
+                                data-copy-html-target="sticky-body-{{ sticky_note.id }}">Copy text</button>
                     </li>
                     <li>
                         <form hx-delete="{{ url_for('sticky_notes.delete_sticky_note', sticky_note_id=sticky_note.id) }}"

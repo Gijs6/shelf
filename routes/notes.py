@@ -144,12 +144,14 @@ def convert_note_to_sticky_note(note_id):
         dropped.append("archived")
 
     content = note.content
+    if note.title:
+        title_line = f"**{note.title}**"
+        content = f"{title_line}\n\n{content}" if content else title_line
     if dropped:
         note_line = f"_Converted from note ({', '.join(dropped)})_"
         content = f"{note_line}\n\n{content}" if content else note_line
 
     sticky_note = StickyNote(
-        title=note.title,
         content=content,
         created_at=note.created_at,
     )

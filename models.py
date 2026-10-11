@@ -86,7 +86,6 @@ class Note(db.Model):
 
 class StickyNote(db.Model):
     id = db.Column(db.String(ID_LENGTH), primary_key=True, default=generate_id)
-    title = db.Column(db.String(200), nullable=True)
     content = db.Column(db.Text, nullable=False, default="")
     created_at = db.Column(db.DateTime, default=now)
     updated_at = db.Column(db.DateTime, default=now)
@@ -104,7 +103,7 @@ class StickyNote(db.Model):
 
     @property
     def display_title(self):
-        return self.title or make_snippet(self.content) or "Untitled"
+        return make_snippet(self.content) or "Untitled"
 
     @property
     def kind(self):

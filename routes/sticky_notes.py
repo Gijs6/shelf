@@ -66,19 +66,17 @@ def update_sticky_note(sticky_note_id):
         StickyNote.id == sticky_note_id, ~StickyNote.deleted
     ).first_or_404()
 
-    title = request.form.get("title", "").strip() or None
     content = request.form.get("content", "")
 
     colour = request.form.get("colour", sticky_note.colour)
     if colour not in STICKY_COLOURS:
         colour = sticky_note.colour
 
-    if not title and not content.strip():
+    if not content.strip():
         db.session.delete(sticky_note)
         db.session.commit()
         return "", 204
 
-    sticky_note.title = title
     sticky_note.content = content
     sticky_note.colour = colour
     sticky_note.updated_at = now()
@@ -86,7 +84,6 @@ def update_sticky_note(sticky_note_id):
     return render_template(
         "partials/sticky_card_fragment.jinja",
         sticky_note=sticky_note,
-        heading_level=request.form.get("heading_level", type=int) or 2,
         compact=bool(request.form.get("compact")),
     )
 
@@ -111,7 +108,6 @@ def convert_sticky_note_to_note(sticky_note_id):
         content = f"{note_line}\n\n{content}" if content else note_line
 
     note = Note(
-        title=sticky_note.title,
         content=content,
         created_at=sticky_note.created_at,
     )
@@ -135,7 +131,6 @@ def convert_sticky_note_to_todo(sticky_note_id):
         content = f"{note_line}\n\n{content}" if content else note_line
 
     todo = Todo(
-        title=sticky_note.title,
         content=content,
         created_at=sticky_note.created_at,
     )

@@ -116,7 +116,6 @@ STICKY_SEEDS = [
         "colour": "green",
     },
     {
-        "title": "Artikel 6 Gemeentewet",
         "content": "In elke gemeente is een raad, een college en een burgemeester.",
         "colour": "blue",
         "pinned": True,
@@ -126,7 +125,6 @@ STICKY_SEEDS = [
         "colour": "yellow",
     },
     {
-        "title": "Artikel 300 Sr",
         "content": "- [x] Mishandeling wordt gestraft met gevangenisstraf van ten hoogste drie jaren of geldboete van de vierde categorie.\n- [ ] Indien het feit zwaar lichamelijk letsel ten gevolge heeft, wordt de schuldige gestraft met gevangenisstraf van ten hoogste vier jaren of geldboete van de vierde categorie.\n- [ ] Met mishandeling wordt gelijkgesteld opzettelijke benadeling van de gezondheid.",
         "colour": "green",
     },
@@ -144,11 +142,11 @@ STICKY_SEEDS = [
         "colour": "blue",
     },
     {
-        "title": "Artikel 7:1 BW",
+        "content": "Artikel 7:1 BW",
         "colour": "purple",
     },
     {
-        "title": "Artikel 453 Sr",
+        "content": "Artikel 453 Sr",
         "colour": "purple",
         "pinned": True,
     },
@@ -345,8 +343,7 @@ def seed_sticky_notes(rng):
     for seed in STICKY_SEEDS:
         db.session.add(
             StickyNote(
-                title=seed.get("title"),
-                content=seed.get("content"),
+                content=seed["content"],
                 colour=seed["colour"],
                 pinned=seed.get("pinned", False),
                 created_at=days_ago(rng.randint(0, 20)),

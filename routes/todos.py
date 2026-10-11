@@ -255,12 +255,14 @@ def convert_todo_to_sticky_note(todo_id):
 
     dropped = dropped_todo_fields(todo, include_group=True)
     content = todo.content
+    if todo.title:
+        title_line = f"**{todo.title}**"
+        content = f"{title_line}\n\n{content}" if content else title_line
     if dropped:
         note_line = f"_Converted from todo ({', '.join(dropped)})_"
         content = f"{note_line}\n\n{content}" if content else note_line
 
     sticky_note = StickyNote(
-        title=todo.title,
         content=content,
         created_at=todo.created_at,
     )

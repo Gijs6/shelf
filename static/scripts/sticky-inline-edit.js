@@ -29,9 +29,8 @@
         if (!e.target.closest(".sticky-note__view")) return;
 
         openSticky(article);
-        var titleField = e.target.closest("h2, h3, h4, .sticky-note__title");
-        var target = titleField ? article.querySelector(".sticky-note__title-input") : article.querySelector(".sticky-note__content-input");
-        if (target) target.focus();
+        var contentInput = article.querySelector(".sticky-note__content-input");
+        if (contentInput) contentInput.focus();
     });
 
     document.addEventListener("focusout", function (e) {
@@ -75,18 +74,14 @@
 
         if (e.key === "Escape") {
             e.target.blur();
-        } else if (e.key === "Enter" && e.target.classList.contains("sticky-note__title-input")) {
-            e.preventDefault();
-            var contentInput = article.querySelector(".sticky-note__content-input");
-            if (contentInput) contentInput.focus();
         }
     });
 
     var autoEdit = document.querySelector(".sticky-note[data-autoedit]");
     if (autoEdit) {
         openSticky(autoEdit);
-        var titleInput = autoEdit.querySelector(".sticky-note__title-input");
-        if (titleInput) titleInput.focus();
+        var contentInput = autoEdit.querySelector(".sticky-note__content-input");
+        if (contentInput) contentInput.focus();
         history.replaceState(null, "", location.pathname);
     }
 })();
