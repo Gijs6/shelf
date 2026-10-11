@@ -1,7 +1,5 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/indicator.jinja" import section_indicator %}
 {% from "partials/date_chips.jinja" import date_chips %}
 
 {% block title %}
@@ -11,97 +9,69 @@
         New todo
     {% endif %}
 {% endblock %}
-{% block page_class %}page--todo{% endblock %}
 
 {% block content %}
-    <header class="page-header page-header--todo">
-        <div class="page-header__heading">
-            {{ section_indicator("todo") }}
-            <h1 class="page-header__title">
-                {% if todo and todo.id %}
-                    Edit {{ todo.id }}
-                {% else %}
-                    New
-                {% endif %}
-            </h1>
-        </div>
-    </header>
+    <div class="page-head">
+        <h1>
+            {% if todo and todo.id %}
+                Edit todo <code>{{ todo.id }}</code>
+            {% else %}
+                New todo
+            {% endif %}
+        </h1>
+    </div>
 
     <form {% if todo and todo.id %} hx-put="{{ url_for('todos.update_todo', todo_id=todo.id) }}" {% else %} hx-post="{{ url_for('todos.create_todo') }}" {% endif %}
           hx-target="body"
           hx-push-url="true"
           class="editor"
           data-require-either="title,content">
-        <div class="editor__body">
-            <label for="title" class="visually-hidden">Title</label>
+        <div class="field field--wide">
+            <label for="title" class="field__label">Title</label>
             <input type="text"
                    id="title"
                    name="title"
-                   class="editor__title"
-                   placeholder="Todo title"
                    value="{{ todo.title or '' }}"
                    autofocus />
+        </div>
 
-            <label for="content" class="visually-hidden">Content (markdown)</label>
-            <textarea id="content"
-                      name="content"
-                      class="editor__content"
-                      placeholder="Write in markdown...">{{ todo.content if todo else '' }}</textarea>
+        <div class="field field--wide">
+            <label for="content" class="field__label">Content (markdown)</label>
+            <textarea id="content" name="content" class="editor__content">{{ todo.content if todo else '' }}</textarea>
+        </div>
 
-            <div class="editor__sidebar">
-                <div class="editor__meta">
-                    <fieldset class="editor__meta-group">
-                        <legend class="editor__meta-title">Details</legend>
-                        <div class="field editor__field">
-                            <label for="group" class="field__label">Group</label>
-                            <input type="text"
-                                   id="group"
-                                   name="group"
-                                   class="field__input"
-                                   data-autocomplete="todo-groups"
-                                   data-no-spaces
-                                   pattern="\S*"
-                                   title="Group names can't contain spaces"
-                                   autocomplete="off"
-                                   placeholder="Search or create a group"
-                                   value="{{ todo.group_name or '' }}" />
-                            <datalist id="todo-groups">
-                                {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
-                            </datalist>
-                        </div>
-                    </fieldset>
+        <div class="field">
+            <label for="group" class="field__label">Group</label>
+            <input type="text"
+                   id="group"
+                   name="group"
+                   data-autocomplete="todo-groups"
+                   data-no-spaces
+                   pattern="\S*"
+                   title="Group names can't contain spaces"
+                   autocomplete="off"
+                   placeholder="Search or create a group"
+                   value="{{ todo.group_name or '' }}" />
+            <datalist id="todo-groups">
+                {% for group in groups %}<option value="{{ group }}"></option>{% endfor %}
+            </datalist>
+        </div>
 
-                    <fieldset class="editor__meta-group">
-                        <legend class="editor__meta-title">Deadline</legend>
-                        <div class="field editor__field">
-                            <label for="deadline" class="field__label">Due at</label>
-                            <input type="datetime-local"
-                                   id="deadline"
-                                   name="deadline"
-                                   class="field__input"
-                                   value="{{ todo.deadline | strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
-                            {{ date_chips("deadline") }}
-                        </div>
-                    </fieldset>
-                </div>
+        <div class="field">
+            <label for="deadline" class="field__label">Due at</label>
+            <input type="datetime-local"
+                   id="deadline"
+                   name="deadline"
+                   value="{{ todo.deadline | strftime('%Y-%m-%dT%H:%M') if todo and todo.deadline else '' }}" />
+            {{ date_chips("deadline") }}
+        </div>
 
-                <div class="editor__actions">
-                    <button type="submit" class="button">{{ icon("edit") }} Save todo</button>
-                </div>
-
-                {% if todo and todo.id %}
-                    <menu class="editor__convert">
-                        <li>
-                            <button type="submit" form="convert-to-note" class="button button--ghost">{{ icon("repeat") }} Convert to note</button>
-                        </li>
-                        <li>
-                            <button type="submit"
-                                    form="convert-to-sticky-note"
-                                    class="button button--ghost">{{ icon("repeat") }} Convert to sticky note</button>
-                        </li>
-                    </menu>
-                {% endif %}
-            </div>
+        <div class="form__actions">
+            <button type="submit" class="btn">Save todo</button>
+            {% if todo and todo.id %}
+                <button type="submit" form="convert-to-note" class="btn">Convert to note</button>
+                <button type="submit" form="convert-to-sticky-note" class="btn">Convert to sticky note</button>
+            {% endif %}
         </div>
     </form>
 
@@ -110,13 +80,13 @@
               hx-post="{{ url_for('todos.convert_todo_to_note', todo_id=todo.id) }}"
               hx-target="body"
               hx-push-url="true"
-              hx-confirm="Convert this todo to a note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the note's content.">
+              hx-confirm="Convert this todo to a note? It gets a new URL, and you lose any unsaved changes made here. Its state and deadline are added to the note's content.">
         </form>
         <form id="convert-to-sticky-note"
               hx-post="{{ url_for('todos.convert_todo_to_sticky_note', todo_id=todo.id) }}"
               hx-target="body"
               hx-push-url="true"
-              hx-confirm="Convert this todo to a sticky note? It will get a new URL, and you'll lose any unsaved changes made here. Its state and deadline will be noted in the sticky note's content.">
+              hx-confirm="Convert this todo to a sticky note? It gets a new URL, and you lose any unsaved changes made here. Its state and deadline are added to the sticky note's content.">
         </form>
     {% endif %}
 {% endblock %}
