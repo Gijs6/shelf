@@ -16,11 +16,12 @@
         </div>
     </section>
 
-    <form method="post"
-          action="{{ url_for('settings.import_data') }}"
-          enctype="multipart/form-data">
-        <fieldset class="fieldset">
-            <legend>Import data</legend>
+    <section class="panel">
+        <h2 class="panel__heading">Import data</h2>
+        <form method="post"
+              action="{{ url_for('settings.import_data') }}"
+              enctype="multipart/form-data"
+              class="panel__body">
             <div class="field">
                 <label for="file" class="field__label">JSON file</label>
                 <input type="file"
@@ -32,8 +33,8 @@
             <div class="form__actions">
                 <button type="submit" class="btn">Import data</button>
             </div>
-        </fieldset>
-    </form>
+        </form>
+    </section>
 
     <section class="panel">
         <h2 class="panel__heading">Trash</h2>
