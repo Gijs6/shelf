@@ -9,7 +9,7 @@
     <header class="navbar">
         <div class="navbar__inner">
             <a href="{{ url_for('index') }}" class="navbar__brand">{% include "mark.svg" %}Shelf</a>
-            <nav class="navbar__links" aria-label="Main navigation">
+            <nav class="navbar__links" aria-label="Main">
                 {{ nav_link('index', 'Dashboard') }}
                 {{ nav_link('notes.list_notes', 'Notes') }}
                 {{ nav_link('todos.list_todos', 'Todos') }}
