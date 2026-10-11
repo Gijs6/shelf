@@ -1,4 +1,3 @@
-{% from "partials/icons.jinja" import icon -%}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,10 +6,14 @@
 
         <title>{%- block title -%}{%- endblock %} - Shelf</title>
 
-        <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" />
+        <link rel="icon"
+              href="{{ url_for('static', filename='favicon.svg') }}"
+              type="image/svg+xml" />
+        <link rel="alternate icon"
+              href="{{ url_for('static', filename='favicon.ico') }}" />
         <link rel="manifest"
               href="{{ url_for('static', filename='manifest.json') }}" />
-        <meta name="theme-color" content="#0a0a0d" />
+        <meta name="theme-color" content="#7048e8" />
 
         <meta name="htmx-config"
               content='{"historyCacheSize": 0, "responseHandling": [{"code": "204", "swap": false}, {"code": "[23]..", "swap": true}, {"code": "[45]..", "swap": true, "error": true}]}' />
@@ -18,247 +21,147 @@
         <link rel="stylesheet"
               href="{{ url_for('static', filename='vendor/easymde.min.css') }}" />
 
+        {% set theme = "http://localhost:8000/theme/v2" if config.DEBUG else "https://cdn.gijs6.nl/theme/v2" %}
+        <link rel="stylesheet" href="{{ theme }}/all.css" />
+        <link rel="stylesheet" href="{{ theme }}/accent/purple.css" />
         {% if config.DEBUG %}
             <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/skeleton.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/fonts.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/colors.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/theming.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/code.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/base.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/auth.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/error.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/dashboard.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/settings.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/sticky-notes.css') }}" />
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/todos.css') }}" />
+                  href="{{ url_for('static', filename='styles/app.css') }}" />
         {% else %}
             <link rel="stylesheet"
-                  href="{{ url_for('static', filename='styles/main.min.css') }}" />
+                  href="{{ url_for('static', filename='styles/app.min.css') }}" />
         {% endif %}
 
         <script src="{{ url_for('static', filename='vendor/htmx.min.js') }}" defer></script>
+        <script src="{{ theme }}/js/toast.js" defer></script>
 
         {% block extra_headers %}{% endblock %}
     </head>
 
-    <body class="{% block body_class %}{% endblock %}" hx-boost="true">
+    <body class="app {% block body_class %}{% endblock %}" hx-boost="true">
+        {% include "partials/flash.jinja" %}
+
         {% block body_content %}{% endblock %}
 
-        <dialog id="shortcuts-modal" class="modal">
-            <header class="modal__header">
-                <h2 class="modal__title">Keyboard shortcuts</h2>
+        <dialog id="shortcuts-modal" class="dialog" aria-labelledby="shortcuts-title">
+            <div class="dialog__head">
+                <h2 id="shortcuts-title">Keyboard shortcuts</h2>
                 <form method="dialog">
-                    <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
+                    <button type="submit" class="dialog__close" aria-label="Close">&times;</button>
                 </form>
-            </header>
-
-            <section class="modal__group">
-                <h3 class="modal__group-title">Global</h3>
-                <dl class="modal__list">
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">?</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Show this help
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">Esc</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Go back / close
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">Ctrl</kbd><kbd class="modal__chip">Enter</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Submit the current form
-                        </dd>
-                    </div>
-                </dl>
-            </section>
-
-            <section class="modal__group">
-                <h3 class="modal__group-title">Go to</h3>
-                <dl class="modal__list">
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">/</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Search
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">g</kbd><kbd class="modal__chip">d</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Dashboard
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">g</kbd><kbd class="modal__chip">n</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Notes
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">g</kbd><kbd class="modal__chip">t</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Todos
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">g</kbd><kbd class="modal__chip">s</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Sticky notes
-                        </dd>
-                    </div>
-                </dl>
-            </section>
-
-            <section class="modal__group">
-                <h3 class="modal__group-title">Create</h3>
-                <dl class="modal__list">
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">c</kbd><kbd class="modal__chip">n</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            New note
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">c</kbd><kbd class="modal__chip">t</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            New todo
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">c</kbd><kbd class="modal__chip">s</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            New sticky note
-                        </dd>
-                    </div>
-                </dl>
-            </section>
-
-            <section class="modal__group">
-                <h3 class="modal__group-title">On a notes/todos/sticky notes list</h3>
-                <dl class="modal__list">
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">n</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            New
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">a</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Archived (Expired for sticky notes)
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">t</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Trash
-                        </dd>
-                    </div>
-                </dl>
-            </section>
-
-            <section class="modal__group">
-                <h3 class="modal__group-title">On a note or todo</h3>
-                <dl class="modal__list">
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">e</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Edit
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">a</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Toggle archive
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">d</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Trash
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">1</kbd><kbd class="modal__chip">2</kbd><kbd class="modal__chip">3</kbd><kbd class="modal__chip">4</kbd><kbd class="modal__chip">5</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Set state to shelved / open / active / done / cancelled
-                        </dd>
-                    </div>
-                </dl>
-            </section>
-
-            <section class="modal__group">
-                <h3 class="modal__group-title">On a focused sticky note</h3>
-                <dl class="modal__list">
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">p</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Toggle pin
-                        </dd>
-                    </div>
-                    <div class="modal__row">
-                        <dt class="modal__row-term">
-                            <kbd class="modal__chip">d</kbd>
-                        </dt>
-                        <dd class="modal__row-desc">
-                            Trash
-                        </dd>
-                    </div>
-                </dl>
-            </section>
+            </div>
+            <div class="dialog__body">
+                <h3>Global</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><kbd>?</kbd></th>
+                            <td>Show this help</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>Esc</kbd></th>
+                            <td>Go back / close</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>Ctrl</kbd> <kbd>Enter</kbd></th>
+                            <td>Submit the current form</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Go to</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><kbd>/</kbd></th>
+                            <td>Search</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>g</kbd> <kbd>d</kbd></th>
+                            <td>Dashboard</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>g</kbd> <kbd>n</kbd></th>
+                            <td>Notes</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>g</kbd> <kbd>t</kbd></th>
+                            <td>Todos</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>g</kbd> <kbd>s</kbd></th>
+                            <td>Sticky notes</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Create</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><kbd>c</kbd> <kbd>n</kbd></th>
+                            <td>New note</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>c</kbd> <kbd>t</kbd></th>
+                            <td>New todo</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>c</kbd> <kbd>s</kbd></th>
+                            <td>New sticky note</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>On a notes/todos/sticky notes list</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><kbd>n</kbd></th>
+                            <td>New</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>a</kbd></th>
+                            <td>Archived (expired for sticky notes)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>t</kbd></th>
+                            <td>Trash</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>On a note or todo</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><kbd>e</kbd></th>
+                            <td>Edit</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>a</kbd></th>
+                            <td>Toggle archive</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>d</kbd></th>
+                            <td>Trash</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> <kbd>5</kbd></th>
+                            <td>Set state to shelved / open / active / done / cancelled</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>On a focused sticky note</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><kbd>p</kbd></th>
+                            <td>Toggle pin</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><kbd>d</kbd></th>
+                            <td>Trash</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </dialog>
 
         <script type="application/json" id="nav-routes">
@@ -288,5 +191,6 @@
         <script src="{{ url_for('static', filename='scripts/group-autocomplete.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/no-spaces.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/date-chips.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/toasts.js') }}"></script>
     </body>
 </html>

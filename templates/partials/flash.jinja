@@ -1,34 +1,28 @@
-{% macro flash_messages() %}
-    {% from "partials/icons.jinja" import icon %}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash" aria-live="polite" aria-atomic="false">
-                <ul class="flash__list">
-                    {% for category, message in messages %}
-                        {% set text = message.text if message is mapping else message %}
-                        <li class="flash__item flash__item--{{ category }}">
-                            {% if category == "success" %}
-                                {{ icon("check-circle") }}
-                            {% elif category == "error" %}
-                                {{ icon("x-circle") }}
-                            {% elif category == "info" %}
-                                {{ icon("info") }}
-                            {% endif %}
-                            <span class="flash__text">{{ text }}</span>
-                            {% if message is mapping and message.undo_url %}
-                                {# djlint:off #}
-                                <form class="flash__undo-form"
-                                      hx-{{ message.undo_method | lower }}="{{ message.undo_url }}"
-                                      hx-target="body"
-                                      hx-push-url="true">
-                                    <button type="submit" class="button button--ghost button--sm">Undo</button>
-                                </form>
-                                {# djlint:on #}
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-    {% endwith %}
-{% endmacro %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="toaster" aria-live="polite">
+            {% for category, message in messages %}
+                {% set kind = "success" if category == "success" else "danger" if category == "error" else "info" %}
+                {% set text = message.text if message is mapping else message %}
+                <div class="toast toast--{{ kind }}"
+                     role="status"
+                     data-auto-dismiss="6000">
+                    <div class="toast__body">
+                        {{ text }}
+                        {% if message is mapping and message.undo_url %}
+                            {# djlint:off #}
+                            <form class="toast__undo"
+                                  hx-{{ message.undo_method | lower }}="{{ message.undo_url }}"
+                                  hx-target="body"
+                                  hx-push-url="true">
+                                <button type="submit" class="btn btn--sm">Undo</button>
+                            </form>
+                            {# djlint:on #}
+                        {% endif %}
+                    </div>
+                    <button type="button" class="toast__dismiss" aria-label="Dismiss">&times;</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
