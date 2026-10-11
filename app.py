@@ -117,6 +117,16 @@ def require_login():
         return redirect(url_for("login"), code=303)
 
 
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template(
+        "error.jinja",
+        code=403,
+        title="Forbidden",
+        description="You don't have permission to view this page.",
+    ), 403
+
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template(
@@ -132,8 +142,8 @@ def server_error(e):
     return render_template(
         "error.jinja",
         code=500,
-        title="Internal server error",
-        description="Something went wrong. Please try again later.",
+        title="Server error",
+        description="Something went wrong on our end. Try again later.",
     ), 500
 
 
