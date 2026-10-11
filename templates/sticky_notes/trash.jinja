@@ -1,44 +1,31 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/empty_state.jinja" import empty_state %}
-{% from "partials/entry_card.jinja" import entry_card %}
-{% from "partials/indicator.jinja" import section_indicator %}
+{% from "partials/entries.jinja" import entry_table %}
 
 {% block title %}Sticky notes trash{% endblock %}
-{% block page_class %}page--sticky{% endblock %}
 
 {% block content %}
-    <header class="page-header page-header--sticky">
-        <div class="page-header__heading">
-            {{ section_indicator("sticky") }}
-            <h1 class="page-header__title">Trash</h1>
-        </div>
-    </header>
+    <div class="page-head">
+        <h1>Sticky notes trash</h1>
+    </div>
 
     {% if notes %}
-        <ul class="card-list">
-            {% for note in notes %}
-                {% call entry_card(note, timestamp=note.deleted_at, timestamp_label="Deleted") %}
-                    <li>
-                        <form hx-patch="{{ url_for('sticky_notes.restore_sticky_note', sticky_note_id=note.id) }}"
-                              hx-target="body"
-                              hx-push-url="true">
-                            <button type="submit" class="button button--ghost button--sm">{{ icon("restore") }} Restore</button>
-                        </form>
-                    </li>
-                    <li>
-                        <form hx-delete="{{ url_for('sticky_notes.purge_sticky_note', sticky_note_id=note.id) }}"
-                              hx-target="body"
-                              hx-push-url="true"
-                              hx-confirm="Permanently delete this sticky note? This can't be undone.">
-                            <button type="submit" class="button button--danger button--sm">{{ icon("trash") }} Delete forever</button>
-                        </form>
-                    </li>
-                {% endcall %}
-            {% endfor %}
-        </ul>
+        {% call(note) entry_table(notes, date_label="Deleted", date_attr="deleted_at", links=False) %}
+            <form hx-patch="{{ url_for('sticky_notes.restore_sticky_note', sticky_note_id=note.id) }}"
+                  hx-target="body"
+                  hx-push-url="true">
+                <button type="submit" class="btn btn--sm">Restore</button>
+            </form>
+            <form hx-delete="{{ url_for('sticky_notes.purge_sticky_note', sticky_note_id=note.id) }}"
+                  hx-target="body"
+                  hx-push-url="true"
+                  hx-confirm="Delete {{ note.display_title | markdown_plain }}? This can't be undone.">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+            </form>
+        {% endcall %}
     {% else %}
-        {{ empty_state('trash', 'Trash is empty.') }}
+        <div class="empty">
+            <p class="empty__title">Trash is empty</p>
+        </div>
     {% endif %}
 {% endblock %}
