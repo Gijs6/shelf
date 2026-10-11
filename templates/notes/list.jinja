@@ -1,40 +1,33 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/empty_state.jinja" import empty_state %}
-{% from "partials/entry_card.jinja" import entry_card %}
+{% from "partials/entries.jinja" import entry_table %}
 
 {% block title %}Notes{% endblock %}
-{% block page_class %}page--note{% endblock %}
 
 {% block content %}
-    <header class="page-header page-header--note">
-        <div class="page-header__heading">
-            <h1 class="page-header__title">Notes</h1>
-        </div>
-        <nav class="page-header__actions" aria-label="Note actions">
+    <div class="page-head">
+        <h1>Notes</h1>
+        <div class="page-head__actions">
             <a href="{{ url_for('notes.archived') }}"
-               class="button button--ghost"
-               data-shortcut="archived">{{ icon("archive") }} Archived</a>
-            <a href="{{ url_for('notes.trash') }}"
-               class="button button--ghost"
-               data-shortcut="trash">{{ icon("trash") }} Trash</a>
+               class="btn"
+               data-shortcut="archived">Archived</a>
+            <a href="{{ url_for('notes.trash') }}" class="btn" data-shortcut="trash">Trash</a>
             <a href="{{ url_for('notes.new_note') }}"
-               class="button"
-               data-shortcut="new">{{ icon("plus") }} New</a>
-        </nav>
-    </header>
+               class="btn"
+               data-shortcut="new">New note</a>
+        </div>
+    </div>
 
     {% if sections %}
         {% for label, items in sections %}
-            <section class="list-section">
-                <h2 class="list-section__title">{{ label }}</h2>
-                <ul class="card-list">
-                    {% for note in items %}{{ entry_card(note, url=url_for('notes.view_note', note_id=note.id) , heading_level=3) }}{% endfor %}
-                </ul>
+            <section class="panel">
+                <h2 class="panel__heading">{{ label }}</h2>
+                {{ entry_table(items) }}
             </section>
         {% endfor %}
     {% else %}
-        {{ empty_state("note", "No notes yet.", url_for('notes.new_note') , "New note") }}
+        <div class="empty">
+            <p class="empty__title">No notes yet</p>
+        </div>
     {% endif %}
 {% endblock %}
