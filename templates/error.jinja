@@ -3,12 +3,16 @@
 {% block title %}{{ code }} {{ title }}{% endblock %}
 
 {% block body_content %}
-    <main class="error-page">
-        <hgroup class="error-page__heading">
-            <p class="error-page__code">{{ code }}</p>
-            <h1 class="error-page__title">{{ title }}</h1>
-        </hgroup>
-        <p class="error-page__desc">{{ description }}</p>
-        <a href="{{ url_for('index') }}" class="button">Go home</a>
+    <header class="navbar">
+        <div class="navbar__inner">
+            <a href="{{ url_for('index') }}" class="navbar__brand">{% include "mark.svg" %}Shelf</a>
+        </div>
+    </header>
+
+    <main class="page page--narrow error">
+        <p class="error__code">{{ code }}</p>
+        <h1>{{ title }}</h1>
+        <p class="lead">{{ description }}</p>
+        <a href="{{ url_for('index') }}" class="btn">Go home</a>
     </main>
 {% endblock %}
