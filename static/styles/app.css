@@ -383,6 +383,7 @@ kbd {
     block-size: 100%;
     padding: var(--space-md) var(--space-lg);
     color: #222222;
+    color-scheme: light;
     background: var(--sticky);
     border: 1px solid color-mix(in srgb, var(--sticky) 65%, #000000);
 
