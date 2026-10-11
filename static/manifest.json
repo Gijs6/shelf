@@ -1,12 +1,12 @@
 {
     "name": "Shelf",
     "short_name": "Shelf",
-    "description": "Notes, sticky notes, and todos.",
+    "description": "Notes, sticky notes and todos.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
-    "background_color": "#0a0a0d",
-    "theme_color": "#0a0a0d",
+    "background_color": "#7048e8",
+    "theme_color": "#7048e8",
     "icons": [
         {
             "src": "/static/icons/icon-192.png",
