@@ -318,27 +318,33 @@ kbd {
 
 .sticky-note--yellow,
 .colour-picker__option--yellow {
-    --sticky: var(--lime-tint-line);
+    --sticky: var(--yellow-tint);
+    --sticky-line: var(--yellow-tint-line);
 }
 .sticky-note--pink,
 .colour-picker__option--pink {
-    --sticky: var(--pink-tint-line);
+    --sticky: var(--pink-tint);
+    --sticky-line: var(--pink-tint-line);
 }
 .sticky-note--blue,
 .colour-picker__option--blue {
-    --sticky: var(--cyan-tint-line);
+    --sticky: var(--cyan-tint);
+    --sticky-line: var(--cyan-tint-line);
 }
 .sticky-note--green,
 .colour-picker__option--green {
-    --sticky: var(--green-tint-line);
+    --sticky: var(--green-tint);
+    --sticky-line: var(--green-tint-line);
 }
 .sticky-note--purple,
 .colour-picker__option--purple {
-    --sticky: var(--purple-tint-line);
+    --sticky: var(--purple-tint);
+    --sticky-line: var(--purple-tint-line);
 }
 .sticky-note--orange,
 .colour-picker__option--orange {
-    --sticky: var(--orange-tint-line);
+    --sticky: var(--orange-tint);
+    --sticky-line: var(--orange-tint-line);
 }
 
 .sticky-board {
@@ -363,7 +369,7 @@ kbd {
     padding: var(--space-md) var(--space-lg);
     color: var(--fg);
     background: var(--sticky);
-    border: 1px solid color-mix(in srgb, var(--sticky) 65%, var(--black));
+    border: 1px solid var(--sticky-line);
 
     a {
         color: inherit;
@@ -375,6 +381,7 @@ kbd {
 
 .sticky-note__content {
     min-inline-size: 0;
+    overflow-wrap: anywhere;
 }
 
 .sticky-note__view {
@@ -455,7 +462,7 @@ kbd {
 .sticky-note__actions {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
     gap: var(--space-2xs);
     margin: 0;
     padding: 0;
@@ -500,7 +507,7 @@ kbd {
     inline-size: var(--space-xl);
     block-size: var(--space-xl);
     padding: 0;
-    background: var(--sticky);
+    background: var(--sticky-line);
     border: 1px solid currentColor;
     cursor: pointer;
 
