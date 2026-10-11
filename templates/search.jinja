@@ -1,184 +1,108 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/empty_state.jinja" import empty_state %}
-{% from "partials/entry_card.jinja" import entry_card, todo_badges %}
+{% from "partials/entries.jinja" import entry_table %}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
-    <header class="page-header">
-        <div class="page-header__heading">
-            <h1 class="page-header__title">Search</h1>
+    <div class="page-head">
+        <h1>Search</h1>
+        <div class="page-head__actions">
+            <button type="button"
+                    class="btn"
+                    data-search-help-toggle
+                    aria-haspopup="dialog">Search syntax</button>
         </div>
-        <menu class="page-header__actions">
-            <li>
-                <button type="button"
-                        class="button button--ghost"
-                        data-search-help-toggle
-                        aria-haspopup="dialog">{{ icon("info") }} Search syntax</button>
-            </li>
-        </menu>
-    </header>
+    </div>
 
-    <dialog id="search-help-modal" class="modal modal--stacked">
-        <header class="modal__header">
-            <h2 class="modal__title">Search syntax</h2>
+    <dialog id="search-help-modal" class="dialog" aria-labelledby="search-help-title">
+        <div class="dialog__head">
+            <h2 id="search-help-title">Search syntax</h2>
             <form method="dialog">
-                <button type="submit" class="modal__close" aria-label="Close">{{ icon("x") }}</button>
+                <button type="submit" class="dialog__close" aria-label="Close">&times;</button>
             </form>
-        </header>
-
-        <section class="modal__group">
-            <h3 class="modal__group-title">Type</h3>
-            <dl class="modal__list">
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">is:note</kbd>
-                        <kbd class="modal__chip">is:todo</kbd>
-                        <kbd class="modal__chip">is:sticky</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Filter by item type. Multiple types can be combined.
-                    </dd>
-                </div>
-            </dl>
-        </section>
-
-        <section class="modal__group">
-            <h3 class="modal__group-title">Todo</h3>
-            <dl class="modal__list">
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">state:open</kbd>
-                        <kbd class="modal__chip">state:active</kbd>
-                        <kbd class="modal__chip">state:done</kbd>
-                        <kbd class="modal__chip">state:cancelled</kbd>
-                        <kbd class="modal__chip">state:shelved</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Filter by todo status.
-                    </dd>
-                </div>
-
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">overdue:yes</kbd>
-                        <kbd class="modal__chip">overdue:no</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Show todos that are overdue or not overdue.
-                    </dd>
-                </div>
-
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">due:today</kbd>
-                        <kbd class="modal__chip">due:week</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Show todos due today or within the next 7 days.
-                    </dd>
-                </div>
-            </dl>
-        </section>
-
-        <section class="modal__group">
-            <h3 class="modal__group-title">Sticky notes</h3>
-            <dl class="modal__list">
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">pinned:yes</kbd>
-                        <kbd class="modal__chip">pinned:no</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Filter pinned sticky notes.
-                    </dd>
-                </div>
-
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">colour:yellow</kbd>
-                        <kbd class="modal__chip">colour:pink</kbd>
-                        <kbd class="modal__chip">colour:blue</kbd>
-                        <kbd class="modal__chip">colour:green</kbd>
-                        <kbd class="modal__chip">colour:purple</kbd>
-                        <kbd class="modal__chip">colour:orange</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Filter by sticky note colour.
-                    </dd>
-                </div>
-            </dl>
-        </section>
-
-        <section class="modal__group">
-            <h3 class="modal__group-title">Groups &amp; archive</h3>
-            <dl class="modal__list">
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">group:home</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Match an exact group name.
-                    </dd>
-                </div>
-
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">archived:yes</kbd>
-                        <kbd class="modal__chip">archived:no</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Include or exclude archived items.
-                    </dd>
-                </div>
-            </dl>
-        </section>
-
-        <section class="modal__group">
-            <h3 class="modal__group-title">Dates</h3>
-            <dl class="modal__list">
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">before:YYYY-MM-DD</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Items created before this date.
-                    </dd>
-                </div>
-
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">after:YYYY-MM-DD</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Items created on or after this date.
-                    </dd>
-                </div>
-            </dl>
-        </section>
-
-        <section class="modal__group">
-            <h3 class="modal__group-title">Sorting</h3>
-            <dl class="modal__list">
-                <div class="modal__row">
-                    <dt class="modal__row-term">
-                        <kbd class="modal__chip">sort:title</kbd>
-                        <kbd class="modal__chip">sort:created</kbd>
-                        <kbd class="modal__chip">sort:updated</kbd>
-                    </dt>
-                    <dd class="modal__row-desc">
-                        Sort results. Default: last updated.
-                    </dd>
-                </div>
-            </dl>
-        </section>
+        </div>
+        <div class="dialog__body">
+                <h3>Type</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><code>is:note</code> <code>is:todo</code> <code>is:sticky</code></th>
+                            <td>Filter by item type. Multiple types can be combined.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Todo</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><code>state:open</code> <code>state:active</code> <code>state:done</code> <code>state:cancelled</code> <code>state:shelved</code></th>
+                            <td>Filter by todo status.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><code>overdue:yes</code> <code>overdue:no</code></th>
+                            <td>Show todos that are overdue or not overdue.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><code>due:today</code> <code>due:week</code></th>
+                            <td>Show todos due today or within the next 7 days.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Sticky notes</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><code>pinned:yes</code> <code>pinned:no</code></th>
+                            <td>Filter pinned sticky notes.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><code>colour:yellow</code> <code>colour:pink</code> <code>colour:blue</code> <code>colour:green</code> <code>colour:purple</code> <code>colour:orange</code></th>
+                            <td>Filter by sticky note colour.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Groups and archive</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><code>group:home</code></th>
+                            <td>Match an exact group name.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><code>archived:yes</code> <code>archived:no</code></th>
+                            <td>Include or exclude archived items.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Dates</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><code>before:YYYY-MM-DD</code></th>
+                            <td>Items created before this date.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><code>after:YYYY-MM-DD</code></th>
+                            <td>Items created on or after this date.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Sorting</h3>
+                <table class="table table--kv">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><code>sort:title</code> <code>sort:created</code> <code>sort:updated</code></th>
+                            <td>Sort results. Default: last updated.</td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
     </dialog>
 
     <search>
     <form method="get"
-          class="filters"
+          class="input-row"
           hx-get="{{ url_for('search.search_view') }}"
           hx-trigger="input changed from:find input, submit"
           hx-select="#search-results"
@@ -189,32 +113,23 @@
         <input type="search"
                id="q"
                name="q"
-               class="field__input filters__input"
                placeholder="is:todo state:open group:home overdue:yes due:week sort:title ..."
                value="{{ query }}"
                autocomplete="off"
                autofocus />
-        <button type="submit" class="button">{{ icon("search") }} Search</button>
+        <button type="submit" class="btn">Search</button>
     </form>
     </search>
 
-    <section id="search-results" aria-label="Search results">
+    <section id="search-results" class="panel" aria-label="Search results">
         {% if results %}
-            <p class="search-results__count">{{ results | length }} result{{ "s" if results | length != 1 else "" }}</p>
-            <ul class="card-list">
-                {% for result in results %}
-                    {% set badges %}
-                        <span class="badge badge--{{ result.kind }}">{{ icon(result.kind) }} {{ result.kind | capitalize }}</span>
-                        {% if result.kind == "todo" %}{{ todo_badges(result) }}{% endif %}
-                        {% if result.kind in ("note", "todo") and result.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
-                        {% if result.kind == "sticky" and result.pinned %}<span class="badge badge--neutral">{{ icon("pin") }} Pinned</span>{% endif %}
-                        {% if result.get("group_name") %}<span class="badge badge--group">{{ icon("folder") }} {{ result.group_name }}</span>{% endif %}
-                    {% endset %}
-                    {{ entry_card(result, url=url_for(result.endpoint, **result.url_kwargs) , badges=badges) }}
-                {% endfor %}
-            </ul>
+            <h2 class="panel__heading">Results ({{ results | length }})</h2>
+            {{ entry_table(results, kind=True, state=True, group=True, due=True) }}
         {% else %}
-            {{ empty_state("search", 'No results for "' + query + '".') }}
+            <div class="empty">
+                <p class="empty__title">No results</p>
+                {% if query %}<p>Nothing matches "{{ query }}".</p>{% endif %}
+            </div>
         {% endif %}
     </section>
 {% endblock %}

@@ -22,6 +22,9 @@
     .table:last-child {
         margin-block-end: 0;
     }
+    .table--kv tbody th {
+        white-space: normal;
+    }
 }
 
 kbd {
