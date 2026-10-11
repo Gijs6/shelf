@@ -2,9 +2,8 @@
     {% if messages %}
         <div class="toaster" aria-live="polite">
             {% for category, message in messages %}
-                {% set kind = "success" if category == "success" else "danger" if category == "error" else "info" %}
                 {% set text = message.text if message is mapping else message %}
-                <div class="toast toast--{{ kind }}"
+                <div class="toast toast--{{ toast_type(category) }}"
                      role="status"
                      data-auto-dismiss="6000">
                     <div class="toast__body">

@@ -23,6 +23,6 @@ build() {
 
 deploy() {
   build
-  echo "$(date +%Y.%m):$(git rev-parse --short HEAD):$(git rev-list --count HEAD)" > VERSION
+  i:version
   g:deploy
 }

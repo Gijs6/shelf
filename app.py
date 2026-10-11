@@ -10,7 +10,8 @@ from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, db, now
 from routes import register_routes
 from utils.filters import register_filters
 from utils.session import SESSION_LIFETIME
-from utils.version import get_version
+from utils.toasts import register_toasts
+from utils.version import register_version
 
 load_dotenv(override=True)
 
@@ -24,10 +25,11 @@ app.config["PERMANENT_SESSION_LIFETIME"] = SESSION_LIFETIME
 db.init_app(app)
 register_filters(app)
 register_routes(app)
+register_toasts(app)
+register_version(app, "book")
 
 app.jinja_env.globals["TODO_STATES"] = TODO_STATES
 app.jinja_env.globals["STICKY_COLOURS"] = STICKY_COLOURS
-app.jinja_env.globals["APP_VERSION"] = get_version()
 
 os.makedirs(app.instance_path, exist_ok=True)
 
@@ -38,7 +40,9 @@ with app.app_context():
 
 def is_logged_in():
     last_login = session.get("last_login")
-    if last_login is None or now() - last_login > SESSION_LIFETIME:
+    if last_login is None:
+        return False
+    if now() - last_login > SESSION_LIFETIME:
         session.clear()
         return False
     return True
@@ -96,7 +100,8 @@ def login_post():
         return redirect(url_for("index"), code=303)
     password = request.form.get("password", "")
     stored_hash = os.getenv("PASSWORD_HASH", "")
-    if stored_hash and check_password_hash(stored_hash, password):
+    if app.debug or (stored_hash and check_password_hash(stored_hash, password)):
+        session.clear()
         session.permanent = True
         session["last_login"] = now()
         return redirect(url_for("index"), code=303)
@@ -107,11 +112,20 @@ def login_post():
 @app.post("/logout")
 def logout():
     session.clear()
+    if app.debug:
+        session["dev_signed_out"] = True
     return redirect(url_for("login"), code=303)
 
 
 @app.before_request
 def require_login():
+    if (
+        app.debug
+        and not session.get("last_login")
+        and not session.get("dev_signed_out")
+    ):
+        session.permanent = True
+        session["last_login"] = now()
     allowed = ["login", "login_post", "logout", "static", "todos.ical_feed"]
     if request.endpoint and request.endpoint not in allowed and not is_logged_in():
         return redirect(url_for("login"), code=303)

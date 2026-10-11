@@ -21,13 +21,13 @@
         <link rel="manifest"
               href="{{ url_for('static', filename='manifest.json') }}" />
 
-        <meta name="htmx-config"
-              content='{"historyCacheSize": 0, "responseHandling": [{"code": "204", "swap": false}, {"code": "[23]..", "swap": true}, {"code": "[45]..", "swap": true, "error": true}]}' />
-
         <link rel="stylesheet"
               href="{{ url_for('static', filename='vendor/easymde.min.css') }}" />
 
-        {% set theme = "http://localhost:8000/theme/v2" if config.DEBUG else "https://cdn.gijs6.nl/theme/v2" %}
+        <meta name="htmx-config"
+              content='{"historyCacheSize": 0, "responseHandling": [{"code": "204", "swap": false}, {"code": "[234]..", "swap": true}, {"code": "5..", "swap": false, "error": true}]}' />
+
+        {% set theme = "https://cdn.gijs6.nl/theme/v2" %}
         <link rel="stylesheet" href="{{ theme }}/all.css" />
         <link rel="stylesheet" href="{{ theme }}/accent/purple.css" />
         {% if config.DEBUG %}
@@ -40,14 +40,17 @@
 
         <script src="{{ url_for('static', filename='vendor/htmx.min.js') }}" defer></script>
         <script src="{{ theme }}/js/toast.js" defer></script>
+        <script src="{{ theme }}/js/confirm.js" defer></script>
 
         {% block extra_headers %}{% endblock %}
     </head>
 
     <body class="app {% block body_class %}{% endblock %}" hx-boost="true">
-        {% include "partials/flash.jinja" %}
+        {% include "partials/toaster.jinja" %}
 
         {% block body_content %}{% endblock %}
+
+        {% include "_footer.jinja" %}
 
         <dialog id="shortcuts-modal" class="dialog" aria-labelledby="shortcuts-title">
             <div class="dialog__head">
@@ -197,6 +200,5 @@
         <script src="{{ url_for('static', filename='scripts/group-autocomplete.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/no-spaces.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/date-chips.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/toasts.js') }}"></script>
     </body>
 </html>
