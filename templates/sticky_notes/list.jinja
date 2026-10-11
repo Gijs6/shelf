@@ -1,43 +1,40 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/empty_state.jinja" import empty_state %}
 {% from "partials/sticky_card.jinja" import sticky_card %}
 
 {% block title %}Sticky notes{% endblock %}
-{% block page_class %}page--sticky{% endblock %}
 
 {% block content %}
-    <header class="page-header page-header--sticky">
-        <div class="page-header__heading">
-            <h1 class="page-header__title">Sticky notes</h1>
-        </div>
-        <nav class="page-header__actions" aria-label="Sticky note actions">
+    <div class="page-head">
+        <h1>Sticky notes</h1>
+        <div class="page-head__actions">
             <a href="{{ url_for('sticky_notes.expired') }}"
-               class="button button--ghost"
-               data-shortcut="archived">{{ icon("clock") }} Expired</a>
+               class="btn"
+               data-shortcut="archived">Expired</a>
             <a href="{{ url_for('sticky_notes.trash') }}"
-               class="button button--ghost"
-               data-shortcut="trash">{{ icon("trash") }} Trash</a>
+               class="btn"
+               data-shortcut="trash">Trash</a>
             <form hx-post="{{ url_for('sticky_notes.new_sticky_note') }}"
                   hx-target="body"
                   hx-push-url="true">
-                <button type="submit" class="button" data-shortcut="new">{{ icon("plus") }} New sticky note</button>
+                <button type="submit" class="btn" data-shortcut="new">New sticky note</button>
             </form>
-        </nav>
-    </header>
+        </div>
+    </div>
 
     {% if pinned_notes %}
-        <ul class="sticky-board sticky-board--pinned">
-            {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id==open_id) ) }}{% endfor %}
+        <ul class="sticky-board">
+            {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id == open_id)) }}{% endfor %}
         </ul>
     {% endif %}
 
     {% if active_notes %}
         <ul class="sticky-board">
-            {% for sticky_note in active_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id==open_id) ) }}{% endfor %}
+            {% for sticky_note in active_notes %}{{ sticky_card(sticky_note, heading_level=2, auto_open=(sticky_note.id == open_id)) }}{% endfor %}
         </ul>
     {% elif not pinned_notes %}
-        {{ empty_state("sticky", "No sticky notes yet.", url_for('sticky_notes.new_sticky_note') , "New sticky note", cta_method="post") }}
+        <div class="empty">
+            <p class="empty__title">No sticky notes yet</p>
+        </div>
     {% endif %}
 {% endblock %}
