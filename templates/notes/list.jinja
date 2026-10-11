@@ -22,7 +22,7 @@
         {% for label, items in sections %}
             <section class="panel">
                 <h2 class="panel__heading">{{ label }}</h2>
-                {{ entry_table(items) }}
+                {{ entry_table(items, aligned=True) }}
             </section>
         {% endfor %}
     {% else %}

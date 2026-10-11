@@ -23,19 +23,19 @@
     {%- endif -%}
 {%- endmacro %}
 
-{% macro entry_table(items, date_label="Updated", date_attr="updated_at", kind=False, state=False, group=False, due=False, links=True) %}
+{% macro entry_table(items, date_label="Updated", date_attr="updated_at", kind=False, state=False, group=False, due=False, links=True, aligned=False) %}
     <div class="table-wrap">
-        <table class="table">
+        <table class="table entries{% if aligned %} entries--aligned{% endif %}{% if kind %} entries--wide{% endif %}">
             <thead>
                 <tr>
                     <th>Title</th>
-                    {% if kind %}<th>Type</th>{% endif %}
-                    {% if state %}<th>State</th>{% endif %}
-                    {% if group %}<th>Group</th>{% endif %}
-                    {% if due %}<th>Due</th>{% endif %}
-                    <th>{{ date_label }}</th>
+                    {% if kind %}<th class="entries__type">Type</th>{% endif %}
+                    {% if state %}<th class="entries__state">State</th>{% endif %}
+                    {% if group %}<th class="entries__group">Group</th>{% endif %}
+                    {% if due %}<th class="entries__date">Due</th>{% endif %}
+                    <th class="entries__date">{{ date_label }}</th>
                     {% if caller %}
-                        <th class="table__actions">
+                        <th class="table__actions entries__actions">
                             <span class="visually-hidden">Actions</span>
                         </th>
                     {% endif %}

@@ -40,6 +40,26 @@ kbd {
     margin-inline-start: var(--space-sm);
 }
 
+.entries {
+    min-inline-size: 40em;
+}
+
+.entries--wide {
+    min-inline-size: 64em;
+}
+
+.entries--aligned {
+    table-layout: fixed;
+}
+
+.entries--aligned .entries__state {
+    inline-size: 10em;
+}
+
+.entries--aligned .entries__date {
+    inline-size: 18em;
+}
+
 .snippet {
     display: block;
     color: var(--muted);

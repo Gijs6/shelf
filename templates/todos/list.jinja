@@ -30,7 +30,7 @@
         {% for label, items in sections %}
             <section class="panel">
                 <h2 class="panel__heading">{{ label }}</h2>
-                {{ entry_table(items, date_label="Created", date_attr="created_at", state=True, due=True) }}
+                {{ entry_table(items, date_label="Created", date_attr="created_at", state=True, due=True, aligned=True) }}
             </section>
         {% endfor %}
     {% else %}
