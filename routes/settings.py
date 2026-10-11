@@ -241,7 +241,7 @@ def import_data():
         set_setting(CALENDAR_TOKEN_KEY, calendar_token)
 
     flash(
-        f"Imported {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
+        f"Imported {counts['notes']} notes, {counts['sticky_notes']} sticky notes and "
         f"{counts['todos']} todos.",
         "success",
     )
@@ -284,7 +284,7 @@ def purge_all_trash():
     db.session.commit()
 
     flash(
-        f"Purged {counts['notes']} notes, {counts['sticky_notes']} sticky notes, "
+        f"Deleted {counts['notes']} notes, {counts['sticky_notes']} sticky notes and "
         f"{counts['todos']} todos from trash.",
         "success",
     )
@@ -313,5 +313,5 @@ def remove_all():
     Todo.query.delete()
     db.session.commit()
 
-    flash("Removed all notes, sticky notes, and todos.", "success")
+    flash("Deleted all notes, sticky notes and todos.", "success")
     return redirect(url_for("settings.index"), code=303)

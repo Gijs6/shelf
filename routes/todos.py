@@ -304,7 +304,7 @@ def purge_todo(todo_id):
     todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted).first_or_404()
     db.session.delete(todo)
     db.session.commit()
-    flash("Todo permanently deleted.", "success")
+    flash("Todo deleted.", "success")
     return redirect(url_for("todos.trash"), code=303)
 
 

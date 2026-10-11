@@ -193,7 +193,7 @@ def purge_note(note_id):
     note = Note.query.filter(Note.id == note_id, Note.deleted).first_or_404()
     db.session.delete(note)
     db.session.commit()
-    flash("Note permanently deleted.", "success")
+    flash("Note deleted.", "success")
     return redirect(url_for("notes.trash"), code=303)
 
 

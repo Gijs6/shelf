@@ -215,5 +215,5 @@ def purge_sticky_note(sticky_note_id):
     ).first_or_404()
     db.session.delete(sticky_note)
     db.session.commit()
-    flash("Sticky note permanently deleted.", "success")
+    flash("Sticky note deleted.", "success")
     return redirect(url_for("sticky_notes.trash"), code=303)
