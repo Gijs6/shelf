@@ -2,21 +2,21 @@
     <div class="date-chips">
         {% if with_time %}
             <button type="button"
-                    class="date-chips__chip"
+                    class="btn btn--sm date-chips__chip"
                     data-date-chip="1h"
-                    data-target="{{ target }}">in 1 hour</button>
+                    data-target="{{ target }}">In 1 hour</button>
         {% endif %}
         <button type="button"
-                class="date-chips__chip"
+                class="btn btn--sm date-chips__chip"
                 data-date-chip="1d"
-                data-target="{{ target }}">in 1 day</button>
+                data-target="{{ target }}">In 1 day</button>
         <button type="button"
-                class="date-chips__chip"
+                class="btn btn--sm date-chips__chip"
                 data-date-chip="1w"
-                data-target="{{ target }}">in 1 week</button>
+                data-target="{{ target }}">In 1 week</button>
         <button type="button"
-                class="date-chips__chip"
+                class="btn btn--sm date-chips__chip"
                 data-date-chip="1mo"
-                data-target="{{ target }}">in 1 month</button>
+                data-target="{{ target }}">In 1 month</button>
     </div>
 {% endmacro %}

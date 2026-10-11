@@ -71,7 +71,7 @@ kbd {
     }
 }
 
-.btn[aria-pressed="true"] {
+.btn:is([aria-pressed="true"], [aria-current]) {
     font-weight: 700;
     background: color-mix(in srgb, var(--btn-hover) 88%, var(--fg));
 }
