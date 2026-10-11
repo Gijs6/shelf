@@ -366,7 +366,7 @@ kbd {
     align-content: start;
     gap: var(--space-xs) var(--space-md);
     block-size: 100%;
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-xl) var(--space-2xl);
     color: var(--fg);
     background: var(--sticky);
     border: 1px solid var(--sticky-line);
@@ -416,10 +416,10 @@ kbd {
 
 .sticky-note__title-input,
 .sticky-note__content-input {
-    padding: 0;
+    padding: var(--space-xs) var(--space-sm);
     color: inherit;
     background: transparent;
-    border: 0;
+    border: 1px solid var(--sticky-line);
     field-sizing: content;
 }
 
@@ -430,7 +430,7 @@ kbd {
 }
 
 .sticky-note__content-input {
-    min-block-size: 0;
+    min-block-size: 4lh;
     resize: none;
 }
 
@@ -443,7 +443,7 @@ kbd {
     inline-size: auto;
     max-inline-size: 100%;
     margin-block-start: var(--space-2xs);
-    padding: var(--space-3xs) var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
     color: inherit;
     background: transparent;
     border: 1px solid currentColor;
