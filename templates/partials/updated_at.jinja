@@ -1,5 +1,5 @@
 {% from "partials/entries.jinja" import when %}
 
-{% macro updated_at_span(item, oob=False) %}
+{% macro updated_at_span(item, oob=False) -%}
     <span id="detail-updated-at"{% if oob %} hx-swap-oob="true"{% endif %}>{{ when(item.updated_at) }}</span>
-{% endmacro %}
+{%- endmacro %}
