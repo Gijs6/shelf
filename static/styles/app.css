@@ -141,8 +141,15 @@ kbd {
     background: var(--head);
 }
 
-.EasyMDEContainer .CodeMirror {
+.EasyMDEContainer .CodeMirror-scroll {
     min-block-size: 50vh;
+}
+
+.EasyMDEContainer .CodeMirror-hscrollbar {
+    display: none !important;
+}
+
+.EasyMDEContainer .CodeMirror {
     padding: var(--space-xs) var(--space-lg);
     font: inherit;
     color: var(--input-fg);
