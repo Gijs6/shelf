@@ -46,6 +46,14 @@ kbd {
     white-space: nowrap;
 }
 
+.entry-summary {
+    margin-block-end: var(--space-xl);
+}
+
+.entry-actions {
+    margin-block-end: var(--space-2xl);
+}
+
 .status--open {
     color: var(--fg);
 }

@@ -1,88 +1,58 @@
 {% extends "base.jinja" %}
 
-{% from "partials/icons.jinja" import icon %}
-{% from "partials/indicator.jinja" import type_indicator %}
+{% from "partials/entries.jinja" import when %}
 {% from "partials/updated_at.jinja" import updated_at_span %}
 
 {% block title %}{{ note.display_title | markdown_plain }}{% endblock %}
-{% block page_class %}page--note{% endblock %}
 
 {% block content %}
     <article>
-        <header class="page-header page-header--note">
-            <hgroup class="page-header__heading">
-                {{ type_indicator("note") }}
-                <h1 class="page-header__title">{{ note.display_title | markdown_inline }}</h1>
-                {% if note.archived or note.group_name %}
-                    <p class="page-header__badges">
-                        {% if note.archived %}<span class="badge badge--neutral">{{ icon("archive") }} Archived</span>{% endif %}
-                        {% if note.group_name %}
-                            <a class="badge badge--group"
-                               href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ icon("folder") }} {{ note.group_name }}</a>
-                        {% endif %}
-                    </p>
-                {% endif %}
-            </hgroup>
-            <menu class="page-header__actions">
-                <li>
-                    <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
-                       class="button button--ghost"
-                       data-shortcut="edit">{{ icon("edit") }} Edit</a>
-                </li>
-                <li>
-                    <button type="button"
-                            class="button button--ghost"
-                            data-copy-html-target="note-content"
-                            data-copy-title="{{ note.title or '' }}">{{ icon("copy") }} Copy</button>
-                </li>
-                <li>
-                    <form class="page-header__actions-form"
-                          hx-post="{{ url_for('notes.duplicate_note', note_id=note.id) }}"
-                          hx-target="body"
-                          hx-push-url="true">
-                        <button type="submit" class="button button--ghost">{{ icon("duplicate") }} Duplicate</button>
-                    </form>
-                </li>
-                <li>
-                    {% if note.archived %}
-                        <form class="page-header__actions-form"
-                              hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
-                              hx-target="body"
-                              hx-push-url="true"
-                              data-shortcut="archive-toggle">
-                            <button type="submit" class="button button--ghost">{{ icon("archive") }} Unarchive</button>
-                        </form>
-                    {% else %}
-                        <form class="page-header__actions-form"
-                              hx-patch="{{ url_for('notes.archive_note', note_id=note.id) }}"
-                              hx-target="body"
-                              hx-push-url="true"
-                              data-shortcut="archive-toggle">
-                            <button type="submit" class="button button--ghost">{{ icon("archive") }} Archive</button>
-                        </form>
-                    {% endif %}
-                </li>
-                <li>
-                    <form class="page-header__actions-form"
-                          hx-delete="{{ url_for('notes.delete_note', note_id=note.id) }}"
-                          hx-target="body"
-                          hx-push-url="true"
-                          data-shortcut="delete">
-                        <button type="submit" class="button button--danger">{{ icon("trash") }} Delete</button>
-                    </form>
-                </li>
-            </menu>
-        </header>
+        <div class="page-head">
+            <h1>{{ note.display_title | markdown_inline }}</h1>
+        </div>
 
-        <ul class="detail-meta">
-            <li class="detail-meta__item">
-                Made
-                <time datetime="{{ note.created_at | isoformat }}" data-live>{{ note.created_at | timeago }}</time>
-                (<time datetime="{{ note.created_at | isoformat }}">{{ note.created_at | strftime("%d %b %Y, %H:%M") }}</time>)
-                - edited
-                {{ updated_at_span(note) }}
-            </li>
-        </ul>
+        <p class="entry-summary">
+            Note
+            {%- if note.group_name %} in group <a href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ note.group_name }}</a>{% endif %}
+            {%- if note.archived %}, archived{% endif %}.
+            Made {{ when(note.created_at) }}, edited {{ updated_at_span(note) }}.
+        </p>
+
+        <div class="form__actions entry-actions">
+            <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
+               class="btn"
+               data-shortcut="edit">Edit</a>
+            <button type="button"
+                    class="btn"
+                    data-copy-html-target="note-content"
+                    data-copy-title="{{ note.title or '' }}">Copy text</button>
+            <form hx-post="{{ url_for('notes.duplicate_note', note_id=note.id) }}"
+                  hx-target="body"
+                  hx-push-url="true">
+                <button type="submit" class="btn">Duplicate</button>
+            </form>
+            {% if note.archived %}
+                <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
+                      hx-target="body"
+                      hx-push-url="true"
+                      data-shortcut="archive-toggle">
+                    <button type="submit" class="btn">Unarchive</button>
+                </form>
+            {% else %}
+                <form hx-patch="{{ url_for('notes.archive_note', note_id=note.id) }}"
+                      hx-target="body"
+                      hx-push-url="true"
+                      data-shortcut="archive-toggle">
+                    <button type="submit" class="btn">Archive</button>
+                </form>
+            {% endif %}
+            <form hx-delete="{{ url_for('notes.delete_note', note_id=note.id) }}"
+                  hx-target="body"
+                  hx-push-url="true"
+                  data-shortcut="delete">
+                <button type="submit" class="btn btn--danger">Delete note</button>
+            </form>
+        </div>
 
         <div id="note-content" class="markdown">{{ note.content | markdown(kind="note", item_id=note.id) }}</div>
     </article>
