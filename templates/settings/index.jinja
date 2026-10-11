@@ -38,8 +38,8 @@
 
     <section class="panel">
         <h2 class="panel__heading">Trash</h2>
-        <div class="panel__body">
-            {% if total_trash %}
+        {% if total_trash %}
+            <div class="panel__body">
                 <p>
                     {{ trash_counts.notes }} {{ trash_counts.notes | pluralize("note") }},
                     {{ trash_counts.sticky_notes }} sticky {{ trash_counts.sticky_notes | pluralize("note") }}
@@ -51,16 +51,18 @@
                       hx-confirm="Delete everything in trash across notes, todos and sticky notes? This can't be undone.">
                     <button type="submit" class="btn btn--danger">Empty trash</button>
                 </form>
-            {% else %}
-                <p>Trash is empty.</p>
-            {% endif %}
-        </div>
+            </div>
+        {% else %}
+            <div class="empty">
+                <p class="empty__title">Trash is empty</p>
+            </div>
+        {% endif %}
     </section>
 
     <section class="panel">
         <h2 class="panel__heading">Expired sticky notes</h2>
-        <div class="panel__body">
-            {% if expired_sticky_note_count %}
+        {% if expired_sticky_note_count %}
+            <div class="panel__body">
                 <p>
                     {{ expired_sticky_note_count }} expired sticky
                     {{ expired_sticky_note_count | pluralize("note") }} not yet in trash.
@@ -71,10 +73,12 @@
                       hx-confirm="Move all expired sticky notes to trash?">
                     <button type="submit" class="btn">Move expired to trash</button>
                 </form>
-            {% else %}
-                <p>No expired sticky notes.</p>
-            {% endif %}
-        </div>
+            </div>
+        {% else %}
+            <div class="empty">
+                <p class="empty__title">No expired sticky notes</p>
+            </div>
+        {% endif %}
     </section>
 
     <section class="panel">
