@@ -94,6 +94,8 @@ def parse_query(raw_query):
         effective_types &= {"sticky"}
     if overdue is not None:
         effective_types &= {"todo"}
+    if group is not None:
+        effective_types &= {"note", "todo"}
     if archived is not None:
         effective_types &= {"note", "todo"}
     if due is not None:
