@@ -39,12 +39,22 @@
     <section class="panel">
         <h2 class="panel__heading">Trash</h2>
         {% if total_trash %}
+            <div class="table-wrap">
+                <table class="table table--kv table--fit">
+                    <caption class="visually-hidden">In trash</caption>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Notes</th>
+                            <td>{{ "{:,}".format(trash_counts.notes) }}</td>
+                            <th scope="row">Sticky notes</th>
+                            <td>{{ "{:,}".format(trash_counts.sticky_notes) }}</td>
+                            <th scope="row">Todos</th>
+                            <td>{{ "{:,}".format(trash_counts.todos) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="panel__body">
-                <p>
-                    {{ trash_counts.notes }} {{ trash_counts.notes | pluralize("note") }},
-                    {{ trash_counts.sticky_notes }} sticky {{ trash_counts.sticky_notes | pluralize("note") }}
-                    and {{ trash_counts.todos }} {{ trash_counts.todos | pluralize("todo") }} in trash.
-                </p>
                 <form hx-delete="{{ url_for('settings.purge_all_trash') }}"
                       hx-target="body"
                       hx-push-url="true"
@@ -132,7 +142,8 @@
                     </form>
                     <form hx-delete="{{ url_for('settings.revoke_calendar_token') }}"
                           hx-target="body"
-                          hx-push-url="true">
+                          hx-push-url="true"
+                          hx-confirm="Revoke the token? The feed URL stops working.">
                         <button type="submit" class="btn btn--danger">Revoke token</button>
                     </form>
                 </div>
@@ -150,11 +161,18 @@
     {% if last_login %}
         <section class="panel">
             <h2 class="panel__heading">Session</h2>
-            <div class="panel__body">
-                <p>
-                    Signed in since {{ when(last_login) }}.
-                    Session expires {{ when(session_expires_at) }}.
-                </p>
+            <div class="table-wrap">
+                <table class="table table--kv table--fit">
+                    <caption class="visually-hidden">Session</caption>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Signed in</th>
+                            <td>{{ when(last_login) }}</td>
+                            <th scope="row">Expires</th>
+                            <td>{{ when(session_expires_at) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
     {% endif %}

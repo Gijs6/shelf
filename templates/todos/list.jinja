@@ -24,6 +24,11 @@
 
     {% if sections %}
         {{ entry_table(sections=sections, group_prefix=False, date_label="Created", date_attr="created_at", state=True, due=True) }}
+    {% elif has_todos %}
+        <div class="empty">
+            <p class="empty__title">No results</p>
+            <p>No todo matches these filters.</p>
+        </div>
     {% else %}
         <div class="empty">
             <p class="empty__title">No todos yet</p>

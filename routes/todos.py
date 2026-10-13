@@ -48,6 +48,7 @@ def list_todos():
     else:
         selected_states = ["open", "active"]
 
+    has_todos = query.first() is not None
     query = query.filter(Todo.state.in_(selected_states))
     todos = query.order_by(Todo.created_at.desc()).all()
 
@@ -65,6 +66,7 @@ def list_todos():
         states=TODO_STATES,
         selected_states=selected,
         chip_links=chip_links,
+        has_todos=has_todos,
     )
 
 
@@ -112,7 +114,7 @@ def create_todo():
     todo = Todo(**fields)
     db.session.add(todo)
     db.session.commit()
-    flash("Todo created.", "success")
+    flash("Todo added.", "success")
     return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
 
 

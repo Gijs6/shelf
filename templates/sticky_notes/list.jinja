@@ -18,7 +18,9 @@
 
     {% if pinned_notes %}
         <section class="panel">
-            <h2 class="panel__heading">Pinned</h2>
+            <h2 class="panel__heading">
+                <span>Pinned <span class="count">{{ "{:,}".format(pinned_notes | length) }}</span></span>
+            </h2>
             <ul class="sticky-board">
                 {% for sticky_note in pinned_notes %}{{ sticky_card(sticky_note, auto_open=(sticky_note.id == open_id)) }}{% endfor %}
             </ul>
@@ -27,7 +29,9 @@
 
     {% if active_notes %}
         <section class="panel">
-            {% if pinned_notes %}<h2 class="panel__heading">Other</h2>{% endif %}
+            <h2 class="panel__heading">
+                <span>{{ "Other" if pinned_notes else "All" }} <span class="count">{{ "{:,}".format(active_notes | length) }}</span></span>
+            </h2>
             <ul class="sticky-board">
                 {% for sticky_note in active_notes %}{{ sticky_card(sticky_note, auto_open=(sticky_note.id == open_id)) }}{% endfor %}
             </ul>
