@@ -1,8 +1,9 @@
 {% extends "skeleton.jinja" %}
 
-{% macro nav_link(endpoint, label) %}
+{% macro nav_link(endpoint, label, exact=False, shortcut=None) %}
     <a href="{{ url_for(endpoint) }}"
-       {% if request.endpoint == endpoint or (request.blueprint and request.blueprint == endpoint.split('.')[0]) %}aria-current="page"{% endif %}>{{ label }}</a>
+       {% if shortcut %}data-shortcut="{{ shortcut }}"{% endif %}
+       {% if request.endpoint == endpoint or (not exact and request.blueprint and request.blueprint == endpoint.split('.')[0]) %}aria-current="page"{% endif %}>{{ label }}</a>
 {% endmacro %}
 
 {% block body_content %}
@@ -15,6 +16,8 @@
                 {{ nav_link('todos.list_todos', 'Todos') }}
                 {{ nav_link('sticky_notes.list_sticky_notes', 'Sticky notes') }}
                 {{ nav_link('search.search_view', 'Search') }}
+                {{ nav_link('storage.archive', 'Archive', exact=True, shortcut='archive') }}
+                {{ nav_link('storage.trash', 'Trash', exact=True, shortcut='trash') }}
                 {{ nav_link('settings.index', 'Settings') }}
                 <form method="post" action="{{ url_for('logout') }}">
                     <button type="submit">Sign out</button>

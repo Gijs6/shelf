@@ -19,22 +19,6 @@ def list_notes():
     return render_template("notes/list.jinja", sections=group_sections(notes))
 
 
-@notes_bp.get("/trash")
-def trash():
-    notes = Note.query.filter(Note.deleted).order_by(Note.deleted_at.desc()).all()
-    return render_template("notes/trash.jinja", notes=notes)
-
-
-@notes_bp.get("/archived")
-def archived():
-    notes = (
-        Note.query.filter(Note.archived, ~Note.deleted)
-        .order_by(Note.archived_at.desc())
-        .all()
-    )
-    return render_template("notes/archived.jinja", notes=notes)
-
-
 @notes_bp.get("/new")
 def new_note():
     return render_template("notes/form.jinja", note=None, groups=all_group_names())
@@ -186,7 +170,7 @@ def restore_note(note_id):
         url_for("notes.delete_note", note_id=note.id),
         undo_method="DELETE",
     )
-    return redirect(url_for("notes.trash"), code=303)
+    return redirect(url_for("storage.trash"), code=303)
 
 
 @notes_bp.delete("/<note_id>/purge")
@@ -195,7 +179,7 @@ def purge_note(note_id):
     db.session.delete(note)
     db.session.commit()
     flash("Note deleted.", "success")
-    return redirect(url_for("notes.trash"), code=303)
+    return redirect(url_for("storage.trash"), code=303)
 
 
 @notes_bp.patch("/<note_id>/archive")
@@ -213,4 +197,4 @@ def unarchive_note(note_id):
     note.archived_at = None
     db.session.commit()
     flash_with_undo("Note unarchived.", url_for("notes.archive_note", note_id=note.id))
-    return redirect(request.referrer or url_for("notes.archived"), code=303)
+    return redirect(request.referrer or url_for("storage.archive"), code=303)

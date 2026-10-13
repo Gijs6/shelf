@@ -68,22 +68,6 @@ def list_todos():
     )
 
 
-@todos_bp.get("/trash")
-def trash():
-    todos = Todo.query.filter(Todo.deleted).order_by(Todo.deleted_at.desc()).all()
-    return render_template("todos/trash.jinja", todos=todos)
-
-
-@todos_bp.get("/archived")
-def archived():
-    todos = (
-        Todo.query.filter(Todo.archived, ~Todo.deleted)
-        .order_by(Todo.archived_at.desc())
-        .all()
-    )
-    return render_template("todos/archived.jinja", todos=todos)
-
-
 @todos_bp.get("/calendar/<token>.ics")
 def ical_feed(token):
     expected_token = get_setting(CALENDAR_TOKEN_KEY)
@@ -297,7 +281,7 @@ def restore_todo(todo_id):
         url_for("todos.delete_todo", todo_id=todo.id),
         undo_method="DELETE",
     )
-    return redirect(url_for("todos.trash"), code=303)
+    return redirect(url_for("storage.trash"), code=303)
 
 
 @todos_bp.delete("/<todo_id>/purge")
@@ -306,7 +290,7 @@ def purge_todo(todo_id):
     db.session.delete(todo)
     db.session.commit()
     flash("Todo deleted.", "success")
-    return redirect(url_for("todos.trash"), code=303)
+    return redirect(url_for("storage.trash"), code=303)
 
 
 @todos_bp.patch("/<todo_id>/archive")
@@ -324,4 +308,4 @@ def unarchive_todo(todo_id):
     todo.archived_at = None
     db.session.commit()
     flash_with_undo("Todo unarchived.", url_for("todos.archive_todo", todo_id=todo.id))
-    return redirect(request.referrer or url_for("todos.archived"), code=303)
+    return redirect(request.referrer or url_for("storage.archive"), code=303)

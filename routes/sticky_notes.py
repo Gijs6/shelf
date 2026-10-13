@@ -31,16 +31,6 @@ def list_sticky_notes():
     )
 
 
-@sticky_notes_bp.get("/trash")
-def trash():
-    notes = (
-        StickyNote.query.filter(StickyNote.deleted)
-        .order_by(StickyNote.deleted_at.desc())
-        .all()
-    )
-    return render_template("sticky_notes/trash.jinja", notes=notes)
-
-
 @sticky_notes_bp.post("/new")
 def new_sticky_note():
     sticky_note = StickyNote(colour="yellow")
@@ -181,7 +171,7 @@ def restore_sticky_note(sticky_note_id):
         url_for("sticky_notes.delete_sticky_note", sticky_note_id=sticky_note.id),
         undo_method="DELETE",
     )
-    return redirect(url_for("sticky_notes.trash"), code=303)
+    return redirect(url_for("storage.trash"), code=303)
 
 
 @sticky_notes_bp.delete("/<sticky_note_id>/purge")
@@ -192,4 +182,4 @@ def purge_sticky_note(sticky_note_id):
     db.session.delete(sticky_note)
     db.session.commit()
     flash("Sticky note deleted.", "success")
-    return redirect(url_for("sticky_notes.trash"), code=303)
+    return redirect(url_for("storage.trash"), code=303)

@@ -103,10 +103,10 @@
                 archiveToggle.requestSubmit();
                 return;
             }
-            var archivedLink = document.querySelector('[data-shortcut="archived"]');
-            if (archivedLink) {
+            var archiveLink = document.querySelector('[data-shortcut="archive"]');
+            if (archiveLink) {
                 e.preventDefault();
-                archivedLink.click();
+                archiveLink.click();
             }
         } else if (e.key === "t") {
             var trashLink = document.querySelector('[data-shortcut="trash"]');

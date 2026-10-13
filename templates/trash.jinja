@@ -1,0 +1,39 @@
+{% extends "base.jinja" %}
+
+{% from "partials/entries.jinja" import entry_table %}
+
+{% block title %}Trash{% endblock %}
+
+{% block content %}
+    <div class="page-head">
+        <h1>Trash</h1>
+    </div>
+
+    {% if sections %}
+        {% call(item) entry_table(sections=sections, date_label="Deleted", date_attr="deleted_at", links=False) %}
+            {% if item.kind == "note" %}
+                {% set restore_url = url_for('notes.restore_note', note_id=item.id) %}
+                {% set purge_url = url_for('notes.purge_note', note_id=item.id) %}
+            {% elif item.kind == "todo" %}
+                {% set restore_url = url_for('todos.restore_todo', todo_id=item.id) %}
+                {% set purge_url = url_for('todos.purge_todo', todo_id=item.id) %}
+            {% else %}
+                {% set restore_url = url_for('sticky_notes.restore_sticky_note', sticky_note_id=item.id) %}
+                {% set purge_url = url_for('sticky_notes.purge_sticky_note', sticky_note_id=item.id) %}
+            {% endif %}
+            <form hx-patch="{{ restore_url }}" hx-target="body" hx-push-url="true">
+                <button type="submit" class="btn btn--sm">Restore</button>
+            </form>
+            <form hx-delete="{{ purge_url }}"
+                  hx-target="body"
+                  hx-push-url="true"
+                  hx-confirm="Delete {{ item.display_title | markdown_plain }}? This can't be undone.">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+            </form>
+        {% endcall %}
+    {% else %}
+        <div class="empty">
+            <p class="empty__title">Trash is empty</p>
+        </div>
+    {% endif %}
+{% endblock %}

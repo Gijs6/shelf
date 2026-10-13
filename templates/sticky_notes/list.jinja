@@ -8,9 +8,6 @@
     <div class="page-head">
         <h1>Sticky notes</h1>
         <div class="page-head__actions">
-            <a href="{{ url_for('sticky_notes.trash') }}"
-               class="btn"
-               data-shortcut="trash">Trash</a>
             <form hx-post="{{ url_for('sticky_notes.new_sticky_note') }}"
                   hx-target="body"
                   hx-push-url="true">

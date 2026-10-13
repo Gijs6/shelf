@@ -1,0 +1,28 @@
+{% extends "base.jinja" %}
+
+{% from "partials/entries.jinja" import entry_table %}
+
+{% block title %}Archive{% endblock %}
+
+{% block content %}
+    <div class="page-head">
+        <h1>Archive</h1>
+    </div>
+
+    {% if sections %}
+        {% call(item) entry_table(sections=sections, date_label="Archived", date_attr="archived_at") %}
+            {% if item.kind == "note" %}
+                {% set unarchive_url = url_for('notes.unarchive_note', note_id=item.id) %}
+            {% else %}
+                {% set unarchive_url = url_for('todos.unarchive_todo', todo_id=item.id) %}
+            {% endif %}
+            <form hx-patch="{{ unarchive_url }}" hx-target="body" hx-push-url="true">
+                <button type="submit" class="btn btn--sm">Unarchive</button>
+            </form>
+        {% endcall %}
+    {% else %}
+        <div class="empty">
+            <p class="empty__title">Nothing archived</p>
+        </div>
+    {% endif %}
+{% endblock %}
