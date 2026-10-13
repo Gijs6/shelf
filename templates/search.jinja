@@ -121,15 +121,33 @@
         </form>
     </search>
 
-    <section id="search-results" class="panel" aria-label="Search results">
-        {% if results %}
-            <h2 class="panel__heading">Results ({{ results | length }})</h2>
-            {{ entry_table(results, kind=True, state=True, group=True, due=True) }}
+    <div id="search-results">
+        <nav class="btn-group" aria-label="Filter by type">
+            {% for filter in filters %}
+                <a href="{{ url_for('search.search_view', q=filter.query) }}"
+                   class="btn btn--sm"
+                   {% if filter.current %}aria-current="true"{% endif %}>{{ filter.label }}</a>
+            {% endfor %}
+        </nav>
+
+        {% for kind, label, items in sections %}
+            <section class="panel">
+                <h2 class="panel__heading">
+                    <span>{{ label }} <span class="count">{{ "{:,}".format(items | length) }}</span></span>
+                </h2>
+                {% if kind == "todo" %}
+                    {{ entry_table(items, state=True, due=True, date_attr=None, flags=True) }}
+                {% elif kind == "note" %}
+                    {{ entry_table(items, flags=True) }}
+                {% else %}
+                    {{ entry_table(items, title_label="Text", flags=True) }}
+                {% endif %}
+            </section>
         {% else %}
             <div class="empty">
                 <p class="empty__title">No results</p>
                 {% if query %}<p>No item matches "{{ query }}".</p>{% endif %}
             </div>
-        {% endif %}
-    </section>
+        {% endfor %}
+    </div>
 {% endblock %}

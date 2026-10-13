@@ -13,7 +13,7 @@
     <section class="panel">
         <h2 class="panel__heading">Upcoming and overdue todos</h2>
         {% if upcoming_todos %}
-            {{ entry_table(upcoming_todos, state=True, due=True) }}
+            {{ entry_table(upcoming_todos, state=True, due=True, date_attr=None) }}
         {% else %}
             <div class="empty">
                 <p class="empty__title">Nothing due</p>

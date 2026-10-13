@@ -8,10 +8,6 @@
     <div class="page-head">
         <h1>Notes</h1>
         <div class="page-head__actions">
-            <a href="{{ url_for('notes.archived') }}"
-               class="btn"
-               data-shortcut="archived">Archived</a>
-            <a href="{{ url_for('notes.trash') }}" class="btn" data-shortcut="trash">Trash</a>
             <a href="{{ url_for('notes.new_note') }}"
                class="btn"
                data-shortcut="new">New note</a>
@@ -19,12 +15,7 @@
     </div>
 
     {% if sections %}
-        {% for label, items in sections %}
-            <section class="panel">
-                <h2 class="panel__heading">{{ label }}</h2>
-                {{ entry_table(items, aligned=True) }}
-            </section>
-        {% endfor %}
+        {{ entry_table(sections=sections, group_prefix=False) }}
     {% else %}
         <div class="empty">
             <p class="empty__title">No notes yet</p>

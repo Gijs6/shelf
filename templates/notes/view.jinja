@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
 
-{% from "partials/entries.jinja" import when %}
+{% from "partials/entries.jinja" import when, group_prefix %}
 {% from "partials/updated_at.jinja" import updated_at_span %}
 
 {% block title %}{{ note.display_title | markdown_plain }}{% endblock %}
@@ -8,17 +8,30 @@
 {% block content %}
     <article>
         <div class="page-head">
-            <h1>{{ note.display_title | markdown_inline }}</h1>
+            <div>
+                <h1>{{ group_prefix(note.group_name) }}{{ note.display_title | markdown_inline }}</h1>
+                <p class="page-head__sub">
+                    Note
+                    {%- if note.archived %}, archived{% endif %}
+                </p>
+            </div>
         </div>
 
-        <p class="entry-summary">
-            Note
-            {%- if note.group_name %} in group <a href="{{ url_for('search.search_view', q='is:note group:' + note.group_name) }}">{{ note.group_name }}</a>{% endif %}
-            {%- if note.archived %}, archived{% endif %}.
-            Made {{ when(note.created_at) }}, edited {{ updated_at_span(note) }}.
-        </p>
+        <div class="table-wrap">
+            <table class="table table--kv table--fit">
+                <caption class="visually-hidden">Details</caption>
+                <tbody>
+                    <tr>
+                        <th scope="row">Created</th>
+                        <td>{{ when(note.created_at) }}</td>
+                        <th scope="row">Edited</th>
+                        <td>{{ updated_at_span(note) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <div class="form__actions entry-actions">
+        <div class="page-actions">
             <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
                class="btn"
                data-shortcut="edit">Edit</a>

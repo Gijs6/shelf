@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
 
-{% from "partials/entries.jinja" import when, state_label %}
+{% from "partials/entries.jinja" import when, title_state, group_prefix %}
 {% from "partials/updated_at.jinja" import updated_at_span %}
 
 {% block title %}{{ todo.display_title | markdown_plain }}{% endblock %}
@@ -8,20 +8,48 @@
 {% block content %}
     <article>
         <div class="page-head">
-            <h1>{{ todo.display_title | markdown_inline }} ({{ state_label(todo) }})</h1>
+            <div>
+                <h1>{{ group_prefix(todo.group_name) }}{{ todo.display_title | markdown_inline }} {{ title_state(todo) }}</h1>
+                <p class="page-head__sub">
+                    Todo
+                    {%- if todo.archived %}, archived{% endif %}
+                </p>
+            </div>
         </div>
 
-        <p class="entry-summary">
-            Todo
-            {%- if todo.group_name %} in group <a href="{{ url_for('search.search_view', q='is:todo group:' + todo.group_name) }}">{{ todo.group_name }}</a>{% endif %}
-            {%- if todo.archived %}, archived{% endif %}.
-            {% if todo.deadline %}Due {{ when(todo.deadline) }}.{% endif %}
-            Made {{ when(todo.created_at) }}, edited {{ updated_at_span(todo) }}.
-            {% if todo.state == "active" and todo.active_at %}Active since {{ when(todo.active_at) }}.{% endif %}
-            {% if todo.completed_at %}Completed {{ when(todo.completed_at) }}.{% endif %}
-        </p>
+        <div class="table-wrap">
+            <table class="table table--kv table--fit">
+                <caption class="visually-hidden">Details</caption>
+                <tbody>
+                    <tr>
+                        {% if todo.deadline %}<th scope="row">Due</th><td>{{ when(todo.deadline) }}</td>{% endif %}
+                        <th scope="row">Created</th>
+                        <td>{{ when(todo.created_at) }}</td>
+                        <th scope="row">Edited</th>
+                        <td>{{ updated_at_span(todo) }}</td>
+                        {% if todo.state == "active" and todo.active_at %}<th scope="row">Active since</th><td>{{ when(todo.active_at) }}</td>{% endif %}
+                        {% if todo.completed_at %}<th scope="row">Completed</th><td>{{ when(todo.completed_at) }}</td>{% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <div class="form__actions entry-actions">
+        <div class="page-actions">
+            <form hx-patch="{{ url_for('todos.set_state', todo_id=todo.id) }}"
+                  hx-target="body"
+                  hx-push-url="true">
+                <fieldset class="btn-group state-picker">
+                    <legend class="visually-hidden">Change state</legend>
+                    {% for state in states %}
+                        <button type="submit"
+                                name="state"
+                                value="{{ state }}"
+                                data-state="{{ state }}"
+                                aria-pressed="{{ 'true' if todo.state == state else 'false' }}"
+                                class="btn btn--sm">{{ state | capitalize }}</button>
+                    {% endfor %}
+                </fieldset>
+            </form>
             <a href="{{ url_for('todos.edit_todo', todo_id=todo.id) }}"
                class="btn"
                data-shortcut="edit">Edit</a>
@@ -56,22 +84,6 @@
                 <button type="submit" class="btn btn--danger">Delete todo</button>
             </form>
         </div>
-
-        <form hx-patch="{{ url_for('todos.set_state', todo_id=todo.id) }}"
-              hx-target="body"
-              hx-push-url="true">
-            <fieldset class="btn-group state-picker">
-                <legend class="visually-hidden">Change state</legend>
-                {% for state in states %}
-                    <button type="submit"
-                            name="state"
-                            value="{{ state }}"
-                            data-state="{{ state }}"
-                            aria-pressed="{{ 'true' if todo.state == state else 'false' }}"
-                            class="btn btn--sm">{{ state | capitalize }}</button>
-                {% endfor %}
-            </fieldset>
-        </form>
 
         <div id="todo-content" class="markdown">{{ todo.content | markdown(kind="todo", item_id=todo.id) }}</div>
     </article>

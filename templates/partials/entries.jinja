@@ -7,10 +7,13 @@
     {%- if todo.overdue %}, <span class="status status--bad">overdue</span>{% endif %}
 {%- endmacro %}
 
-{% macro kind_label(item) -%}
-    {{ {"note": "Note", "todo": "Todo", "sticky": "Sticky note"}[item.kind] }}
-    {%- if item.archived %} (archived){% endif %}
-    {%- if item.pinned %} (pinned){% endif %}
+{% macro title_state(todo) -%}
+    <span class="status {{ {'open': 'status--open', 'active': 'status--warn', 'done': 'status--ok'}.get(todo.state, '') }}">({{ todo.state }}
+        {%- if todo.overdue %}, <span class="status--bad">overdue</span>{% endif %})</span>
+{%- endmacro %}
+
+{% macro group_prefix(name) -%}
+    {%- if name %}<span class="group-prefix"><a href="{{ url_for('search.search_view', q='group:' + name) }}">{{ name }}</a> /</span> {% endif -%}
 {%- endmacro %}
 
 {% macro entry_url(item) -%}
@@ -23,53 +26,69 @@
     {%- endif -%}
 {%- endmacro %}
 
-{% macro entry_table(items, date_label="Updated", date_attr="updated_at", kind=False, state=False, group=False, due=False, links=True, aligned=False) %}
+{% macro entry_rows(items, date_attr, state, due, links, flags, prefix, row_actions) %}
+    {% for item in items %}
+        {% set url = entry_url(item) if links else "" %}
+        {% set title = item.display_title or item.title %}
+        <tr>
+            <td>
+                {% if prefix %}{{ group_prefix(item.group_name) }}{% endif %}
+                {%- if url %}
+                    <a href="{{ url }}">{{ title | markdown_inline(links=false) }}</a>
+                {% else %}
+                    {{ title | markdown_inline }}
+                {% endif %}
+                {%- if flags and item.archived %} <span class="status">(archived)</span>{% endif %}
+                {%- if flags and item.pinned %} <span class="status">(pinned)</span>{% endif %}
+                {% if item.title and item.snippet %}<span class="table__sub">{{ item.snippet | markdown_inline }}</span>{% endif %}
+            </td>
+            {% if state %}
+                <td class="nowrap">
+                    {% if item.state %}{{ state_label(item) }}{% endif %}
+                </td>
+            {% endif %}
+            {% if due %}
+                <td class="nowrap">
+                    {% if item.deadline %}{{ when(item.deadline) }}{% endif %}
+                </td>
+            {% endif %}
+            {% if date_attr %}<td class="nowrap">{{ when(item[date_attr]) }}</td>{% endif %}
+            {% if row_actions %}<td class="table__actions">{{ row_actions(item) }}</td>{% endif %}
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{% macro entry_table(items=None, sections=None, title_label="Title", date_label="Updated", date_attr="updated_at", state=False, due=False, links=True, flags=False, group_prefix=True) %}
+    {% set row_actions = caller if caller else None %}
+    {% set columns = 1 + (1 if state else 0) + (1 if due else 0) + (1 if date_attr else 0) + (1 if row_actions else 0) %}
     <div class="table-wrap">
-        <table class="table entries{% if aligned %} entries--aligned{% endif %}{% if kind %} entries--wide{% endif %}">
+        <table class="table entries">
             <thead>
                 <tr>
-                    <th>Title</th>
-                    {% if kind %}<th class="entries__type">Type</th>{% endif %}
-                    {% if state %}<th class="entries__state">State</th>{% endif %}
-                    {% if group %}<th class="entries__group">Group</th>{% endif %}
-                    {% if due %}<th class="entries__date">Due</th>{% endif %}
-                    <th class="entries__date">{{ date_label }}</th>
-                    {% if caller %}
-                        <th class="table__actions entries__actions">
+                    <th>{{ title_label }}</th>
+                    {% if state %}<th>State</th>{% endif %}
+                    {% if due %}<th>Due</th>{% endif %}
+                    {% if date_attr %}<th>{{ date_label }}</th>{% endif %}
+                    {% if row_actions %}
+                        <th class="table__actions">
                             <span class="visually-hidden">Actions</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
-                {% for item in items %}
-                    {% set url = entry_url(item) if links else "" %}
-                    {% set title = item.display_title or item.title %}
-                    <tr>
-                        <td>
-                            {% if url %}
-                                <a href="{{ url }}">{{ title | markdown_inline(links=false) }}</a>
-                            {% else %}
-                                {{ title | markdown_inline }}
-                            {% endif %}
-                            {% if item.title and item.snippet %}<span class="snippet">{{ item.snippet | markdown_inline }}</span>{% endif %}
-                        </td>
-                        {% if kind %}<td class="nowrap">{{ kind_label(item) }}</td>{% endif %}
-                        {% if state %}
-                            <td class="nowrap">
-                                {% if item.state %}{{ state_label(item) }}{% endif %}
-                            </td>
-                        {% endif %}
-                        {% if group %}<td>{{ item.group_name or "" }}</td>{% endif %}
-                        {% if due %}
-                            <td class="nowrap">
-                                {% if item.deadline %}{{ when(item.deadline) }}{% endif %}
-                            </td>
-                        {% endif %}
-                        <td class="nowrap">{{ when(item[date_attr]) }}</td>
-                        {% if caller %}<td class="table__actions">{{ caller(item) }}</td>{% endif %}
-                    </tr>
-                {% endfor %}
+                {% if sections %}
+                    {% for label, section_items in sections %}
+                        <tr class="table__group">
+                            <th colspan="{{ columns }}" scope="colgroup">
+                                {{ label }} <span class="count">{{ "{:,}".format(section_items | length) }}</span>
+                            </th>
+                        </tr>
+                        {{ entry_rows(section_items, date_attr, state, due, links, flags, group_prefix, row_actions) }}
+                    {% endfor %}
+                {% else %}
+                    {{ entry_rows(items, date_attr, state, due, links, flags, group_prefix, row_actions) }}
+                {% endif %}
             </tbody>
         </table>
     </div>

@@ -13,14 +13,6 @@
     }
 }
 
-kbd {
-    display: inline-block;
-    padding: 0 var(--space-2xs);
-    font-size: 12px;
-    background: var(--page);
-    border: 1px solid var(--rule);
-}
-
 .toast__undo {
     display: inline;
     margin-inline-start: var(--space-sm);
@@ -30,45 +22,29 @@ kbd {
     min-inline-size: 40em;
 }
 
-.entries--wide {
-    min-inline-size: 64em;
-}
-
-.entries--aligned {
-    table-layout: fixed;
-}
-
-.entries--aligned .entries__state {
-    inline-size: 10em;
-}
-
-.entries--aligned .entries__date {
-    inline-size: 18em;
-}
-
-.snippet {
-    display: block;
+.group-prefix {
     color: var(--muted);
+
+    a {
+        color: inherit;
+    }
+    a:hover {
+        color: var(--fg);
+    }
 }
 
 .nowrap {
     white-space: nowrap;
 }
 
-.entry-summary {
-    margin-block-end: var(--space-xl);
-}
-
-.entry-actions {
-    margin-block-end: var(--space-2xl);
+.page-actions .state-picker {
+    align-self: center;
+    margin: 0;
+    margin-inline-end: auto;
 }
 
 .status--open {
     color: var(--fg);
-}
-
-.field--wide {
-    max-inline-size: none;
 }
 
 .date-chips {
@@ -78,110 +54,8 @@ kbd {
     margin-block-start: var(--space-xs);
 }
 
-.autocomplete {
-    position: relative;
-}
-
-.autocomplete__menu {
-    position: absolute;
-    inset-block-start: 100%;
-    inset-inline: 0;
-    z-index: 50;
-    max-block-size: 12rem;
-    margin: var(--space-3xs) 0 0;
-    padding: var(--space-xs) 0;
-    overflow-y: auto;
-    list-style: none;
-    background: var(--page);
-    border: 1px solid var(--rule);
-}
-
-.autocomplete__option {
-    padding: var(--space-xs) var(--space-lg);
-    cursor: pointer;
-
-    &:hover {
-        background: var(--head);
-    }
-}
-
-.autocomplete__option--active {
-    background: var(--head);
-}
-
 .EasyMDEContainer .CodeMirror-scroll {
     min-block-size: 50vh;
-}
-
-.EasyMDEContainer .CodeMirror-hscrollbar {
-    display: none !important;
-}
-
-.EasyMDEContainer .CodeMirror {
-    padding: var(--space-xs) var(--space-lg);
-    font: inherit;
-    color: var(--input-fg);
-    background: var(--input-bg);
-    border: 1px solid var(--input-line);
-    border-radius: 0;
-}
-
-.EasyMDEContainer .CodeMirror-focused {
-    border-color: var(--link);
-    outline: 1px solid var(--link);
-    outline-offset: -1px;
-}
-
-.EasyMDEContainer .CodeMirror :focus-visible {
-    outline: none;
-}
-
-.EasyMDEContainer .CodeMirror-cursor {
-    border-inline-start-color: var(--fg);
-}
-
-.EasyMDEContainer .CodeMirror-selected,
-.EasyMDEContainer .CodeMirror-focused .CodeMirror-selected {
-    background: color-mix(in srgb, var(--link) 25%, transparent);
-}
-
-.EasyMDEContainer .CodeMirror .CodeMirror-placeholder {
-    color: var(--muted);
-    opacity: 1;
-}
-
-.EasyMDEContainer :is(.cm-header, .cm-strong, .cm-variable-2, .cm-variable-3, .cm-keyword) {
-    color: inherit;
-}
-
-.EasyMDEContainer .cm-header-1 {
-    font-size: 22px;
-}
-.EasyMDEContainer .cm-header-2 {
-    font-size: 15px;
-}
-.EasyMDEContainer :is(.cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6) {
-    font-size: 14px;
-}
-
-.EasyMDEContainer :is(.cm-link, .cm-url) {
-    color: var(--link);
-}
-
-.EasyMDEContainer .cm-quote {
-    font-style: normal;
-    color: inherit;
-}
-
-.EasyMDEContainer .cm-hr {
-    color: var(--muted);
-}
-
-.EasyMDEContainer .cm-comment {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: inherit;
-    background: var(--pre-bg);
 }
 
 .markdown {
@@ -200,18 +74,13 @@ kbd {
         padding: 0 var(--space-2xs);
         background: var(--pre-bg);
     }
-    blockquote {
-        margin-inline: 0;
-        padding-inline-start: var(--space-lg);
-        color: var(--muted);
-        border-inline-start: 4px solid var(--line);
-    }
     table {
         display: block;
+        inline-size: fit-content;
         max-inline-size: 100%;
         margin: 0 0 var(--space-md);
         overflow-x: auto;
-        border-block: 1px solid var(--rule);
+        border: 1px solid var(--rule);
     }
     th,
     td {
@@ -221,6 +90,7 @@ kbd {
         border-top: 1px solid var(--line);
     }
     thead th {
+        border-top: 0;
         background: var(--head);
         border-bottom: 1px solid var(--rule);
     }
@@ -437,7 +307,7 @@ kbd {
 
 .sticky-note__action {
     padding: 0;
-    font-size: 12px;
+    font-size: var(--text-sm);
     color: inherit;
     text-decoration: underline;
     background: none;
@@ -451,7 +321,7 @@ kbd {
 
 .sticky-note__footer {
     grid-column: 1 / -1;
-    font-size: 12px;
+    font-size: var(--text-sm);
 
     p {
         margin: 0;

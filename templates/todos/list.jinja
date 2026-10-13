@@ -8,10 +8,6 @@
     <div class="page-head">
         <h1>Todos</h1>
         <div class="page-head__actions">
-            <a href="{{ url_for('todos.archived') }}"
-               class="btn"
-               data-shortcut="archived">Archived</a>
-            <a href="{{ url_for('todos.trash') }}" class="btn" data-shortcut="trash">Trash</a>
             <a href="{{ url_for('todos.new_todo') }}"
                class="btn"
                data-shortcut="new">New todo</a>
@@ -27,12 +23,7 @@
     </nav>
 
     {% if sections %}
-        {% for label, items in sections %}
-            <section class="panel">
-                <h2 class="panel__heading">{{ label }}</h2>
-                {{ entry_table(items, date_label="Created", date_attr="created_at", state=True, due=True, aligned=True) }}
-            </section>
-        {% endfor %}
+        {{ entry_table(sections=sections, group_prefix=False, date_label="Created", date_attr="created_at", state=True, due=True) }}
     {% else %}
         <div class="empty">
             <p class="empty__title">No todos yet</p>
