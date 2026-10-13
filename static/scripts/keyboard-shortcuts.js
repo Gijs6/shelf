@@ -1,4 +1,7 @@
 (function () {
+    if (window.shelfShortcuts) return;
+    window.shelfShortcuts = true;
+
     var routes = JSON.parse(document.getElementById("nav-routes").textContent);
 
     var CHORD_DESTINATIONS = {

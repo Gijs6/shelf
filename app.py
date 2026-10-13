@@ -10,7 +10,7 @@ from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, db, now
 from routes import register_routes
 from utils.filters import register_filters
 from utils.session import SESSION_LIFETIME
-from utils.toasts import register_toasts
+from utils.toasts import htmx_redirect, register_toasts
 from utils.version import register_version
 
 load_dotenv(override=True)
@@ -125,7 +125,7 @@ def require_login():
         session["last_login"] = now()
     allowed = ["login", "login_post", "logout", "static", "todos.ical_feed"]
     if request.endpoint and request.endpoint not in allowed and not is_logged_in():
-        return redirect(url_for("login"), code=303)
+        return htmx_redirect(url_for("login"))
 
 
 @app.errorhandler(403)

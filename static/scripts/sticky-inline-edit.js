@@ -1,4 +1,15 @@
 (function () {
+    var autoEdit = document.querySelector(".sticky-note[data-autoedit]");
+    if (autoEdit) {
+        autoEdit.classList.add("sticky-note--editing");
+        var autoInput = autoEdit.querySelector(".sticky-note__content-input");
+        if (autoInput) autoInput.focus();
+        history.replaceState(null, "", location.pathname);
+    }
+
+    if (window.shelfStickyEdit) return;
+    window.shelfStickyEdit = true;
+
     function openSticky(article) {
         article.classList.add("sticky-note--editing");
     }
@@ -9,17 +20,23 @@
         var url = article.dataset.updateUrl;
         article.classList.remove("sticky-note--editing");
 
-        fetch(url, { method: "PUT", body: new FormData(form) }).then(function (response) {
-            if (response.status === 204) {
-                li.remove();
-                return;
-            }
-            return response.text().then(function (html) {
-                var template = document.createElement("template");
-                template.innerHTML = html.trim();
-                li.replaceWith(template.content.firstElementChild);
+        fetch(url, { method: "PUT", body: new FormData(form) })
+            .then(function (response) {
+                if (response.redirected || !response.ok) throw new Error(response.statusText);
+                if (response.status === 204) {
+                    li.remove();
+                    return;
+                }
+                return response.text().then(function (html) {
+                    var template = document.createElement("template");
+                    template.innerHTML = html.trim();
+                    li.replaceWith(template.content.firstElementChild);
+                });
+            })
+            .catch(function () {
+                openSticky(article);
+                window.toast("Couldn't save the sticky note. Your text is still here, so try again.", { type: "danger" });
             });
-        });
     }
 
     document.addEventListener("click", function (e) {
@@ -76,12 +93,4 @@
             e.target.blur();
         }
     });
-
-    var autoEdit = document.querySelector(".sticky-note[data-autoedit]");
-    if (autoEdit) {
-        openSticky(autoEdit);
-        var contentInput = autoEdit.querySelector(".sticky-note__content-input");
-        if (contentInput) contentInput.focus();
-        history.replaceState(null, "", location.pathname);
-    }
 })();

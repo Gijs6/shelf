@@ -1,4 +1,7 @@
 (function () {
+    if (window.shelfLiveTimestamps) return;
+    window.shelfLiveTimestamps = true;
+
     function timeago(dt) {
         const now = Date.now();
         const value = new Date(dt).getTime();

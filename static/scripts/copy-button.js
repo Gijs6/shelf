@@ -1,4 +1,7 @@
 (function () {
+    if (window.shelfCopyButton) return;
+    window.shelfCopyButton = true;
+
     function copyText(text) {
         if (navigator.clipboard) {
             return navigator.clipboard.writeText(text);

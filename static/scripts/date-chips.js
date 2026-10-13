@@ -1,4 +1,7 @@
 (function () {
+    if (window.shelfDateChips) return;
+    window.shelfDateChips = true;
+
     function pad(value) {
         return String(value).padStart(2, "0");
     }
