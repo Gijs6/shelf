@@ -36,7 +36,7 @@ def new_sticky_note():
     sticky_note = StickyNote(colour="yellow")
     db.session.add(sticky_note)
     db.session.commit()
-    flash("Sticky note created.", "success")
+    flash("Sticky note added.", "success")
     return redirect(
         url_for("sticky_notes.list_sticky_notes", open=sticky_note.id), code=303
     )

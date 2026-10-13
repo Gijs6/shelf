@@ -13,11 +13,11 @@
 
                 <form class="sticky-note__edit" novalidate>
                     <label class="visually-hidden"
-                           for="sticky-content-input-{{ sticky_note.id }}">Content (markdown)</label>
+                           for="sticky-content-input-{{ sticky_note.id }}">Content (Markdown)</label>
                     <textarea id="sticky-content-input-{{ sticky_note.id }}"
                               name="content"
                               class="sticky-note__content-input"
-                              placeholder="Write in markdown...">{{ sticky_note.content }}</textarea>
+                              placeholder="Write in Markdown...">{{ sticky_note.content }}</textarea>
 
                     <div class="colour-picker"
                          role="group"
@@ -73,7 +73,7 @@
 
                 <footer class="sticky-note__footer">
                     <p class="sticky-note__made">
-                        Made {{ when(sticky_note.created_at) }}
+                        Created {{ when(sticky_note.created_at) }}
                     </p>
                 </footer>
             {% endif %}

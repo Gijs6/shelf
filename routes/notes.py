@@ -40,7 +40,7 @@ def create_note():
     note = Note(title=title, content=content, group_name=group_name)
     db.session.add(note)
     db.session.commit()
-    flash("Note created.", "success")
+    flash("Note added.", "success")
     return redirect(url_for("notes.view_note", note_id=note.id), code=303)
 
 

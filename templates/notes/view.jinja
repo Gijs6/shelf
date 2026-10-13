@@ -9,11 +9,11 @@
     <article>
         <div class="page-head">
             <div>
-                <h1>{{ group_prefix(note.group_name) }}{{ note.display_title | markdown_inline }}</h1>
-                <p class="page-head__sub">
-                    Note
-                    {%- if note.archived %}, archived{% endif %}
-                </p>
+                <h1>
+                    {{ group_prefix(note.group_name) }}{{ note.display_title | markdown_inline }}
+                    {%- if note.archived %} <span class="status">(archived)</span>{% endif %}
+                </h1>
+                <p class="page-head__sub">Note</p>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
         <div class="page-actions">
             <a href="{{ url_for('notes.edit_note', note_id=note.id) }}"
                class="btn"
-               data-shortcut="edit">Edit</a>
+               data-shortcut="edit">Edit note</a>
             <button type="button"
                     class="btn"
                     data-copy-html-target="note-content"
@@ -42,21 +42,21 @@
             <form hx-post="{{ url_for('notes.duplicate_note', note_id=note.id) }}"
                   hx-target="body"
                   hx-push-url="true">
-                <button type="submit" class="btn">Duplicate</button>
+                <button type="submit" class="btn">Duplicate note</button>
             </form>
             {% if note.archived %}
                 <form hx-patch="{{ url_for('notes.unarchive_note', note_id=note.id) }}"
                       hx-target="body"
                       hx-push-url="true"
                       data-shortcut="archive-toggle">
-                    <button type="submit" class="btn">Unarchive</button>
+                    <button type="submit" class="btn">Unarchive note</button>
                 </form>
             {% else %}
                 <form hx-patch="{{ url_for('notes.archive_note', note_id=note.id) }}"
                       hx-target="body"
                       hx-push-url="true"
                       data-shortcut="archive-toggle">
-                    <button type="submit" class="btn">Archive</button>
+                    <button type="submit" class="btn">Archive note</button>
                 </form>
             {% endif %}
             <form hx-delete="{{ url_for('notes.delete_note', note_id=note.id) }}"

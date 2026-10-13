@@ -9,11 +9,11 @@
     <article>
         <div class="page-head">
             <div>
-                <h1>{{ group_prefix(todo.group_name) }}{{ todo.display_title | markdown_inline }} {{ title_state(todo) }}</h1>
-                <p class="page-head__sub">
-                    Todo
-                    {%- if todo.archived %}, archived{% endif %}
-                </p>
+                <h1>
+                    {{ group_prefix(todo.group_name) }}{{ todo.display_title | markdown_inline }} {{ title_state(todo) }}
+                    {%- if todo.archived %} <span class="status">(archived)</span>{% endif %}
+                </h1>
+                <p class="page-head__sub">Todo</p>
             </div>
         </div>
 
@@ -52,7 +52,7 @@
             </form>
             <a href="{{ url_for('todos.edit_todo', todo_id=todo.id) }}"
                class="btn"
-               data-shortcut="edit">Edit</a>
+               data-shortcut="edit">Edit todo</a>
             <button type="button"
                     class="btn"
                     data-copy-html-target="todo-content"
@@ -60,21 +60,21 @@
             <form hx-post="{{ url_for('todos.duplicate_todo', todo_id=todo.id) }}"
                   hx-target="body"
                   hx-push-url="true">
-                <button type="submit" class="btn">Duplicate</button>
+                <button type="submit" class="btn">Duplicate todo</button>
             </form>
             {% if todo.archived %}
                 <form hx-patch="{{ url_for('todos.unarchive_todo', todo_id=todo.id) }}"
                       hx-target="body"
                       hx-push-url="true"
                       data-shortcut="archive-toggle">
-                    <button type="submit" class="btn">Unarchive</button>
+                    <button type="submit" class="btn">Unarchive todo</button>
                 </form>
             {% else %}
                 <form hx-patch="{{ url_for('todos.archive_todo', todo_id=todo.id) }}"
                       hx-target="body"
                       hx-push-url="true"
                       data-shortcut="archive-toggle">
-                    <button type="submit" class="btn">Archive</button>
+                    <button type="submit" class="btn">Archive todo</button>
                 </form>
             {% endif %}
             <form hx-delete="{{ url_for('todos.delete_todo', todo_id=todo.id) }}"
