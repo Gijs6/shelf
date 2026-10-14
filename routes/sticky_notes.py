@@ -153,7 +153,7 @@ def delete_sticky_note(sticky_note_id):
     sticky_note.deleted_at = now()
     db.session.commit()
     flash_with_undo(
-        "Sticky note moved to trash.",
+        "Sticky note deleted.",
         url_for("sticky_notes.restore_sticky_note", sticky_note_id=sticky_note.id),
     )
     return redirect(
@@ -181,5 +181,5 @@ def purge_sticky_note(sticky_note_id):
     ).first_or_404()
     db.session.delete(sticky_note)
     db.session.commit()
-    flash("Sticky note deleted.", "success")
+    flash("Sticky note purged.", "success")
     return redirect(url_for("storage.trash"), code=303)

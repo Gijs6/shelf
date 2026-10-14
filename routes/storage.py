@@ -32,7 +32,7 @@ def trash():
 
 
 @storage_bp.delete("/trash")
-def empty_trash():
+def purge_trash():
     counts = {
         "notes": Note.query.filter(Note.deleted).delete(synchronize_session=False),
         "sticky_notes": StickyNote.query.filter(StickyNote.deleted).delete(
@@ -42,7 +42,7 @@ def empty_trash():
     }
     db.session.commit()
 
-    flash(f"Deleted {count_summary(counts)} from trash.", "success")
+    flash(f"Purged {count_summary(counts)} from trash.", "success")
     return redirect(url_for("storage.trash"), code=303)
 
 

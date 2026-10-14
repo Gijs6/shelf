@@ -9,11 +9,11 @@
         <h1>Trash</h1>
         {% if sections %}
             <div class="page-head__actions">
-                <form hx-delete="{{ url_for('storage.empty_trash') }}"
+                <form hx-delete="{{ url_for('storage.purge_trash') }}"
                       hx-target="body"
                       hx-push-url="true"
-                      hx-confirm="Delete everything in trash across notes, todos and sticky notes? This can't be undone.">
-                    <button type="submit" class="btn btn--danger">Empty trash</button>
+                      hx-confirm="Purge everything in trash across notes, todos and sticky notes? This can't be undone.">
+                    <button type="submit" class="btn btn--danger">Purge trash</button>
                 </form>
             </div>
         {% endif %}
@@ -37,8 +37,8 @@
             <form hx-delete="{{ purge_url }}"
                   hx-target="body"
                   hx-push-url="true"
-                  hx-confirm="Delete {{ item.display_title | markdown_plain }}? This can't be undone.">
-                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+                  hx-confirm="Purge {{ item.display_title | markdown_plain }}? This can't be undone.">
+                <button type="submit" class="btn btn--danger btn--sm">Purge</button>
             </form>
         {% endcall %}
     {% else %}

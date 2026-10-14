@@ -268,7 +268,7 @@ def delete_todo(todo_id):
     todo.deleted_at = now()
     db.session.commit()
     flash_with_undo(
-        "Todo moved to trash.", url_for("todos.restore_todo", todo_id=todo.id)
+        "Todo deleted.", url_for("todos.restore_todo", todo_id=todo.id)
     )
     if request.args.get("next") == "archive":
         return redirect(url_for("storage.archive"), code=303)
@@ -293,7 +293,7 @@ def purge_todo(todo_id):
     todo = Todo.query.filter(Todo.id == todo_id, Todo.deleted).first_or_404()
     db.session.delete(todo)
     db.session.commit()
-    flash("Todo deleted.", "success")
+    flash("Todo purged.", "success")
     return redirect(url_for("storage.trash"), code=303)
 
 

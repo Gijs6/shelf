@@ -155,7 +155,7 @@ def delete_note(note_id):
     note.deleted_at = now()
     db.session.commit()
     flash_with_undo(
-        "Note moved to trash.", url_for("notes.restore_note", note_id=note.id)
+        "Note deleted.", url_for("notes.restore_note", note_id=note.id)
     )
     if request.args.get("next") == "archive":
         return redirect(url_for("storage.archive"), code=303)
@@ -180,7 +180,7 @@ def purge_note(note_id):
     note = Note.query.filter(Note.id == note_id, Note.deleted).first_or_404()
     db.session.delete(note)
     db.session.commit()
-    flash("Note deleted.", "success")
+    flash("Note purged.", "success")
     return redirect(url_for("storage.trash"), code=303)
 
 
