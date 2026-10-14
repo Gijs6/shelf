@@ -154,9 +154,7 @@ def delete_note(note_id):
     note = Note.query.get_or_404(note_id)
     note.deleted_at = now()
     db.session.commit()
-    flash_with_undo(
-        "Note deleted.", url_for("notes.restore_note", note_id=note.id)
-    )
+    flash_with_undo("Note deleted.", url_for("notes.restore_note", note_id=note.id))
     if request.args.get("next") == "archive":
         return redirect(url_for("storage.archive"), code=303)
     return redirect(url_for("notes.list_notes"), code=303)

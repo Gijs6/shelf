@@ -267,9 +267,7 @@ def delete_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.deleted_at = now()
     db.session.commit()
-    flash_with_undo(
-        "Todo deleted.", url_for("todos.restore_todo", todo_id=todo.id)
-    )
+    flash_with_undo("Todo deleted.", url_for("todos.restore_todo", todo_id=todo.id))
     if request.args.get("next") == "archive":
         return redirect(url_for("storage.archive"), code=303)
     return redirect(url_for("todos.list_todos"), code=303)
