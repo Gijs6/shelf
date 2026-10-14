@@ -270,6 +270,8 @@ def delete_todo(todo_id):
     flash_with_undo(
         "Todo moved to trash.", url_for("todos.restore_todo", todo_id=todo.id)
     )
+    if request.args.get("next") == "archive":
+        return redirect(url_for("storage.archive"), code=303)
     return redirect(url_for("todos.list_todos"), code=303)
 
 

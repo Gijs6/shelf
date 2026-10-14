@@ -157,6 +157,8 @@ def delete_note(note_id):
     flash_with_undo(
         "Note moved to trash.", url_for("notes.restore_note", note_id=note.id)
     )
+    if request.args.get("next") == "archive":
+        return redirect(url_for("storage.archive"), code=303)
     return redirect(url_for("notes.list_notes"), code=303)
 
 

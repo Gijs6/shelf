@@ -5,7 +5,6 @@ from flask import (
     redirect,
     render_template,
     request,
-    session,
     url_for,
 )
 
@@ -25,7 +24,6 @@ from models import (
 from utils.datetimes import parse_utc_datetime, utc_isoformat
 from utils.filters import pluralize_filter as pluralize
 from utils.groups import group_name_counts, normalize_group_name
-from utils.session import SESSION_LIFETIME
 from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
 
 settings_bp = Blueprint("settings", __name__, url_prefix="/settings")
@@ -146,20 +144,9 @@ def index():
         if calendar_token
         else None
     )
-    last_login = session.get("last_login")
-    session_expires_at = last_login + SESSION_LIFETIME if last_login else None
-    trash_counts = {
-        "notes": Note.query.filter(Note.deleted).count(),
-        "sticky_notes": StickyNote.query.filter(StickyNote.deleted).count(),
-        "todos": Todo.query.filter(Todo.deleted).count(),
-    }
     return render_template(
         "settings/index.jinja",
         calendar_url=calendar_url,
-        last_login=last_login,
-        session_expires_at=session_expires_at,
-        trash_counts=trash_counts,
-        total_trash=sum(trash_counts.values()),
         group_counts=group_name_counts(),
     )
 
@@ -265,30 +252,4 @@ def rename_group():
         f'Renamed "{old_name}" to "{new_name}" ({item_count} {pluralize(item_count, "item")}).',
         "success",
     )
-    return redirect(url_for("settings.index"), code=303)
-
-
-@settings_bp.delete("/trash")
-def purge_all_trash():
-    counts = {
-        "notes": Note.query.filter(Note.deleted).delete(synchronize_session=False),
-        "sticky_notes": StickyNote.query.filter(StickyNote.deleted).delete(
-            synchronize_session=False
-        ),
-        "todos": Todo.query.filter(Todo.deleted).delete(synchronize_session=False),
-    }
-    db.session.commit()
-
-    flash(f"Deleted {count_summary(counts)} from trash.", "success")
-    return redirect(url_for("settings.index"), code=303)
-
-
-@settings_bp.delete("/")
-def remove_all():
-    Note.query.delete()
-    StickyNote.query.delete()
-    Todo.query.delete()
-    db.session.commit()
-
-    flash("Deleted all notes, sticky notes and todos.", "success")
     return redirect(url_for("settings.index"), code=303)

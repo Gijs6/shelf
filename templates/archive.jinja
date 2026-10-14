@@ -13,11 +13,16 @@
         {% call(item) entry_table(sections=sections, date_label="Archived", date_attr="archived_at") %}
             {% if item.kind == "note" %}
                 {% set unarchive_url = url_for('notes.unarchive_note', note_id=item.id) %}
+                {% set delete_url = url_for('notes.delete_note', note_id=item.id, next='archive') %}
             {% else %}
                 {% set unarchive_url = url_for('todos.unarchive_todo', todo_id=item.id) %}
+                {% set delete_url = url_for('todos.delete_todo', todo_id=item.id, next='archive') %}
             {% endif %}
             <form hx-patch="{{ unarchive_url }}" hx-target="body" hx-push-url="true">
                 <button type="submit" class="btn btn--sm">Unarchive</button>
+            </form>
+            <form hx-delete="{{ delete_url }}" hx-target="body" hx-push-url="true">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
             </form>
         {% endcall %}
     {% else %}

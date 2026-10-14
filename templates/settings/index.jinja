@@ -1,7 +1,5 @@
 {% extends "base.jinja" %}
 
-{% from "partials/entries.jinja" import when %}
-
 {% block title %}Settings{% endblock %}
 
 {% block content %}
@@ -34,39 +32,6 @@
                 <button type="submit" class="btn">Import data</button>
             </div>
         </form>
-    </section>
-
-    <section class="panel">
-        <h2 class="panel__heading">Trash</h2>
-        {% if total_trash %}
-            <div class="table-wrap">
-                <table class="table table--kv table--fit">
-                    <caption class="visually-hidden">In trash</caption>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Notes</th>
-                            <td>{{ "{:,}".format(trash_counts.notes) }}</td>
-                            <th scope="row">Sticky notes</th>
-                            <td>{{ "{:,}".format(trash_counts.sticky_notes) }}</td>
-                            <th scope="row">Todos</th>
-                            <td>{{ "{:,}".format(trash_counts.todos) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="panel__body">
-                <form hx-delete="{{ url_for('settings.purge_all_trash') }}"
-                      hx-target="body"
-                      hx-push-url="true"
-                      hx-confirm="Delete everything in trash across notes, todos and sticky notes? This can't be undone.">
-                    <button type="submit" class="btn btn--danger">Empty trash</button>
-                </form>
-            </div>
-        {% else %}
-            <div class="empty">
-                <p class="empty__title">Trash is empty</p>
-            </div>
-        {% endif %}
     </section>
 
     <section class="panel">
@@ -109,18 +74,6 @@
     </section>
 
     <section class="panel">
-        <h2 class="panel__heading">Delete all data</h2>
-        <div class="panel__body">
-            <form hx-delete="{{ url_for('settings.remove_all') }}"
-                  hx-target="body"
-                  hx-push-url="true"
-                  hx-confirm="Delete all notes, todos and sticky notes? This can't be undone.">
-                <button type="submit" class="btn btn--danger">Delete all data</button>
-            </form>
-        </div>
-    </section>
-
-    <section class="panel">
         <h2 class="panel__heading">Calendar feed</h2>
         <div class="panel__body">
             {% if calendar_url %}
@@ -157,26 +110,6 @@
             {% endif %}
         </div>
     </section>
-
-    {% if last_login %}
-        <section class="panel">
-            <h2 class="panel__heading">Session</h2>
-            <div class="table-wrap">
-                <table class="table table--kv table--fit">
-                    <caption class="visually-hidden">Session</caption>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Signed in</th>
-                            <td>{{ when(last_login) }}</td>
-                            <th scope="row">Expires</th>
-                            <td>{{ when(session_expires_at) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    {% endif %}
-
 
     <dialog id="rename-group-modal" class="dialog" aria-labelledby="rename-group-title">
         <div class="dialog__head">

@@ -7,6 +7,16 @@
 {% block content %}
     <div class="page-head">
         <h1>Trash</h1>
+        {% if sections %}
+            <div class="page-head__actions">
+                <form hx-delete="{{ url_for('storage.empty_trash') }}"
+                      hx-target="body"
+                      hx-push-url="true"
+                      hx-confirm="Delete everything in trash across notes, todos and sticky notes? This can't be undone.">
+                    <button type="submit" class="btn btn--danger">Empty trash</button>
+                </form>
+            </div>
+        {% endif %}
     </div>
 
     {% if sections %}
