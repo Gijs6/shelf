@@ -15,7 +15,7 @@
     </div>
 
     {% if bookmarks %}
-        {{ entry_table(bookmarks, date_label="Added", date_attr="created_at") }}
+        {{ entry_table(bookmarks, date_label="Added", date_attr="created_at", description=True) }}
     {% else %}
         <div class="empty">
             <p class="empty__title">No bookmarks yet</p>

@@ -36,7 +36,7 @@
     {%- endif -%}
 {%- endmacro %}
 
-{% macro entry_rows(items, date_attr, state, due, links, flags, prefix, row_actions) %}
+{% macro entry_rows(items, date_attr, state, due, links, flags, prefix, row_actions, description) %}
     {% for item in items %}
         {% set url = entry_url(item) if links else "" %}
         {% set title = item.display_title or item.title %}
@@ -59,11 +59,16 @@
                 {%- if flags and item.pinned %} <span class="status">(pinned)</span>{% endif %}
                 {% if item.kind == "bookmark" %}
                     <span class="table__sub">{{ bookmark_link(item) }}</span>
-                    {% if item.snippet %}<span class="table__sub">{{ item.snippet | markdown_inline }}</span>{% endif %}
+                    {% if item.snippet and not description %}<span class="table__sub">{{ item.snippet | markdown_inline }}</span>{% endif %}
                 {% elif item.title and item.snippet %}
                     <span class="table__sub">{{ item.snippet | markdown_inline }}</span>
                 {% endif %}
             </td>
+            {% if description %}
+                <td>
+                    {% if item.snippet %}{{ item.snippet | markdown_inline }}{% endif %}
+                </td>
+            {% endif %}
             {% if state %}
                 <td class="nowrap">
                     {% if item.state %}{{ state_label(item) }}{% endif %}
@@ -80,14 +85,15 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro entry_table(items=None, sections=None, title_label="Title", date_label="Updated", date_attr="updated_at", state=False, due=False, links=True, flags=False, group_prefix=True) %}
+{% macro entry_table(items=None, sections=None, title_label="Title", date_label="Updated", date_attr="updated_at", state=False, due=False, links=True, flags=False, group_prefix=True, description=False) %}
     {% set row_actions = caller if caller else None %}
-    {% set columns = 1 + (1 if state else 0) + (1 if due else 0) + (1 if date_attr else 0) + (1 if row_actions else 0) %}
+    {% set columns = 1 + (1 if description else 0) + (1 if state else 0) + (1 if due else 0) + (1 if date_attr else 0) + (1 if row_actions else 0) %}
     <div class="table-wrap">
         <table class="table entries">
             <thead>
                 <tr>
                     <th>{{ title_label }}</th>
+                    {% if description %}<th>Description</th>{% endif %}
                     {% if state %}<th>State</th>{% endif %}
                     {% if due %}<th>Due</th>{% endif %}
                     {% if date_attr %}<th>{{ date_label }}</th>{% endif %}
@@ -106,10 +112,10 @@
                                 {{ label }} <span class="count">{{ "{:,}".format(section_items | length) }}</span>
                             </th>
                         </tr>
-                        {{ entry_rows(section_items, date_attr, state, due, links, flags, group_prefix, row_actions) }}
+                        {{ entry_rows(section_items, date_attr, state, due, links, flags, group_prefix, row_actions, description) }}
                     {% endfor %}
                 {% else %}
-                    {{ entry_rows(items, date_attr, state, due, links, flags, group_prefix, row_actions) }}
+                    {{ entry_rows(items, date_attr, state, due, links, flags, group_prefix, row_actions, description) }}
                 {% endif %}
             </tbody>
         </table>
