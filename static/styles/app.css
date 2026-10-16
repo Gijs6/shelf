@@ -33,6 +33,14 @@
     }
 }
 
+.favicon {
+    inline-size: 1em;
+    block-size: 1em;
+    margin-inline-end: var(--space-xs);
+    vertical-align: -0.125em;
+    object-fit: contain;
+}
+
 .nowrap {
     white-space: nowrap;
 }

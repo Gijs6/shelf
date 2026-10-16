@@ -16,6 +16,14 @@
     {%- if name %}<span class="group-prefix"><a href="{{ url_for('search.search_view', q='group:' + name) }}">{{ name }}</a> /</span> {% endif -%}
 {%- endmacro %}
 
+{% macro favicon(item) -%}
+    <img class="favicon" src="{{ url_for('bookmarks.favicon', bookmark_id=item.id, v=item.favicon_version) }}" alt="" width="16" height="16" loading="lazy" />
+{%- endmacro %}
+
+{% macro bookmark_link(item) -%}
+    <a href="{{ item.url | e }}" target="_blank" rel="noopener noreferrer">{{ item.display_url | e }}</a>
+{%- endmacro %}
+
 {% macro entry_url(item) -%}
     {%- if item.endpoint -%}
         {{ url_for(item.endpoint, **item.url_kwargs) }}
@@ -23,6 +31,8 @@
         {{ url_for('notes.view_note', note_id=item.id) }}
     {%- elif item.kind == "todo" -%}
         {{ url_for('todos.view_todo', todo_id=item.id) }}
+    {%- elif item.kind == "bookmark" -%}
+        {{ url_for('bookmarks.view_bookmark', bookmark_id=item.id) }}
     {%- endif -%}
 {%- endmacro %}
 
@@ -33,14 +43,26 @@
         <tr>
             <td>
                 {% if prefix %}{{ group_prefix(item.group_name) }}{% endif %}
-                {%- if url %}
+                {%- if item.kind == "bookmark" %}{{ favicon(item) }}{% endif %}
+                {%- if item.kind == "bookmark" %}
+                    {% if url %}
+                        <a href="{{ url }}">{{ title | e }}</a>
+                    {% else %}
+                        {{ title | e }}
+                    {% endif %}
+                {% elif url %}
                     <a href="{{ url }}">{{ title | markdown_inline(links=false) }}</a>
                 {% else %}
                     {{ title | markdown_inline }}
                 {% endif %}
                 {%- if flags and item.archived %} <span class="status">(archived)</span>{% endif %}
                 {%- if flags and item.pinned %} <span class="status">(pinned)</span>{% endif %}
-                {% if item.title and item.snippet %}<span class="table__sub">{{ item.snippet | markdown_inline }}</span>{% endif %}
+                {% if item.kind == "bookmark" %}
+                    <span class="table__sub">{{ bookmark_link(item) }}</span>
+                    {% if item.snippet %}<span class="table__sub">{{ item.snippet | markdown_inline }}</span>{% endif %}
+                {% elif item.title and item.snippet %}
+                    <span class="table__sub">{{ item.snippet | markdown_inline }}</span>
+                {% endif %}
             </td>
             {% if state %}
                 <td class="nowrap">

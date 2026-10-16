@@ -33,6 +33,17 @@
     </section>
 
     <section class="panel">
+        <h2 class="panel__heading">Recent bookmarks</h2>
+        {% if recent_bookmarks %}
+            {{ entry_table(recent_bookmarks, date_label="Added", date_attr="created_at") }}
+        {% else %}
+            <div class="empty">
+                <p class="empty__title">No bookmarks yet</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="panel">
         <h2 class="panel__heading">Pinned and active sticky notes</h2>
         {% if sticky_notes %}
             <ul class="sticky-board">

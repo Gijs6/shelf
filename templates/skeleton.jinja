@@ -103,6 +103,10 @@
                             <td>Sticky notes</td>
                         </tr>
                         <tr>
+                            <th scope="row"><kbd>g</kbd> <kbd>b</kbd></th>
+                            <td>Bookmarks</td>
+                        </tr>
+                        <tr>
                             <th scope="row"><kbd>a</kbd></th>
                             <td>Archive</td>
                         </tr>
@@ -127,9 +131,13 @@
                             <th scope="row"><kbd>c</kbd> <kbd>s</kbd></th>
                             <td>New sticky note</td>
                         </tr>
+                        <tr>
+                            <th scope="row"><kbd>c</kbd> <kbd>b</kbd></th>
+                            <td>New bookmark</td>
+                        </tr>
                     </tbody>
                 </table>
-                <h3>On a notes/todos/sticky notes list</h3>
+                <h3>On a notes/todos/sticky notes/bookmarks list</h3>
                 <table class="table table--kv">
                     <tbody>
                         <tr>
@@ -138,7 +146,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <h3>On a note or todo</h3>
+                <h3>On a note, todo or bookmark</h3>
                 <table class="table table--kv">
                     <tbody>
                         <tr>
@@ -184,6 +192,8 @@
                 "newNote": "{{ url_for('notes.new_note') }}",
                 "newTodo": "{{ url_for('todos.new_todo') }}",
                 "newStickyNote": "{{ url_for('sticky_notes.new_sticky_note') }}",
+                "bookmarks": "{{ url_for('bookmarks.list_bookmarks') }}",
+                "newBookmark": "{{ url_for('bookmarks.new_bookmark') }}",
                 "search": "{{ url_for('search.search_view') }}"
             }
         </script>

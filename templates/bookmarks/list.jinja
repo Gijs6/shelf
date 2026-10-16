@@ -1,0 +1,24 @@
+{% extends "base.jinja" %}
+
+{% from "partials/entries.jinja" import entry_table %}
+
+{% block title %}Bookmarks{% endblock %}
+
+{% block content %}
+    <div class="page-head">
+        <h1>Bookmarks</h1>
+        <div class="page-head__actions">
+            <a href="{{ url_for('bookmarks.new_bookmark') }}"
+               class="btn"
+               data-shortcut="new">New bookmark</a>
+        </div>
+    </div>
+
+    {% if bookmarks %}
+        {{ entry_table(bookmarks, date_label="Added", date_attr="created_at") }}
+    {% else %}
+        <div class="empty">
+            <p class="empty__title">No bookmarks yet</p>
+        </div>
+    {% endif %}
+{% endblock %}

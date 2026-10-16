@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 
-from models import Note, StickyNote, Todo, db
+from models import Bookmark, Note, StickyNote, Todo, db
 from routes.settings import count_summary
 
 storage_bp = Blueprint("storage", __name__)
@@ -27,6 +27,12 @@ def trash():
             .order_by(StickyNote.deleted_at.desc())
             .all(),
         ),
+        (
+            "Bookmarks",
+            Bookmark.query.filter(Bookmark.deleted)
+            .order_by(Bookmark.deleted_at.desc())
+            .all(),
+        ),
     ]
     return render_template("trash.jinja", sections=non_empty(sections))
 
@@ -39,6 +45,9 @@ def purge_trash():
             synchronize_session=False
         ),
         "todos": Todo.query.filter(Todo.deleted).delete(synchronize_session=False),
+        "bookmarks": Bookmark.query.filter(Bookmark.deleted).delete(
+            synchronize_session=False
+        ),
     }
     db.session.commit()
 

@@ -3,7 +3,7 @@ import random
 from datetime import timedelta
 
 from app import app
-from models import Note, StickyNote, Todo, db, now
+from models import Bookmark, Note, StickyNote, Todo, db, now
 
 NOTE_SEEDS = [
     ("Artikel A 2 Kieswet", "Er is een Kiesraad, gevestigd te 's-Gravenhage."),
@@ -310,6 +310,45 @@ TODO_SEEDS = [
     },
 ]
 
+BOOKMARK_SEEDS = [
+    {
+        "url": "https://wetten.overheid.nl/BWBR0001840/",
+        "title": "Grondwet voor het Koninkrijk der Nederlanden",
+        "description": "De **geldende versie** van de Grondwet.",
+    },
+    {
+        "url": "https://www.rechtspraak.nl/Uitspraken",
+        "title": "Uitspraken - Rechtspraak",
+        "description": "Gepubliceerde uitspraken doorzoeken op ECLI of trefwoord.",
+    },
+    {
+        "url": "https://www.kiesraad.nl/",
+        "title": None,
+        "description": "",
+    },
+    {
+        "url": "https://flask.palletsprojects.com/en/stable/",
+        "title": "Welcome to Flask",
+        "description": "Docs for the framework Shelf runs on.",
+    },
+    {
+        "url": "https://htmx.org/reference/",
+        "title": "</> htmx ~ Reference",
+        "description": "Attributes, headers and events, all on one page.",
+    },
+    {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog",
+        "title": "<dialog>: The Dialog element - HTML | MDN",
+        "description": "Notes on `showModal()` and the `::backdrop` pseudo-element.",
+    },
+    {
+        "url": "https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlsplit",
+        "title": None,
+        "description": "",
+        "deleted": True,
+    },
+]
+
 
 def days_ago(n):
     return now() - timedelta(days=n)
@@ -379,8 +418,23 @@ def seed_todos(rng):
         )
 
 
+def seed_bookmarks(rng):
+    for seed in BOOKMARK_SEEDS:
+        created = days_ago(rng.randint(0, 30))
+        db.session.add(
+            Bookmark(
+                url=seed["url"],
+                title=seed["title"],
+                description=seed["description"],
+                created_at=created,
+                updated_at=created,
+                deleted_at=now() if seed.get("deleted") else None,
+            )
+        )
+
+
 def reset_data():
-    for model in (Note, StickyNote, Todo):
+    for model in (Note, StickyNote, Todo, Bookmark):
         model.query.delete()
     db.session.commit()
 
@@ -395,13 +449,15 @@ def seed(reset=False, seed_value=1):
         seed_notes(rng)
         seed_sticky_notes(rng)
         seed_todos(rng)
+        seed_bookmarks(rng)
 
         db.session.commit()
 
         print(
             f"Seeded {Note.query.count()} notes, "
             f"{StickyNote.query.count()} sticky notes, "
-            f"{Todo.query.count()} todos."
+            f"{Todo.query.count()} todos, "
+            f"{Bookmark.query.count()} bookmarks."
         )
 
 

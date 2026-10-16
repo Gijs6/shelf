@@ -14,6 +14,7 @@ import secrets
 from models import (
     STICKY_COLOURS,
     TODO_STATES,
+    Bookmark,
     Note,
     StickyNote,
     Todo,
@@ -25,6 +26,7 @@ from utils.datetimes import parse_utc_datetime, utc_isoformat
 from utils.filters import pluralize_filter as pluralize
 from utils.groups import group_name_counts, normalize_group_name
 from utils.settings import CALENDAR_TOKEN_KEY, delete_setting, get_setting, set_setting
+from utils.urls import normalize_url
 
 settings_bp = Blueprint("settings", __name__, url_prefix="/settings")
 
@@ -68,6 +70,18 @@ def todo_to_dict(todo):
         "deadline": utc_isoformat(todo.deadline),
         "deleted_at": utc_isoformat(todo.deleted_at),
         "archived_at": utc_isoformat(todo.archived_at),
+    }
+
+
+def bookmark_to_dict(bookmark):
+    return {
+        "id": bookmark.id,
+        "url": bookmark.url,
+        "title": bookmark.title,
+        "description": bookmark.description,
+        "created_at": utc_isoformat(bookmark.created_at),
+        "updated_at": utc_isoformat(bookmark.updated_at),
+        "deleted_at": utc_isoformat(bookmark.deleted_at),
     }
 
 
@@ -118,6 +132,22 @@ def apply_todo(data):
     return todo
 
 
+def apply_bookmark(data):
+    bookmark = get_or_create(Bookmark, data)
+    url = normalize_url(data.get("url"))
+    if url != bookmark.url:
+        bookmark.favicon = None
+        bookmark.favicon_mime = None
+        bookmark.favicon_fetched_at = None
+    bookmark.url = url
+    bookmark.title = data.get("title")
+    bookmark.description = data.get("description") or ""
+    bookmark.created_at = parse_utc_datetime(data.get("created_at")) or now()
+    bookmark.updated_at = parse_utc_datetime(data.get("updated_at")) or now()
+    bookmark.deleted_at = parse_utc_datetime(data.get("deleted_at"))
+    return bookmark
+
+
 def is_blank(data):
     return (
         not (data.get("title") or "").strip()
@@ -129,10 +159,12 @@ def count_summary(counts):
     notes = counts["notes"]
     sticky_notes = counts["sticky_notes"]
     todos = counts["todos"]
+    bookmarks = counts["bookmarks"]
     return (
         f"{notes} {pluralize(notes, 'note')}, "
-        f"{sticky_notes} sticky {pluralize(sticky_notes, 'note')} and "
-        f"{todos} {pluralize(todos, 'todo')}"
+        f"{sticky_notes} sticky {pluralize(sticky_notes, 'note')}, "
+        f"{todos} {pluralize(todos, 'todo')} and "
+        f"{bookmarks} {pluralize(bookmarks, 'bookmark')}"
     )
 
 
@@ -174,6 +206,7 @@ def export():
             sticky_note_to_dict(sticky_note) for sticky_note in StickyNote.query.all()
         ],
         "todos": [todo_to_dict(todo) for todo in Todo.query.all()],
+        "bookmarks": [bookmark_to_dict(bookmark) for bookmark in Bookmark.query.all()],
         "settings": {"calendar_token": get_setting(CALENDAR_TOKEN_KEY)},
     }
     filename = f"shelf-export-{now().strftime('%Y%m%d-%H%M%S')}.json"
@@ -196,7 +229,7 @@ def import_data():
         if not isinstance(payload, dict):
             raise TypeError("Expected a JSON object")
 
-        counts = {"notes": 0, "sticky_notes": 0, "todos": 0}
+        counts = {"notes": 0, "sticky_notes": 0, "todos": 0, "bookmarks": 0}
 
         for data in payload.get("notes") or []:
             if is_blank(data):
@@ -215,6 +248,12 @@ def import_data():
                 continue
             db.session.add(apply_todo(data))
             counts["todos"] += 1
+
+        for data in payload.get("bookmarks") or []:
+            if not normalize_url(data.get("url")):
+                continue
+            db.session.add(apply_bookmark(data))
+            counts["bookmarks"] += 1
 
         db.session.commit()
     except (ValueError, TypeError, AttributeError, KeyError):

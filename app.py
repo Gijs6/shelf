@@ -6,7 +6,16 @@ from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 
 from migrations import run_migrations
-from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, db, now
+from models import (
+    STICKY_COLOURS,
+    TODO_STATES,
+    Bookmark,
+    Note,
+    StickyNote,
+    Todo,
+    db,
+    now,
+)
 from routes import register_routes
 from utils.filters import register_filters
 from utils.session import SESSION_LIFETIME
@@ -69,6 +78,13 @@ def index():
         .all()
     )
 
+    recent_bookmarks = (
+        Bookmark.query.filter(~Bookmark.deleted)
+        .order_by(Bookmark.created_at.desc())
+        .limit(5)
+        .all()
+    )
+
     sticky_notes = (
         StickyNote.query.filter(~StickyNote.deleted)
         .order_by(StickyNote.pinned.desc(), StickyNote.created_at.desc())
@@ -79,6 +95,7 @@ def index():
     return render_template(
         "dashboard.jinja",
         recent_notes=recent_notes,
+        recent_bookmarks=recent_bookmarks,
         sticky_notes=sticky_notes,
         upcoming_todos=upcoming_todos,
     )

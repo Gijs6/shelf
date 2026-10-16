@@ -5,8 +5,8 @@
     var routes = JSON.parse(document.getElementById("nav-routes").textContent);
 
     var CHORD_DESTINATIONS = {
-        g: { d: routes.dashboard, n: routes.notes, t: routes.todos, s: routes.stickyNotes },
-        c: { n: routes.newNote, t: routes.newTodo, s: routes.newStickyNote }
+        g: { d: routes.dashboard, n: routes.notes, t: routes.todos, s: routes.stickyNotes, b: routes.bookmarks },
+        c: { n: routes.newNote, t: routes.newTodo, s: routes.newStickyNote, b: routes.newBookmark }
     };
 
     var TODO_STATE_ORDER = ["shelved", "open", "active", "done", "cancelled"];

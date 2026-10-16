@@ -27,7 +27,7 @@
             <table class="table table--kv">
                 <tbody>
                     <tr>
-                        <th scope="row"><code>is:note</code> <code>is:todo</code> <code>is:sticky</code></th>
+                        <th scope="row"><code>is:note</code> <code>is:todo</code> <code>is:sticky</code> <code>is:bookmark</code></th>
                         <td>Filter by item type. Multiple types can be combined.</td>
                     </tr>
                 </tbody>
@@ -137,7 +137,7 @@
                 </h2>
                 {% if kind == "todo" %}
                     {{ entry_table(items, state=True, due=True, date_attr=None, flags=True) }}
-                {% elif kind == "note" %}
+                {% elif kind == "note" or kind == "bookmark" %}
                     {{ entry_table(items, flags=True) }}
                 {% else %}
                     {{ entry_table(items, title_label="Text", flags=True) }}

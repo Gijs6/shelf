@@ -12,7 +12,7 @@
                 <form hx-delete="{{ url_for('storage.purge_trash') }}"
                       hx-target="body"
                       hx-push-url="true"
-                      hx-confirm="Purge everything in trash across notes, todos and sticky notes? This can't be undone.">
+                      hx-confirm="Purge everything in trash across notes, todos, sticky notes and bookmarks? This can't be undone.">
                     <button type="submit" class="btn btn--danger">Purge trash</button>
                 </form>
             </div>
@@ -27,6 +27,9 @@
             {% elif item.kind == "todo" %}
                 {% set restore_url = url_for('todos.restore_todo', todo_id=item.id) %}
                 {% set purge_url = url_for('todos.purge_todo', todo_id=item.id) %}
+            {% elif item.kind == "bookmark" %}
+                {% set restore_url = url_for('bookmarks.restore_bookmark', bookmark_id=item.id) %}
+                {% set purge_url = url_for('bookmarks.purge_bookmark', bookmark_id=item.id) %}
             {% else %}
                 {% set restore_url = url_for('sticky_notes.restore_sticky_note', sticky_note_id=item.id) %}
                 {% set purge_url = url_for('sticky_notes.purge_sticky_note', sticky_note_id=item.id) %}
@@ -37,7 +40,7 @@
             <form hx-delete="{{ purge_url }}"
                   hx-target="body"
                   hx-push-url="true"
-                  hx-confirm="Purge {{ item.display_title | markdown_plain }}? This can't be undone.">
+                  hx-confirm="Purge {{ item.display_title | e if item.kind == "bookmark" else item.display_title | markdown_plain }}? This can't be undone.">
                 <button type="submit" class="btn btn--danger btn--sm">Purge</button>
             </form>
         {% endcall %}

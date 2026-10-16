@@ -3,7 +3,15 @@ from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import func, or_
 
-from models import STICKY_COLOURS, TODO_STATES, Note, StickyNote, Todo, make_snippet
+from models import (
+    STICKY_COLOURS,
+    TODO_STATES,
+    Bookmark,
+    Note,
+    StickyNote,
+    Todo,
+    make_snippet,
+)
 
 TYPE_ALIASES = {
     "note": "note",
@@ -17,9 +25,11 @@ TYPE_ALIASES = {
     "sticky-notes": "sticky",
     "sticky_note": "sticky",
     "sticky_notes": "sticky",
+    "bookmark": "bookmark",
+    "bookmarks": "bookmark",
 }
 
-ALL_TYPES = {"note", "todo", "sticky"}
+ALL_TYPES = {"note", "todo", "sticky", "bookmark"}
 
 TOKEN_RE = re.compile(r"(\S+):(\S+)|(\S+)")
 
@@ -233,6 +243,38 @@ def search(raw_query, limit=50):
                     "url_kwargs": {"_anchor": f"sticky-{sticky_note.id}"},
                     "pinned": sticky_note.pinned,
                     "colour": sticky_note.colour,
+                }
+            )
+
+    if "bookmark" in types:
+        query = Bookmark.query.filter(~Bookmark.deleted)
+        if parsed["before"] is not None:
+            query = query.filter(Bookmark.created_at < parsed["before"])
+        if parsed["after"] is not None:
+            query = query.filter(Bookmark.created_at >= parsed["after"])
+        if parsed["text"]:
+            like = f"%{parsed['text']}%"
+            query = query.filter(
+                or_(
+                    Bookmark.title.ilike(like),
+                    Bookmark.url.ilike(like),
+                    Bookmark.description.ilike(like),
+                )
+            )
+        for bookmark in query.all():
+            results.append(
+                {
+                    "kind": "bookmark",
+                    "id": bookmark.id,
+                    "title": bookmark.display_title,
+                    "snippet": bookmark.snippet,
+                    "url": bookmark.url,
+                    "display_url": bookmark.display_url,
+                    "favicon_version": bookmark.favicon_version,
+                    "created_at": bookmark.created_at,
+                    "updated_at": bookmark.updated_at,
+                    "endpoint": "bookmarks.view_bookmark",
+                    "url_kwargs": {"bookmark_id": bookmark.id},
                 }
             )
 

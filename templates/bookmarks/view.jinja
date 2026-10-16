@@ -1,0 +1,47 @@
+{% extends "base.jinja" %}
+
+{% from "partials/entries.jinja" import when, favicon, bookmark_link %}
+{% from "partials/updated_at.jinja" import updated_at_span %}
+
+{% block title %}{{ bookmark.display_title | e }}{% endblock %}
+
+{% block content %}
+    <article>
+        <div class="page-head">
+            <div>
+                <h1>{{ favicon(bookmark) }}{{ bookmark.display_title | e }}</h1>
+                <p class="page-head__sub">{{ bookmark_link(bookmark) }}</p>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table class="table table--kv table--fit">
+                <caption class="visually-hidden">Details</caption>
+                <tbody>
+                    <tr>
+                        <th scope="row">Added</th>
+                        <td>{{ when(bookmark.created_at) }}</td>
+                        <th scope="row">Edited</th>
+                        <td>{{ updated_at_span(bookmark) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page-actions">
+            <a href="{{ url_for('bookmarks.edit_bookmark', bookmark_id=bookmark.id) }}"
+               class="btn"
+               data-shortcut="edit">Edit bookmark</a>
+            <form hx-delete="{{ url_for('bookmarks.delete_bookmark', bookmark_id=bookmark.id) }}"
+                  hx-target="body"
+                  hx-push-url="true"
+                  data-shortcut="delete">
+                <button type="submit" class="btn btn--danger">Delete bookmark</button>
+            </form>
+        </div>
+
+        {% if bookmark.description %}
+            <div class="markdown">{{ bookmark.description | markdown }}</div>
+        {% endif %}
+    </article>
+{% endblock %}

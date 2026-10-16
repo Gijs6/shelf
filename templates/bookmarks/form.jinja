@@ -1,0 +1,55 @@
+{% extends "base.jinja" %}
+
+{% block title %}{{ "Edit bookmark" if bookmark and bookmark.id else "New bookmark" }}{% endblock %}
+
+{% block content %}
+    <div class="page-head">
+        <h1>
+            {% if bookmark and bookmark.id %}
+                Edit bookmark <code>{{ bookmark.id }}</code>
+            {% else %}
+                New bookmark
+            {% endif %}
+        </h1>
+    </div>
+
+    <form {% if bookmark and bookmark.id %} hx-put="{{ url_for('bookmarks.update_bookmark', bookmark_id=bookmark.id) }}" {% else %} hx-post="{{ url_for('bookmarks.create_bookmark') }}" {% endif %}
+          hx-target="body"
+          hx-push-url="true"
+          class="editor">
+        <div class="field field--wide">
+            <label for="url" class="field__label">URL</label>
+            <input type="text"
+                   id="url"
+                   name="url"
+                   inputmode="url"
+                   autocomplete="off"
+                   placeholder="https://"
+                   required
+                   value="{{ bookmark.url | e if bookmark else '' }}"
+                   hx-get="{{ url_for('bookmarks.prefill_title') }}"
+                   hx-trigger="change"
+                   hx-include="#title"
+                   hx-target="#title"
+                   hx-swap="outerHTML"
+                   hx-push-url="false"
+                   autofocus />
+        </div>
+
+        <div class="field field--wide">
+            <label for="title" class="field__label">Title</label>
+            {% with title = bookmark.title if bookmark else None %}
+                {% include "bookmarks/title_input.jinja" %}
+            {% endwith %}
+        </div>
+
+        <div class="field field--wide">
+            <label for="description" class="field__label">Description</label>
+            <textarea id="description" name="description" rows="4">{{ bookmark.description | e if bookmark else '' }}</textarea>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn">Save bookmark</button>
+        </div>
+    </form>
+{% endblock %}

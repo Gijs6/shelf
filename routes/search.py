@@ -9,9 +9,15 @@ TYPE_FILTERS = [
     ("todo", "Todos"),
     ("note", "Notes"),
     ("sticky", "Sticky notes"),
+    ("bookmark", "Bookmarks"),
 ]
 
-SECTION_LABELS = {"todo": "Todos", "note": "Notes", "sticky": "Sticky notes"}
+SECTION_LABELS = {
+    "todo": "Todos",
+    "note": "Notes",
+    "sticky": "Sticky notes",
+    "bookmark": "Bookmarks",
+}
 
 
 def type_filters(query):

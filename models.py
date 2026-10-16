@@ -6,7 +6,8 @@ from sqlalchemy import and_
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
 
-from utils.datetimes import now, now_naive
+from utils.datetimes import as_utc, now, now_naive
+from utils.urls import display_url
 
 db = SQLAlchemy()
 
@@ -171,3 +172,46 @@ class Todo(db.Model):
     @property
     def kind(self):
         return "todo"
+
+
+class Bookmark(db.Model):
+    id = db.Column(db.String(ID_LENGTH), primary_key=True, default=generate_id)
+    url = db.Column(db.String(2000), nullable=False)
+    title = db.Column(db.String(200), nullable=True)
+    description = db.Column(db.Text, nullable=False, default="")
+    created_at = db.Column(db.DateTime, default=now)
+    updated_at = db.Column(db.DateTime, default=now)
+    favicon = db.Column(db.LargeBinary, nullable=True)
+    favicon_mime = db.Column(db.String(100), nullable=True)
+    favicon_fetched_at = db.Column(db.DateTime, nullable=True)
+    deleted_at = db.Column(db.DateTime, nullable=True)
+
+    @hybrid_property
+    def deleted(self):
+        return self.deleted_at is not None
+
+    @deleted.expression
+    def deleted(cls):
+        return cls.deleted_at.isnot(None)
+
+    @property
+    def display_url(self):
+        return display_url(self.url)
+
+    @property
+    def snippet(self):
+        return make_snippet(self.description)
+
+    @property
+    def display_title(self):
+        return self.title or display_url(self.url, length=None)
+
+    @property
+    def favicon_version(self):
+        if self.favicon_fetched_at is None:
+            return 0
+        return int(as_utc(self.favicon_fetched_at).timestamp())
+
+    @property
+    def kind(self):
+        return "bookmark"
