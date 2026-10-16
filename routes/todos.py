@@ -9,9 +9,9 @@ from flask import (
     url_for,
 )
 
-from models import TODO_STATES, Note, StickyNote, Todo, db, now
+from models import TODO_STATES, Todo, db, now
 from utils.checklist import toggle_item_checkbox
-from utils.datetimes import local_to_utc, parse_local_datetime, utc_to_local
+from utils.datetimes import local_to_utc, parse_local_datetime
 from utils.flash import flash_with_undo
 from utils.groups import all_group_names, group_sections, normalize_group_name
 from utils.ical import build_todo_calendar
@@ -196,69 +196,6 @@ def set_state(todo_id):
     flash("Todo updated.", "success")
     return redirect(
         request.referrer or url_for("todos.view_todo", todo_id=todo.id), code=303
-    )
-
-
-def dropped_todo_fields(todo, include_group):
-    dropped = []
-    if include_group and todo.group_name:
-        dropped.append(f"group: {todo.group_name}")
-    if todo.state != "open":
-        dropped.append(f"state: {todo.state}")
-    if todo.deadline:
-        local_deadline = utc_to_local(todo.deadline)
-        dropped.append(f"deadline: {local_deadline.strftime('%-d %b %Y, %H:%M')}")
-    return dropped
-
-
-@todos_bp.post("/<todo_id>/convert/note")
-def convert_todo_to_note(todo_id):
-    todo = Todo.query.filter(Todo.id == todo_id, ~Todo.deleted).first_or_404()
-
-    dropped = dropped_todo_fields(todo, include_group=False)
-    content = todo.content
-    if dropped:
-        note_line = f"_Converted from todo ({', '.join(dropped)})_"
-        content = f"{note_line}\n\n{content}" if content else note_line
-
-    note = Note(
-        title=todo.title,
-        content=content,
-        group_name=todo.group_name,
-        created_at=todo.created_at,
-        archived_at=todo.archived_at,
-    )
-    db.session.add(note)
-    db.session.delete(todo)
-    db.session.commit()
-    flash("Todo converted to note.", "success")
-    return redirect(url_for("notes.view_note", note_id=note.id), code=303)
-
-
-@todos_bp.post("/<todo_id>/convert/sticky-note")
-def convert_todo_to_sticky_note(todo_id):
-    todo = Todo.query.filter(Todo.id == todo_id, ~Todo.deleted).first_or_404()
-
-    dropped = dropped_todo_fields(todo, include_group=True)
-    content = todo.content
-    if todo.title:
-        title_line = f"**{todo.title}**"
-        content = f"{title_line}\n\n{content}" if content else title_line
-    if dropped:
-        note_line = f"_Converted from todo ({', '.join(dropped)})_"
-        content = f"{note_line}\n\n{content}" if content else note_line
-
-    sticky_note = StickyNote(
-        content=content,
-        created_at=todo.created_at,
-    )
-    db.session.add(sticky_note)
-    db.session.delete(todo)
-    db.session.commit()
-    flash("Todo converted to sticky note.", "success")
-    return redirect(
-        url_for("sticky_notes.list_sticky_notes", open=sticky_note.id),
-        code=303,
     )
 
 

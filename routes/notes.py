@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
-from models import Note, StickyNote, Todo, db, now
+from models import Note, db, now
 from utils.checklist import toggle_item_checkbox
 from utils.flash import flash_with_undo
 from utils.groups import all_group_names, group_sections, normalize_group_name
@@ -97,56 +97,6 @@ def duplicate_note(note_id):
     db.session.commit()
     flash("Note duplicated.", "success")
     return redirect(url_for("notes.view_note", note_id=duplicate.id), code=303)
-
-
-@notes_bp.post("/<note_id>/convert/todo")
-def convert_note_to_todo(note_id):
-    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
-
-    todo = Todo(
-        title=note.title,
-        content=note.content,
-        group_name=note.group_name,
-        created_at=note.created_at,
-        archived_at=note.archived_at,
-    )
-    db.session.add(todo)
-    db.session.delete(note)
-    db.session.commit()
-    flash("Note converted to todo.", "success")
-    return redirect(url_for("todos.view_todo", todo_id=todo.id), code=303)
-
-
-@notes_bp.post("/<note_id>/convert/sticky-note")
-def convert_note_to_sticky_note(note_id):
-    note = Note.query.filter(Note.id == note_id, ~Note.deleted).first_or_404()
-
-    dropped = []
-    if note.group_name:
-        dropped.append(f"group: {note.group_name}")
-    if note.archived:
-        dropped.append("archived")
-
-    content = note.content
-    if note.title:
-        title_line = f"**{note.title}**"
-        content = f"{title_line}\n\n{content}" if content else title_line
-    if dropped:
-        note_line = f"_Converted from note ({', '.join(dropped)})_"
-        content = f"{note_line}\n\n{content}" if content else note_line
-
-    sticky_note = StickyNote(
-        content=content,
-        created_at=note.created_at,
-    )
-    db.session.add(sticky_note)
-    db.session.delete(note)
-    db.session.commit()
-    flash("Note converted to sticky note.", "success")
-    return redirect(
-        url_for("sticky_notes.list_sticky_notes", open=sticky_note.id),
-        code=303,
-    )
 
 
 @notes_bp.delete("/<note_id>")

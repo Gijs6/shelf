@@ -51,25 +51,6 @@
 
         <div class="form__actions">
             <button type="submit" class="btn">Save note</button>
-            {% if note and note.id %}
-                <button type="submit" form="convert-to-todo" class="btn">Convert to todo</button>
-                <button type="submit" form="convert-to-sticky-note" class="btn">Convert to sticky note</button>
-            {% endif %}
         </div>
     </form>
-
-    {% if note and note.id %}
-        <form id="convert-to-todo"
-              hx-post="{{ url_for('notes.convert_note_to_todo', note_id=note.id) }}"
-              hx-target="body"
-              hx-push-url="true"
-              hx-confirm="Convert this note to a todo? It gets a new URL, and you lose any unsaved changes made here.">
-        </form>
-        <form id="convert-to-sticky-note"
-              hx-post="{{ url_for('notes.convert_note_to_sticky_note', note_id=note.id) }}"
-              hx-target="body"
-              hx-push-url="true"
-              hx-confirm="Convert this note to a sticky note? It gets a new URL, and you lose any unsaved changes made here.">
-        </form>
-    {% endif %}
 {% endblock %}
