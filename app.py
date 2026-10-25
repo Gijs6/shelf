@@ -3,7 +3,6 @@ from flask import Flask, render_template
 import os
 
 from dotenv import load_dotenv
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 from migrations import run_migrations
 from models import (
@@ -19,6 +18,8 @@ from routes import register_routes
 from utils.auth import init_auth
 from utils.errors import register_errors
 from utils.filters import register_filters
+from utils.headers import register_headers
+from utils.proxy import TrustedProxyFix
 from utils.session import SESSION_LIFETIME
 from utils.toasts import register_toasts
 from utils.version import register_version
@@ -26,7 +27,10 @@ from utils.version import register_version
 load_dotenv(override=True)
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+app.jinja_env.autoescape = True
+app.wsgi_app = TrustedProxyFix(
+    app.wsgi_app, os.getenv("TRUSTED_PROXIES", "router").split(",")
+)
 
 app.secret_key = os.getenv("SECRET_KEY", os.urandom(100).hex())
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URI", "sqlite:///shelf.db")
@@ -42,6 +46,7 @@ register_routes(app)
 register_toasts(app)
 register_version(app, "book")
 register_errors(app, "book")
+register_headers(app)
 
 app.jinja_env.globals["TODO_STATES"] = TODO_STATES
 app.jinja_env.globals["STICKY_COLOURS"] = STICKY_COLOURS
