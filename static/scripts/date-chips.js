@@ -2,9 +2,15 @@
     if (window.shelfDateChips) return;
     window.shelfDateChips = true;
 
-    function pad(value) {
-        return String(value).padStart(2, "0");
-    }
+    var parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: document.documentElement.dataset.tz || undefined,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+    });
 
     function shift(code) {
         var amount = parseInt(code, 10);
@@ -19,9 +25,13 @@
     }
 
     function format(input, date) {
-        var day = date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate());
+        var p = {};
+        parts.formatToParts(date).forEach(function (part) {
+            p[part.type] = part.value;
+        });
+        var day = p.year + "-" + p.month + "-" + p.day;
         if (input.type === "date") return day;
-        return day + "T" + pad(date.getHours()) + ":" + pad(date.getMinutes());
+        return day + "T" + p.hour + ":" + p.minute;
     }
 
     document.addEventListener("click", function (event) {

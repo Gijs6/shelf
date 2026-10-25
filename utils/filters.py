@@ -1,3 +1,4 @@
+import os
 import re
 from datetime import datetime, timezone
 
@@ -127,3 +128,4 @@ FILTERS = {
 def register_filters(app):
     for name, fn in FILTERS.items():
         app.template_filter(name)(fn)
+    app.jinja_env.globals["TIME_ZONE"] = os.environ.get("TZ", "")

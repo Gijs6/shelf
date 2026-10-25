@@ -1,6 +1,4 @@
 FROM python:3.15
-RUN apt-get update && apt-get install -y tzdata
-ENV TZ=Europe/Amsterdam
 WORKDIR /app
 COPY ./requirements.txt requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
