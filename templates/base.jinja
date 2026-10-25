@@ -19,9 +19,11 @@
                 {{ nav_link('storage.archive', 'Archive', exact=True, shortcut='archive') }}
                 {{ nav_link('storage.trash', 'Trash', exact=True, shortcut='trash') }}
                 {{ nav_link('settings.index', 'Settings') }}
-                <form method="post" action="{{ url_for('logout') }}">
-                    <button type="submit">Sign out</button>
-                </form>
+                {% if auth_provider == "password" %}
+                    <form method="post" action="{{ url_for('auth.logout') }}">
+                        <button type="submit">Sign out</button>
+                    </form>
+                {% endif %}
             </nav>
         </div>
     </header>

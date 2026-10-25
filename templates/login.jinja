@@ -14,7 +14,8 @@
             <h1>Sign in</h1>
         </div>
 
-        <form method="post" action="{{ url_for('login_post') }}">
+        <form method="post" action="{{ url_for('auth.login') }}">
+            <input type="hidden" name="next" value="{{ next_url }}" />
             {% if config.DEBUG %}
                 <p class="muted">Dev login</p>
             {% else %}
